@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 
@@ -46,7 +47,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // brightness: Brightness.light,
-          primaryColor: Colors.deepOrange,
+          primarySwatch: Colors.blue,
+          primaryColor: defaultTargetPlatform == TargetPlatform.iOS ? Colors.grey[50] : null,
           // accentColor: Colors.deepPurple,
           buttonColor: Colors.blueAccent,
           // textTheme: Theme.of(context).textTheme.apply(

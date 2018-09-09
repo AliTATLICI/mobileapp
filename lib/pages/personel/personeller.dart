@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -12,10 +13,10 @@ class PersonellerSayfa extends StatefulWidget {
   PersonellerSayfa(this.model);
 
   @override
-    State<StatefulWidget> createState() {
-      // TODO: implement createState
-      return _PersonellerSayfaState();
-    }
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _PersonellerSayfaState();
+  }
 }
 
 class _PersonellerSayfaState extends State<PersonellerSayfa> {
@@ -34,9 +35,30 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
-          AppBar(
-            automaticallyImplyLeading: false,
-            title: Text("Seçiniz"),
+          // AppBar(
+          //   automaticallyImplyLeading: false,
+          //   //title: Text("Seçiniz"),
+          // ),
+          ScopedModelDescendant(
+            builder: (BuildContext context, Widget child, MainModel model) {
+              return UserAccountsDrawerHeader(
+                accountName: Text("Ali TATLICI"),
+                accountEmail: Text(model.kullanici.email),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Theme.of(context).platform == TargetPlatform.iOS ? Colors.purple : Colors.white,
+                  backgroundImage: NetworkImage(
+                    "http://isparta.edu.tr/resim.aspx?sicil_no=01582",
+                  ),
+                ),
+                otherAccountsPictures: <Widget>[
+                  CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    "http://isparta.edu.tr/foto.aspx?sicil_no=01582",
+                  ),
+                )
+                ],
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.person),
@@ -53,14 +75,18 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
   }
 
   Widget _buildPersonellerList() {
-    return ScopedModelDescendant(builder: (BuildContext context, Widget child, MainModel model) {
+    return ScopedModelDescendant(
+        builder: (BuildContext context, Widget child, MainModel model) {
       Widget content = Center(child: Text('Personel bulunamadı!'));
-      if (model.displayedPersoneller.length > 0 && !model.isYukleme ) {
+      if (model.displayedPersoneller.length > 0 && !model.isYukleme) {
         content = Personeller();
       } else if (model.isYukleme) {
         content = Center(child: CircularProgressIndicator());
       }
-      return RefreshIndicator(onRefresh: model.fetchPersoneller, child: content,); 
+      return RefreshIndicator(
+        onRefresh: model.fetchPersoneller,
+        child: content,
+      );
     });
   }
 
@@ -71,10 +97,10 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
       drawer: _buildSideDrawer(context),
       appBar: AppBar(
         title: Text("Personel Listesi"),
+        elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
         actions: <Widget>[
           ScopedModelDescendant<MainModel>(
-            builder:
-                (BuildContext context, Widget child, MainModel model) {
+            builder: (BuildContext context, Widget child, MainModel model) {
               return IconButton(
                 icon: Icon(model.displayedFavoriteOnly
                     ? Icons.favorite
@@ -91,4 +117,3 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
     );
   }
 }
-

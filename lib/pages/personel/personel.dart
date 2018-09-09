@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../../widgets/ui_elements/adi_soyadi_default.dart';
 import '../../models/personel.dart';
 import '../../scoped-models/main.dart';
+import '../../widgets/personeller/personel_dersler.dart';
 
 class PersonelSayfa extends StatelessWidget {
   final Personel personel;
@@ -92,7 +93,13 @@ class PersonelSayfa extends StatelessWidget {
                   personel.bolum,
                   textAlign: TextAlign.center,
                 ),
-              )
+              ),
+              Text('haftalık ders programı'),
+              Expanded(child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) =>
+              EntryItem(data[index]),
+          itemCount: data.length,
+        ),)
             ],
           ),
         ),);
