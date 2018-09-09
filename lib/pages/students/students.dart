@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../widgets/personeller/personeller.dart';
 import '../../widgets/ui_elements/cikisyap_list_tile.dart';
 import '../../scoped-models/main.dart';
+import '../../models/student.dart';
 
-class PersonellerSayfa extends StatefulWidget {
+class StudentsPage extends StatefulWidget {
   final MainModel model;
 
-  PersonellerSayfa(this.model);
+  StudentsPage(this.model);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PersonellerSayfaState();
+    return _StudentsPageState();
   }
 }
 
-class _PersonellerSayfaState extends State<PersonellerSayfa> {
+class _StudentsPageState extends State<StudentsPage> {
   @override
   initState() {
-    widget.model.fetchPersoneller();
+    widget.model.fetchStudents();
     super.initState();
   }
 
@@ -62,9 +62,9 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Personel Yönetimi'),
+            title: Text('Personeller'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/admin');
+              Navigator.pushReplacementNamed(context, '/');
             },
           ),
           ListTile(
@@ -81,17 +81,47 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
     );
   }
 
-  Widget _buildPersonellerList() {
+  Widget _buildStudentsList() {
     return ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
-      Widget content = Center(child: Text('Personel bulunamadı!'));
-      if (model.displayedPersoneller.length > 0 && !model.isYukleme) {
-        content = Personeller();
+      Widget content = Center(child: Text('Öğrenci bulunamadı!'));
+      print("STUDENTS UZUNLUGUuuuuuuuuuuuuuuuuuuuuuuuu" + model.allStudents.length.toString());
+      if (model.allStudents.length > 0 && !model.isYukleme) {
+        content = ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          key: Key(model.allStudents[index].id),
+          onDismissed: (DismissDirection direction) {
+            if (direction == DismissDirection.endToStart) {
+              model.selectPersonel(model.allStudents[index].id);
+              model.silPersonel();
+            }
+          },
+          background: Container(color: Colors.red),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    "http://w3.sdu.edu.tr/foto.aspx?sicil_no=" +
+                        model.allStudents[index].id,
+                  ),
+                ),
+                title: Text(model.allStudents[index].name),
+                subtitle: Text(model.allStudents[index].phone),
+                ),
+              Divider()
+            ],
+          ),
+        );
+      },
+      itemCount: model.allStudents.length,
+    );
       } else if (model.isYukleme) {
         content = Center(child: CircularProgressIndicator());
       }
       return RefreshIndicator(
-        onRefresh: model.fetchPersoneller,
+        onRefresh: model.fetchStudents,
         child: content,
       );
     });
@@ -103,7 +133,7 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
     return Scaffold(
       drawer: _buildSideDrawer(context),
       appBar: AppBar(
-        title: Text("Personel Listesi"),
+        title: Text("Öğrenci Listesi"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
         actions: <Widget>[
           ScopedModelDescendant<MainModel>(
@@ -120,7 +150,7 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
           )
         ],
       ),
-      body: _buildPersonellerList(),
+      body: _buildStudentsList(), 
     );
   }
 }

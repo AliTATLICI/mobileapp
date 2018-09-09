@@ -6,6 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import './pages/auth/auth.dart';
 import './pages/personel/personeller.dart';
+import './pages/students/students.dart';
 import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
 import './scoped-models/main.dart';
@@ -64,6 +65,8 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : PersonellerSayfa(_model),
+          '/ogrenciler': (BuildContext context) =>
+              !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : PersonelAdminSayfa(_model),
         },

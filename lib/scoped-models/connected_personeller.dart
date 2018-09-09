@@ -7,12 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../models/personel.dart';
+import '../models/student.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
+  List<Student> _students = [];
   String _selPersonelId;
+  String _selStudentId;
   Kullanici _authenticatedKullanici;
   bool _isYukleme = false;
 }
@@ -379,4 +382,80 @@ class YardimciModel extends ConnectedPersonellerModel {
   bool get isYukleme {
     return _isYukleme;
   }
+}
+
+class StudentModel extends ConnectedPersonellerModel {
+  
+  List<Student> get allStudents {
+    return List.from(_students);
+  }
+
+  List<Student> get displayedStudents {
+    return List.from(_students);
+  }
+
+  int get selectedStudentIndex {
+    return _students.indexWhere((Student student) {
+      return student.id == _selStudentId;
+    });
+  }
+
+  String get selectedStudentId {
+    return _selStudentId;
+  }
+
+  Student get selectedStudent {
+    if (selectedStudentId == null) {
+      return null;
+    }
+    return _students.firstWhere((Student student) {
+      return student.id == _selStudentId;
+    });
+  }
+
+
+  
+  Future<Null> fetchStudents({onlyForUser = false}) {
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            'https://sdu-egitim-2018.firebaseio.com/students.json?auth=${_authenticatedKullanici.token}')
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<Student> fetchedStudentList = [];
+      final Map<String, dynamic> studentListData = json.decode(response.body);
+      if (studentListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      print("JSON UZUNLUGU" + studentListData.length.toString());
+      studentListData.forEach((String studentId, dynamic studentData) {
+        final Student student = Student(
+            id: studentId,
+            name: studentData['name'],
+            certificate: studentData['certificate'],
+            phone: studentData['phone'],
+            status: studentData['status'],
+            statusDate: studentData['statusData'],
+            situation: studentData['stuation'],);
+        fetchedStudentList.add(student);
+      });
+      _students = fetchedStudentList;
+      _isYukleme = false;
+      notifyListeners();
+      _selStudentId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  void selectStudent(String studentId) {
+    _selStudentId = studentId;
+    notifyListeners();
+  }
+
 }
