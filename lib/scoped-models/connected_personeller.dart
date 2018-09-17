@@ -219,6 +219,48 @@ class PersonellerModel extends ConnectedPersonellerModel {
     });
   }
 
+  Future<Null> fetchPersonellerDjango({onlyForUser = false}) {
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            'https://7bolge7dans.xyz/pbs/personeller/',  headers: {'Authorization': '${_authenticatedKullanici.token}'})
+        .then<Null>((http.Response response) {
+      print("DJANGO POSTMAN DAN GELEN RESPONSE : " +json.decode(response.toString()));
+      final List<Personel> fetchedPersonelList = [];
+      final Map<String, dynamic> personelListData = json.decode(response.body);
+      if (personelListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      personelListData.forEach((String personelId, dynamic personelData) {
+        final Personel personel = Personel(
+            id: personelId,
+            adSoyad: personelData['adSoyad'],
+            sicil: personelData['sicil'],
+            eposta: personelData['eposta'],
+            bolum: personelData['bolum'],
+            cep: personelData['cep'],
+            userEmail: personelData['userEmail'],
+            userId: personelData['userId'],
+            isFavorite: personelData['wishlistUsers'] == null ? false: (personelData['wishlistUsers'] as Map<String, dynamic>)
+                .containsKey(_authenticatedKullanici.id));
+        fetchedPersonelList.add(personel);
+      });
+      _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
+        return personel.userId == _authenticatedKullanici.id;
+      }).toList() : fetchedPersonelList;
+      _isYukleme = false;
+      notifyListeners();
+      _selPersonelId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
   void togglePersonelFavoriteStatus() async {
     final bool isCurrentlyFavorite = selectedPersonel.isFavorite;
     final bool newFavoriteStatus = !isCurrentlyFavorite;
@@ -331,6 +373,64 @@ class KullaniciModel extends ConnectedPersonellerModel {
     } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
       message = 'Bu eposta kayıtlı değil!';
     } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
+      message = 'Parola geçerli değil!';
+    }
+    print('YUKLEME FALSE YAPAMADI');
+    _isYukleme = false;
+    print('YUKLEME FALSE YAPTI!!!!!!!');
+    notifyListeners();
+    return {'success': !hasError, 'message': message};
+  }
+
+  Future<Map<String, dynamic>> kimlikdogrulamaDjango(String email, String password,
+    [AuthMode mode = AuthMode.Login]) async {
+    _isYukleme = true;
+    notifyListeners();
+    final Map<String, dynamic> authData = {
+      'username': email,
+      'password': password,
+      'returnSecureToken': true
+    };
+    http.Response response;
+    if (mode == AuthMode.Login) {
+      response = await http.post('https://7bolge7dans.xyz/pbs/api/login',
+          body: json.encode(authData),
+          headers: {'Content-Type': 'application/json'});
+    } else {
+      response = await http.post(
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyC9HZLbyM32OcWy1CCymy7vFyBkyIByQ4o',
+        body: json.encode(authData),
+        headers: {'Content-Type': 'application/json'},
+      );
+    }
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    bool hasError = true;
+    String message = 'Bir şeyler yanlış!';
+    //print('GELEN TIME BUDUR:' + responseData['expiresIn']);
+    print('GELEN RESPONSE DATA BUDUR'+ responseData.toString());
+    if (responseData.containsKey('token')) {
+      hasError = false;
+      message = 'Authentication succeeded!';
+      _authenticatedKullanici = Kullanici(
+          id: responseData['localId'].toString(),
+          email: email,
+          token: responseData['token']);
+      ayarlaAuthTimeout(int.parse(responseData['expireIn']));
+      _kullaniciSubject.add(true);
+      final DateTime now = DateTime.now();
+      final DateTime expiryTime =
+          now.add(Duration(seconds: int.parse(responseData['expireIn'])));
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', responseData['token']);
+      prefs.setString('userEmail', email);
+      prefs.setString('userId', responseData['localId'].toString());
+      prefs.setString('expiryTime', expiryTime.toIso8601String());
+    } else if (responseData['error'] == 'EMAIL_EXISTS') {
+      message = 'Bu eposta kayıtlı! Başka bir eposta giriniz.';
+    } else if (responseData['error'] == 'The user does not exist') {
+      message = 'Bu eposta kayıtlı değil!';
+    } else if (responseData['error'] == 'Incorrect password') {
       message = 'Parola geçerli değil!';
     }
     print('YUKLEME FALSE YAPAMADI');

@@ -17,8 +17,8 @@ dependencies:
   image_picker: "^0.4.5"
   mime: "^0.9.6"
   url_launcher: "^3.0.2"
-  
-  
+
+
 
 
 
@@ -26,10 +26,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.5.2
-  
+
 
 flutter_icons:
-  android: true 
+  android: true
   ios: true
   image_path: "assets/icon/app-icon.png"
   adaptive_icon_background: "#FFFAFAFA"
@@ -51,7 +51,7 @@ flutter:
   assets:
     - assets/food.jpg
     - assets/background.jpg
-    - assets/sdu.jpg    
+    - assets/sdu.jpg
     - assets/profil.jpg
     - assets/staff-default.png
   #  - images/a_dot_ham.jpeg
@@ -80,5 +80,5 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies, 
+  # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

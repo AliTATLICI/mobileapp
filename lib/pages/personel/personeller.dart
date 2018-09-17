@@ -22,7 +22,7 @@ class PersonellerSayfa extends StatefulWidget {
 class _PersonellerSayfaState extends State<PersonellerSayfa> {
   @override
   initState() {
-    widget.model.fetchPersoneller();
+    widget.model.fetchPersonellerDjango();
     super.initState();
   }
 

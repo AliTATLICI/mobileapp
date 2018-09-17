@@ -186,7 +186,7 @@ class _AuthPageState extends State<AuthPage> {
                                       ? 'GİRİŞ'
                                       : 'KAYDOL'),
                                   onPressed: () =>
-                                      _gonderForm(model.kimlikdogrulama),
+                                      _gonderForm(model.kimlikdogrulamaDjango),
                                 );
                         },
                       )
