@@ -220,32 +220,36 @@ class PersonellerModel extends ConnectedPersonellerModel {
   }
 
   Future<Null> fetchPersonellerDjango({onlyForUser = false}) {
+    print("fetchPersonelDJANGO metodun içine GİRDİ");
     _isYukleme = true;
     notifyListeners();
     return http
         .get(
-            'https://7bolge7dans.xyz/pbs/personeller/',  headers: {'Authorization': '${_authenticatedKullanici.token}'})
+            'https://7bolge7dans.xyz/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
         .then<Null>((http.Response response) {
-      print("DJANGO POSTMAN DAN GELEN RESPONSE : " +json.decode(response.toString()));
+      print(json.decode(response.body));
       final List<Personel> fetchedPersonelList = [];
-      final Map<String, dynamic> personelListData = json.decode(response.body);
+      final Map<String, dynamic> personelListData = json.decode(utf8.decode(response.bodyBytes));
       if (personelListData == null) {
         _isYukleme = false;
         notifyListeners();
         return;
       }
-      personelListData.forEach((String personelId, dynamic personelData) {
+      print("PERSONELLISTDATA:" + personelListData["results"].toString());
+      personelListData["results"].forEach((dynamic personelData) {
+        print("PERSONELDATA-FOREACH-----------------------" + personelData['adi_soyadi']);
         final Personel personel = Personel(
-            id: personelId,
-            adSoyad: personelData['adSoyad'],
+            id: personelData['sicil'],
+            adSoyad: personelData['adi_soyadi'],
             sicil: personelData['sicil'],
-            eposta: personelData['eposta'],
-            bolum: personelData['bolum'],
-            cep: personelData['cep'],
-            userEmail: personelData['userEmail'],
-            userId: personelData['userId'],
+            eposta: personelData['e_posta'],
+            bolum: personelData['sicil'],
+            cep: personelData['telefon'],
+            userEmail: personelData['sicil'],
+            userId: personelData['sicil'],
             isFavorite: personelData['wishlistUsers'] == null ? false: (personelData['wishlistUsers'] as Map<String, dynamic>)
                 .containsKey(_authenticatedKullanici.id));
+        print("personelTOSTRING-" + personel.toString());
         fetchedPersonelList.add(personel);
       });
       _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
