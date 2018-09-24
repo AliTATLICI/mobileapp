@@ -225,7 +225,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            'https://7bolge7dans.xyz/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
+            'http://192.168.1.34:8080/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Personel> fetchedPersonelList = [];
@@ -397,7 +397,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
     };
     http.Response response;
     if (mode == AuthMode.Login) {
-      response = await http.post('https://7bolge7dans.xyz/pbs/api/login',
+      response = await http.post('http://192.168.1.34:8080/pbs/api/login',
           body: json.encode(authData),
           headers: {'Content-Type': 'application/json'});
     } else {
