@@ -61,6 +61,13 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.report),
+            title: Text('Haberler'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/haberler');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.person),
             title: Text('Personel Yönetimi'),
             onTap: () {

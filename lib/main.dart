@@ -9,11 +9,14 @@ import './pages/personel/personeller.dart';
 import './pages/students/students.dart';
 import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
+import './pages/personel/haber.dart';
+import './pages/haber_duyuru/haberler.dart';
 import './scoped-models/main.dart';
 import './models/personel.dart';
+import './models/haber.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
+  //debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
@@ -49,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           // brightness: Brightness.light,
           primarySwatch: Colors.blue,
-          primaryColor: defaultTargetPlatform == TargetPlatform.iOS ? Colors.grey[50] : null,
+          primaryColor: defaultTargetPlatform == TargetPlatform.iOS ? Colors.grey[50] : Colors.deepOrange,
           // accentColor: Colors.deepPurple,
           buttonColor: Colors.blueAccent,
           // textTheme: Theme.of(context).textTheme.apply(
@@ -69,6 +72,7 @@ class _MyAppState extends State<MyApp> {
               !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : PersonelAdminSayfa(_model),
+          '/haberler': (BuildContext context) => HaberlerSayfa(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -88,6 +92,15 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute<bool>(
                 builder: (BuildContext contex) =>
                     !_isAuthenticated ? AuthPage() : PersonelSayfa(personel));
+          }
+          if (pathElements[1] == 'haber') {
+            final String haberId = pathElements[2];
+            final Haber haber =
+                _model.allHaberler.firstWhere((Haber haber) {
+              return haber.id == haberId;
+            });
+            return MaterialPageRoute<bool>(
+                builder: (BuildContext contex) => HaberSayfa(haber));
           }
           return null;
         },

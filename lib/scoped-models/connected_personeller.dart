@@ -8,14 +8,17 @@ import 'package:rxdart/subjects.dart';
 
 import '../models/personel.dart';
 import '../models/student.dart';
+import '../models/haber.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
   List<Student> _students = [];
+  List<Haber> _haberler = [];
   String _selPersonelId;
   String _selStudentId;
+  String _selHaberId;
   Kullanici _authenticatedKullanici;
   bool _isYukleme = false;
 }
@@ -27,6 +30,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_personeller);
   }
 
+  List<Haber> get allHaberler {
+    return List.from(_haberler);
+  }
+
   List<Personel> get displayedPersoneller {
     if (_gosterFavorites) {
       return _personeller
@@ -34,6 +41,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
           .toList();
     }
     return List.from(_personeller);
+  }
+
+  List<Haber> get displayedHaberler {
+    return List.from(_haberler);
   }
 
   int get selectedPersonelIndex {
@@ -225,7 +236,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            'http://192.168.1.34:8080/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
+            'http://192.168.1.35:8000/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Personel> fetchedPersonelList = [];
@@ -255,9 +266,52 @@ class PersonellerModel extends ConnectedPersonellerModel {
       _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
         return personel.userId == _authenticatedKullanici.id;
       }).toList() : fetchedPersonelList;
+      print("TUM PERSONELLER--------**********-------");
+      print(_personeller);
       _isYukleme = false;
       notifyListeners();
       _selPersonelId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  Future<Null> fetchHaberlerDjango({onlyForUser = false}) {
+    print("fetchHaberDJANGO metodun içine GİRDİ");
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            'http://192.168.1.35:8000/haber/haberler/',)
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<Haber> fetchedHaberList = [];
+      final Map<String, dynamic> haberListData = json.decode(utf8.decode(response.bodyBytes));
+      if (haberListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      //print("HABERLISTDATA:" + haberListData["results"].toString());
+      haberListData["results"].forEach((dynamic haberData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final Haber haber = Haber(
+            id: haberData['id'].toString(),
+            numarasi: haberData['numarasi'],
+            baslik: haberData['baslik'],
+            createdDate: haberData['created_date'],
+            icerik: haberData['icerik']
+      
+            );
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedHaberList.add(haber);
+      });
+      _haberler = fetchedHaberList;
+      _isYukleme = false;
+      notifyListeners();
+      _selHaberId = null;
     }).catchError((error) {
       _isYukleme = false;
       notifyListeners();
@@ -397,7 +451,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
     };
     http.Response response;
     if (mode == AuthMode.Login) {
-      response = await http.post('http://192.168.1.34:8080/pbs/api/login',
+      response = await http.post('http://192.168.1.35:8000/pbs/api/login',
           body: json.encode(authData),
           headers: {'Content-Type': 'application/json'});
     } else {

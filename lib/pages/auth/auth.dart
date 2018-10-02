@@ -13,7 +13,7 @@ class AuthPage extends StatefulWidget {
   }
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
@@ -22,6 +22,15 @@ class _AuthPageState extends State<AuthPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordTextController = TextEditingController();
   AuthMode _authMode = AuthMode.Login;
+  AnimationController _controller;
+
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    super.initState();
+  }
 
   DecorationImage _buildBackgroundImage() {
     return DecorationImage(
@@ -68,16 +77,19 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildPasswordConfirmTextField() {
-    return TextFormField(
-      decoration: InputDecoration(
-          labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
-      keyboardType: TextInputType.emailAddress,
-      obscureText: true,
-      validator: (String value) {
-        if (_passwordTextController.text != value) {
-          return 'Parolalar eşleşmiyor!';
-        }
-      },
+    return FadeTransition(
+        opacity: CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+        child: TextFormField(
+        decoration: InputDecoration(
+            labelText: 'Confirm Password', filled: true, fillColor: Colors.white),
+        keyboardType: TextInputType.emailAddress,
+        obscureText: true,
+        validator: (String value) {
+          if (_passwordTextController.text != value && _authMode == AuthMode.Signup) {
+            return 'Parolalar eşleşmiyor!';
+          }
+        },
+      ),
     );
   }
 
@@ -99,26 +111,28 @@ class _AuthPageState extends State<AuthPage> {
     }
     _formKey.currentState.save();
     Map<String, dynamic> successInformation;
-    successInformation =  await authenticate(_formData['email'], _formData['password'], _authMode);        
+    successInformation = await authenticate(
+        _formData['email'], _formData['password'], _authMode);
     if (successInformation['success']) {
-        Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/');
     } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Bir Hata Oluştu!'),
-                content: Text(successInformation['message']),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Okay'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            },);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Bir Hata Oluştu!'),
+            content: Text(successInformation['message']),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        },
+      );
     }
     // print('EMAIL :' + _formData['email']);
     // print('PASSWORD' + _formData['password']);
@@ -154,9 +168,7 @@ class _AuthPageState extends State<AuthPage> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      _authMode == AuthMode.Signup
-                          ? _buildPasswordConfirmTextField()
-                          : Container(),
+                      _buildPasswordConfirmTextField(),
                       _buildAcceptSwitch(),
                       SizedBox(
                         height: 10.0,
@@ -165,11 +177,18 @@ class _AuthPageState extends State<AuthPage> {
                         child: Text(
                             'Switch to ${_authMode == AuthMode.Login ? 'Signup' : 'Login'}'),
                         onPressed: () {
-                          setState(() {
-                            _authMode = _authMode == AuthMode.Login
-                                ? AuthMode.Signup
-                                : AuthMode.Login;
-                          });
+                          if(_authMode == AuthMode.Login) {
+                            setState(() {
+                              _authMode ==AuthMode.Signup;
+                            });
+                            _controller.forward();
+                          } else {
+                            setState(() {
+                              _authMode ==AuthMode.Login;
+                            });
+                            _controller.reverse();
+                          }
+                          
                         },
                       ),
                       SizedBox(
