@@ -59,7 +59,9 @@ class HaberCard extends StatelessWidget {
               fit: BoxFit.cover,
               placeholder: AssetImage('assets/staff-default.png'),
             );
-      return fadeInImage;
+      return Hero(
+        tag: haber.id,
+        child: fadeInImage);
     }
     else {
       return Text(haber.id);

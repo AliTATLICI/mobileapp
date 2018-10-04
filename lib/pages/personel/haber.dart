@@ -45,8 +45,8 @@ class HaberSayfa extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-            eposta,
-            style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+          eposta,
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
         ),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 5.0),
@@ -63,44 +63,65 @@ class HaberSayfa extends StatelessWidget {
     );
   }
 
+  List buildTextViews(int count) {
+    List<Widget> strings = List();
+    for (int i = 0; i < count; i++) {
+      strings.add(new Padding(
+          padding: new EdgeInsets.all(16.0),
+          child: new Text("" + haber.icerik[i].toString(),
+              style: new TextStyle(fontSize: 16.0))));
+    }
+    return strings;
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    String ilkresim = haber.icerik.firstWhere((o) => o.startsWith('/SDU_Files/'), orElse: () => '/SDU_Files/Images/IMG_9529.JPG');
-    return WillPopScope(onWillPop: () {
-      print("< Geri Butonuna Basıldı");
-      Navigator.pop(context, false);
-      return Future.value(false);
-    }, child: Scaffold(
-          appBar: AppBar(
-            title: Text(haber.numarasi),
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              FadeInImage(
-                image: NetworkImage("http://w3.sdu.edu.tr/" + ilkresim),
-                height: 300.0,
-                fit: BoxFit.cover,
-                placeholder: AssetImage('assets/staff-default.png'),
-              ),
-              Container(
-                padding: EdgeInsets.all(5.0),
-                child: AdiSoyadiDefault(haber.numarasi),
-              ),
-              _buildBolumCepRow(haber.id, haber.createdDate),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  haber.id,
-                  textAlign: TextAlign.center,
+    List haber_icerikleri = haber.icerik;
+    String ilkresim = haber.icerik.firstWhere(
+        (o) => o.startsWith('/SDU_Files/'),
+        orElse: () => '/SDU_Files/Images/IMG_9529.JPG');
+    return WillPopScope(
+      onWillPop: () {
+        print("< Geri Butonuna Basıldı");
+        Navigator.pop(context, false);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        // appBar: AppBar(
+        //   title: Text(haber.numarasi),
+        // ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 250.0,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(haber.baslik),
+                background: Hero(
+                  tag: haber.id,
+                  child: FadeInImage(
+                    image: NetworkImage("http://w3.sdu.edu.tr/" + ilkresim),
+                    height: 300.0,
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage('assets/staff-default.png'),
+                  ),
                 ),
               ),
-            ],
-          
-          ),
-          floatingActionButton: HaberFAB(),
-        ),);
-    
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                return ListTile(
+                    title: Text(haber.icerik[index]),
+                  );
+              },
+              childCount: haber.icerik.length
+              ),
+            )
+          ],
+        ),
+        floatingActionButton: HaberFAB(),
+      ),
+    );
   }
 }
