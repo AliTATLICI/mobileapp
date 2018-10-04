@@ -9,6 +9,7 @@ import 'package:rxdart/subjects.dart';
 import '../models/personel.dart';
 import '../models/student.dart';
 import '../models/haber.dart';
+import '../models/duyuru.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
 
@@ -16,9 +17,11 @@ class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
   List<Student> _students = [];
   List<Haber> _haberler = [];
+  List<Duyuru> _duyurular = [];
   String _selPersonelId;
   String _selStudentId;
   String _selHaberId;
+  String _selDuyuruId;
   Kullanici _authenticatedKullanici;
   bool _isYukleme = false;
 }
@@ -34,6 +37,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_haberler);
   }
 
+  List<Duyuru> get allDuyurular {
+    return List.from(_duyurular);
+  }
+
   List<Personel> get displayedPersoneller {
     if (_gosterFavorites) {
       return _personeller
@@ -45,6 +52,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   List<Haber> get displayedHaberler {
     return List.from(_haberler);
+  }
+
+  List<Duyuru> get displayedDuyurular {
+    return List.from(_duyurular);
   }
 
   int get selectedPersonelIndex {
@@ -318,6 +329,49 @@ class PersonellerModel extends ConnectedPersonellerModel {
       return;
     });
   }
+
+
+  Future<Null> fetchDuyurularDjango({onlyForUser = false}) {
+    print("fetchDuyurularDJANGO metodun içine GİRDİ");
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            'http://192.168.1.35:8000/haber/duyurular/',)
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<Duyuru> fetchedDuyuruList = [];
+      final Map<String, dynamic> duyuruListData = json.decode(utf8.decode(response.bodyBytes));
+      if (duyuruListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      //print("HABERLISTDATA:" + haberListData["results"].toString());
+      duyuruListData["results"].forEach((dynamic duyuruData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final Duyuru duyuru = Duyuru(
+            id: duyuruData['id'].toString(),
+            numarasi: duyuruData['numarasi'],
+            baslik: duyuruData['baslik'],
+            createdDate: duyuruData['created_date'],
+            icerik: duyuruData['icerik']
+      
+            );
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedDuyuruList.add(duyuru);
+      });
+      _duyurular = fetchedDuyuruList;
+      _isYukleme = false;
+      notifyListeners();
+      _selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
 
   void togglePersonelFavoriteStatus() async {
     final bool isCurrentlyFavorite = selectedPersonel.isFavorite;

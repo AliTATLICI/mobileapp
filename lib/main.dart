@@ -10,10 +10,13 @@ import './pages/students/students.dart';
 import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
 import './pages/personel/haber.dart';
+import './pages/personel/duyuru.dart';
 import './pages/haber_duyuru/haberler.dart';
+import './pages/haber_duyuru/duyurular.dart';
 import './scoped-models/main.dart';
 import './models/personel.dart';
 import './models/haber.dart';
+import './models/duyuru.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -73,6 +76,7 @@ class _MyAppState extends State<MyApp> {
           '/admin': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : PersonelAdminSayfa(_model),
           '/haberler': (BuildContext context) => HaberlerSayfa(_model),
+          '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -101,6 +105,15 @@ class _MyAppState extends State<MyApp> {
             });
             return MaterialPageRoute<bool>(
                 builder: (BuildContext contex) => HaberSayfa(haber));
+          }
+          if (pathElements[1] == 'duyuru') {
+            final String duyuruId = pathElements[2];
+            final Duyuru duyuru =
+                _model.allDuyurular.firstWhere((Duyuru duyuru) {
+              return duyuru.id == duyuruId;
+            });
+            return MaterialPageRoute<bool>(
+                builder: (BuildContext contex) => DuyuruSayfa(duyuru));
           }
           return null;
         },

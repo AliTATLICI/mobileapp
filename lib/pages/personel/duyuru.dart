@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/ui_elements/adi_soyadi_default.dart';
-import '../../models/haber.dart';
+import '../../models/duyuru.dart';
 import '../../scoped-models/main.dart';
-import '../../widgets/personeller/personel_dersler.dart';
 import '../../widgets/personeller/haber_fab.dart';
 
-class HaberSayfa extends StatelessWidget {
-  final Haber haber;
+class DuyuruSayfa extends StatelessWidget {
+  final Duyuru duyuru;
 
-  HaberSayfa(this.haber);
+  DuyuruSayfa(this.duyuru);
   _showWarnigDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -68,7 +67,7 @@ class HaberSayfa extends StatelessWidget {
     for (int i = 0; i < count; i++) {
       strings.add(new Padding(
           padding: new EdgeInsets.all(16.0),
-          child: new Text("" + haber.icerik[i].toString(),
+          child: new Text("" + duyuru.icerik[i].toString(),
               style: new TextStyle(fontSize: 16.0))));
     }
     return strings;
@@ -77,8 +76,8 @@ class HaberSayfa extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    List haber_icerikleri = haber.icerik;
-    String ilkresim = haber.icerik.firstWhere(
+    List duyuru_icerikleri = duyuru.icerik;
+    String ilkresim = duyuru.icerik.firstWhere(
         (o) => o.startsWith('/SDU_Files/'),
         orElse: () => '/SDU_Files/Images/IMG_9529.JPG');
     return WillPopScope(
@@ -98,9 +97,9 @@ class HaberSayfa extends StatelessWidget {
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(      
                 centerTitle: false,          
-                title: Text(haber.baslik, style: TextStyle(fontSize: 13.0), textAlign: TextAlign.start,),
+                title: Text(duyuru.baslik, style: TextStyle(fontSize: 13.0), textAlign: TextAlign.start,),
                 background: Hero(
-                  tag: haber.id,
+                  tag: duyuru.id,
                   child: FadeInImage(
                     image: NetworkImage("http://w3.sdu.edu.tr/" + ilkresim),
                     height: 300.0,
@@ -115,15 +114,15 @@ class HaberSayfa extends StatelessWidget {
                 return Container(
                     alignment: Alignment.center,
                     color: Colors.teal[100 * (index%9)],
-                    child: haber.icerik[index].startsWith("/SDU_Files/") ? FadeInImage(
-                    image: NetworkImage("http://w3.sdu.edu.tr/" + haber.icerik[index]),
+                    child: duyuru.icerik[index].startsWith("/SDU_Files/") ? FadeInImage(
+                    image: NetworkImage("http://w3.sdu.edu.tr/" + duyuru.icerik[index]),
                     height: 300.0,
                     fit: BoxFit.cover,
                     placeholder: AssetImage('assets/staff-default.png'),
-                  ):  Text(haber.icerik[index]),
+                  ):  Text(duyuru.icerik[index]),
                   );
               },
-              childCount: haber.icerik.length
+              childCount: duyuru.icerik.length
               ),
             )
           ],
