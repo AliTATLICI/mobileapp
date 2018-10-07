@@ -20,21 +20,19 @@ dependencies:
   cached_network_image: "^0.4.1"
 
 
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_launcher_icons: ^0.5.2
 
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/app-icon.png"
+  image_path: "assets/icon/sdu_logo.jpg"
   adaptive_icon_background: "#FFFAFAFA"
-  adaptive_icon_foreground: "assets/icon/app-icon.png"
+  adaptive_icon_foreground: "assets/icon/sdu_logo.jpg"
 
 
 # For information on the generic Dart part of this file, see the
@@ -55,6 +53,7 @@ flutter:
     - assets/sdu.jpg
     - assets/profil.jpg
     - assets/staff-default.png
+    - assets/sdu_obs_giris.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

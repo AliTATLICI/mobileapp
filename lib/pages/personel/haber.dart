@@ -76,7 +76,7 @@ class HaberSayfa extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final cihazGenisligi = MediaQuery.of(context).size.width;
     List haber_icerikleri = haber.icerik;
     String ilkresim = haber.icerik.firstWhere(
         (o) => o.startsWith('/SDU_Files/'),
@@ -96,9 +96,14 @@ class HaberSayfa extends StatelessWidget {
             SliverAppBar(
               expandedHeight: 250.0,
               pinned: true,
-              flexibleSpace: FlexibleSpaceBar(      
-                centerTitle: false,          
-                title: Text(haber.baslik, style: TextStyle(fontSize: 13.0), textAlign: TextAlign.start,),
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: false,
+                title: Text(
+                  haber.baslik,
+                  softWrap: true,
+                  style: TextStyle(fontSize: cihazGenisligi > 700 ? 20 : 12.0,),
+                  textAlign: TextAlign.start,
+                ),
                 background: Hero(
                   tag: haber.id,
                   child: FadeInImage(
@@ -111,20 +116,22 @@ class HaberSayfa extends StatelessWidget {
               ),
             ),
             SliverList(
-              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
                 return Container(
-                    alignment: Alignment.center,
-                    color: Colors.teal[100 * (index%9)],
-                    child: haber.icerik[index].startsWith("/SDU_Files/") ? FadeInImage(
-                    image: NetworkImage("http://w3.sdu.edu.tr/" + haber.icerik[index]),
-                    height: 300.0,
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage('assets/staff-default.png'),
-                  ):  Text(haber.icerik[index]),
-                  );
-              },
-              childCount: haber.icerik.length
-              ),
+                  alignment: Alignment.center,
+                  color: Colors.teal[100 * (index % 9)],
+                  child: haber.icerik[index].startsWith("/SDU_Files/")
+                      ? FadeInImage(
+                          image: NetworkImage(
+                              "http://w3.sdu.edu.tr/" + haber.icerik[index]),
+                          height: 300.0,
+                          fit: BoxFit.cover,
+                          placeholder: AssetImage('assets/staff-default.png'),
+                        )
+                      : Text(haber.icerik[index]),
+                );
+              }, childCount: haber.icerik.length),
             )
           ],
         ),

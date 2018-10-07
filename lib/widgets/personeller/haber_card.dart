@@ -14,13 +14,16 @@ class HaberCard extends StatelessWidget {
 
   HaberCard(this.haber, this.haberIndex);
 
+  
+
   Widget _buildAdiSoyadiSicilRow() {
+    String ilkresim = haber.icerik.firstWhere((o) => o.startsWith('/SDU_Files/'), orElse: () => null);
     return Container(
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          HaberBasligi(haber.baslik),
+          HaberBasligi(ilkresim != null ? haber.baslik : haber.icerik[0]),
           SizedBox(
             width: 8.0,
           ),
@@ -64,7 +67,10 @@ class HaberCard extends StatelessWidget {
         child: fadeInImage);
     }
     else {
-      return Text(haber.id);
+      return Text(haber.baslik, softWrap:true,
+      style: TextStyle(
+        fontSize: 16.0, fontWeight: FontWeight.bold, fontFamily: 'Oswald'
+      ),);
     }
     
   }

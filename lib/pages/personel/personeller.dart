@@ -5,6 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/personeller/personeller.dart';
 import '../../widgets/ui_elements/cikisyap_list_tile.dart';
+import '../../widgets/ui_elements/drawer_custom.dart';
 import '../../scoped-models/main.dart';
 
 class PersonellerSayfa extends StatefulWidget {
@@ -82,6 +83,13 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Öğrenci Bilgi Sistemi'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/obs');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.school),
             title: Text('Öğrenciler'),
             onTap: () {
@@ -115,10 +123,10 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: _buildSideDrawer(context),
+      drawer: DrawerCustom(widget.model),
       appBar: AppBar(
         title: Text("Personel Listesi"),
-        elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+        elevation: defaultTargetPlatform == TargetPlatform.android ? 4.0 : 0.0,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -11,12 +14,17 @@ import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
 import './pages/personel/haber.dart';
 import './pages/personel/duyuru.dart';
+
+import './pages/obs/obs_giris.dart';
+
 import './pages/haber_duyuru/haberler.dart';
 import './pages/haber_duyuru/duyurular.dart';
 import './scoped-models/main.dart';
 import './models/personel.dart';
 import './models/haber.dart';
 import './models/duyuru.dart';
+import './widgets/helpers/custom_route.dart';
+import './shared/adaptive_theme.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -32,7 +40,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
+  final _platformChannel = MethodChannel('flutter-course.com/battery');
   bool _isAuthenticated = false;
+
+
+  Future<Null> _getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      final int result = await _platformChannel.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Batarya durumu : %$result';
+    }
+    catch (error) {
+      batteryLevel = 'Batarya durumu bulunamadı';
+      print(error);
+    }
+    print(batteryLevel);
+    
+  }
 
   @override
   void initState() {
@@ -42,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         _isAuthenticated = isAuthenticated;
       });
     });
+    _getBatteryLevel();
     super.initState();
   }
 
@@ -50,23 +75,10 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
+        title: "SDÜ UBYS Mobil",
         //debugShowMaterialGrid: true,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          // brightness: Brightness.light,
-          primarySwatch: Colors.blue,
-          primaryColor: defaultTargetPlatform == TargetPlatform.iOS ? Colors.grey[50] : Colors.deepOrange,
-          // accentColor: Colors.deepPurple,
-          buttonColor: Colors.blueAccent,
-          // textTheme: Theme.of(context).textTheme.apply(
-          //   bodyColor: Colors.black,
-          //   displayColor: Colors.red
-          // ),
-          // primaryTextTheme: Theme
-          //   .of(context)
-          //   .primaryTextTheme
-          //   .apply(bodyColor: Colors.white)
-        ),
+        theme: getAdaptiveThemeData(context),
         //home: PersonellerSayfa(),
         routes: {
           '/': (BuildContext context) =>
@@ -77,6 +89,7 @@ class _MyAppState extends State<MyApp> {
               !_isAuthenticated ? AuthPage() : PersonelAdminSayfa(_model),
           '/haberler': (BuildContext context) => HaberlerSayfa(_model),
           '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
+          '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -103,7 +116,7 @@ class _MyAppState extends State<MyApp> {
                 _model.allHaberler.firstWhere((Haber haber) {
               return haber.id == haberId;
             });
-            return MaterialPageRoute<bool>(
+            return CustomRoute<bool>(
                 builder: (BuildContext contex) => HaberSayfa(haber));
           }
           if (pathElements[1] == 'duyuru') {

@@ -229,6 +229,7 @@ class _PersonelDuzenleSayfasiState extends State<PersonelDuzenleSayfasi> {
             : Scaffold(
                 appBar: AppBar(
                   title: Text('Personel Düzenleme'),
+                  elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
                 ),
                 body: pageContent,
               );

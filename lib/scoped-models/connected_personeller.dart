@@ -579,6 +579,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
     _authenticatedKullanici = null;
     _authTimer.cancel();
     _kullaniciSubject.add(false);
+    _selDuyuruId = null;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
     prefs.remove('userEmail');

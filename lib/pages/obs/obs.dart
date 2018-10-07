@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import './personel_duzenle.dart';
-import './personel_listele.dart';
+import './obs_anasayfa.dart';
+import './obs_donem_dersleri.dart';
 import '../../widgets/ui_elements/cikisyap_list_tile.dart';
 import '../../scoped-models/main.dart';
 
-class PersonelAdminSayfa extends StatelessWidget {
+class OBSSayfa extends StatelessWidget {
   final MainModel model;
 
-  PersonelAdminSayfa(this.model);
+  OBSSayfa(this.model);
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -41,30 +41,34 @@ class PersonelAdminSayfa extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         drawer: _buildSideDrawer(context),
         appBar: AppBar(
-          title: Text("Personel Listesi"),
+          title: Text("Öğrenci Bilgi Sistemi"),
           elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
+                icon: Icon(Icons.home),
+                text: 'Ana Sayfa',
+              ),
+              Tab(
                 icon: Icon(Icons.create),
-                text: 'Personel Oluştur',
+                text: 'Dönem Derslerim',
               ),
               Tab(
                 icon: Icon(
-                  Icons.person,
-                ),
-                text: 'Kayıtlı Personeller',
+                  Icons.school),
+                text: 'Tüm Derslerim',
               ),
             ],
           ),
         ),
         body: TabBarView(
           children: <Widget>[
-            PersonelDuzenleSayfasi(),
+            OBSAnaSayfa(),
+            PersonelListeleSayfasi(model),
             PersonelListeleSayfasi(model)
           ],
         ),
