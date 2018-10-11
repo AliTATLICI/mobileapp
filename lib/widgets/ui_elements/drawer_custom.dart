@@ -79,9 +79,16 @@ class _DrawerCustomState extends State<DrawerCustom> {
           ),
           ListTile(
             leading: Icon(Icons.school),
-            title: Text('Öğrenciler'),
+            title: Text('Öğrenci Arama'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/ogrenciler');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.person_pin_circle),
+            title: Text('Personel Arama'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/personel-arama');
             },
           ),
           Divider(),

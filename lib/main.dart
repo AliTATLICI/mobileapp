@@ -14,6 +14,7 @@ import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
 import './pages/personel/haber.dart';
 import './pages/personel/duyuru.dart';
+import './pages/personel/personel_arama.dart';
 
 import './pages/obs/obs_giris.dart';
 
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
           '/haberler': (BuildContext context) => HaberlerSayfa(_model),
           '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
           '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
+          '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
