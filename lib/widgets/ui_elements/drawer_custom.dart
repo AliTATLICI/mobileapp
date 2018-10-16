@@ -6,9 +6,9 @@ import './cikisyap_list_tile.dart';
 
 class DrawerCustom extends StatefulWidget {
 
-  final MainModel model;
+  //final MainModel model;
 
-  DrawerCustom(this.model);
+  //DrawerCustom(this.model);
   @override
   _DrawerCustomState createState() => _DrawerCustomState();
 }
@@ -32,7 +32,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
             builder: (BuildContext context, Widget child, MainModel model) {
               return UserAccountsDrawerHeader(
                 accountName: Text("Ali TATLICI"),
-                accountEmail: Text(model.kullanici.email),
+                accountEmail: Text("eposta yazacak"),//model.kullanici.email
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Theme.of(context).platform == TargetPlatform.iOS ? Colors.purple : Colors.white,
                   backgroundImage: NetworkImage(
@@ -50,14 +50,14 @@ class _DrawerCustomState extends State<DrawerCustom> {
             },
           ),
          ListTile(
-            leading: Icon(Icons.report),
+            leading: Icon(Icons.info_outline),
             title: Text('Haberler'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/haberler');
             },
           ),
           ListTile(
-            leading: Icon(Icons.report),
+            leading: Icon(Icons.history),
             title: Text('Duyurular'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/duyurular');

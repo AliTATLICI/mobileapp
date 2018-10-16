@@ -161,7 +161,7 @@ class _OBSGirisSayfasiState extends State<OBSGirisSayfasi> with TickerProviderSt
     final double targeteWidth =
         deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     return Scaffold(
-        drawer: DrawerCustom(widget.model),
+        drawer: DrawerCustom(),
         appBar: AppBar(
           title: Text('Öğrenci  Bilgi Sistemi Giriş'),
         ),

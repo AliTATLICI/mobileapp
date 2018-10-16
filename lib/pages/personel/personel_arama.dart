@@ -14,7 +14,7 @@ class PersonelAramaSayfasi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerCustom(model),
+      drawer: DrawerCustom(),
       appBar: AppBar(
         title: Text("Personel Arama"),
         actions: <Widget>[

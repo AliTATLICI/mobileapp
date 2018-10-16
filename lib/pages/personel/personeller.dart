@@ -123,7 +123,7 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: DrawerCustom(widget.model),
+      drawer: DrawerCustom(),
       appBar: AppBar(
         title: Text("Personel Listesi"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 4.0 : 0.0,

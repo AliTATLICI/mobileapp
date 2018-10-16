@@ -26,6 +26,7 @@ import './models/haber.dart';
 import './models/duyuru.dart';
 import './widgets/helpers/custom_route.dart';
 import './shared/adaptive_theme.dart';
+import './pages/ana_sayfa.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -83,7 +84,7 @@ class _MyAppState extends State<MyApp> {
         //home: PersonellerSayfa(),
         routes: {
           '/': (BuildContext context) =>
-              !_isAuthenticated ? AuthPage() : PersonellerSayfa(_model),
+              AnaSayfa(_model),
           '/ogrenciler': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>

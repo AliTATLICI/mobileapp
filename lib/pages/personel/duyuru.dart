@@ -128,6 +128,11 @@ class DuyuruSayfa extends StatelessWidget {
           ],
         ),
         floatingActionButton: HaberFAB(),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.yellow,
+          child: Container(height: 50.0,),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       ),
     );
   }

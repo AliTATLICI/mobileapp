@@ -48,7 +48,7 @@ class _HaberlerSayfaState extends State<HaberlerSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: DrawerCustom(widget.model),
+      drawer: DrawerCustom(),
       appBar: AppBar(
         title: Text("Haberler"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,

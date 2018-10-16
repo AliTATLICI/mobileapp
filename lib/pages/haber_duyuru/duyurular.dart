@@ -5,6 +5,8 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/personeller/duyurular.dart';
 import '../../widgets/ui_elements/cikisyap_list_tile.dart';
+import '../../widgets/ui_elements/drawer_custom.dart';
+
 import '../../scoped-models/main.dart';
 
 class DuyurularSayfa extends StatefulWidget {
@@ -115,7 +117,7 @@ class _DuyurularSayfaState extends State<DuyurularSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: _buildSideDrawer(context),
+      drawer: DrawerCustom(),
       appBar: AppBar(
         title: Text("Duyurular"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
