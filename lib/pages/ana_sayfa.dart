@@ -5,6 +5,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
+import './yemekhane.dart';
 
 class AnaSayfa extends StatefulWidget {
   final MainModel model;
@@ -166,28 +167,10 @@ class ChoiceCard extends StatelessWidget {
       )
     ),
     onTap: () {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                child: new CupertinoAlertDialog(
-                  title: new Column(
-                    children: <Widget>[
-                      new Text("GridView"),
-                      new Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-                  content: new Text(choice.title),
-                  actions: <Widget>[
-                    new FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: new Text("OK"))
-                  ],
-                ));
+            Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => YemekhaneSayfasi()),
+  );
           },
         );
   }

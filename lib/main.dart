@@ -27,6 +27,7 @@ import './models/duyuru.dart';
 import './widgets/helpers/custom_route.dart';
 import './shared/adaptive_theme.dart';
 import './pages/ana_sayfa.dart';
+import './pages/yemekhane.dart';
 
 void main() {
   //debugPaintSizeEnabled = true;
@@ -93,6 +94,7 @@ class _MyAppState extends State<MyApp> {
           '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
           '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
+          '/yemekhane': (BuildContext context) => YemekhaneSayfasi()
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
