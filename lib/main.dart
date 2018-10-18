@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -94,7 +95,8 @@ class _MyAppState extends State<MyApp> {
           '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
           '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
-          '/yemekhane': (BuildContext context) => YemekhaneSayfasi()
+          '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
+                                  .format(DateTime.now()))
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {

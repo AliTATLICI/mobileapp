@@ -19,6 +19,7 @@ dependencies:
   url_launcher: "^3.0.2"
   cached_network_image: "^0.4.1"
   carousel_pro: ^0.0.13
+  intl: ^0.15.7
 
 
 dev_dependencies:
@@ -55,6 +56,10 @@ flutter:
     - assets/profil.jpg
     - assets/staff-default.png
     - assets/sdu_obs_giris.jpg
+    - assets/anasayfa1.jpg
+    - assets/anasayfa2.jpg
+    - assets/anasayfa3.jpg
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

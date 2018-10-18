@@ -98,11 +98,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   width: 400.0,
                   child: new Carousel(
                     images: [
-                      new NetworkImage(
-                          'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
-                      new NetworkImage(
-                          'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
-                      new ExactAssetImage("assets/sdu.jpg")
+                      ExactAssetImage("assets/anasayfa1.jpg"),
+                      ExactAssetImage("assets/anasayfa2.jpg"),
+                      ExactAssetImage("assets/anasayfa3.jpg")
                     ],
                     dotSize: 4.0,
                     dotSpacing: 15.0,
@@ -112,18 +110,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                     borderRadius: true,
                   )),
             ),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              height: 350.0,
-              color: Colors.grey[250],
-              child: GridView.count(
+            Expanded(
+                          child: Container(
+                padding: EdgeInsets.all(10.0),
+                height: 350.0,
+                color: Colors.grey[250],
+                child: GridView.count(
           crossAxisCount: 3,
           children: List.generate(choices.length, (index) {
-              return Center(
-                child: ChoiceCard(choice: choices[index]),
-              );
+                return Center(
+                  child: ChoiceCard(choice: choices[index]),
+                );
            }
           ),),
+              ),
             ),
           ],
         ),
@@ -169,7 +169,7 @@ class ChoiceCard extends StatelessWidget {
     onTap: () {
             Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => YemekhaneSayfasi()),
+    MaterialPageRoute(builder: (context) => YemekhaneSayfasi('18.10.2018')),
   );
           },
         );

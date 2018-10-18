@@ -49,6 +49,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
               );
             },
           ),
+          ListTile(
+            leading: Icon(Icons.info_outline),
+            title: Text('Anasayfa'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+          ),
          ListTile(
             leading: Icon(Icons.info_outline),
             title: Text('Haberler'),
