@@ -32,9 +32,9 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
         'Kıymalı Ispanak',
         'Peynirli Makarna',
         'Kase Yoğurt',
-        'Kavun '
+        'Elma'
       ],
-      'kalori': '(950 Kcal)'
+      'kalori': '1250 Kcal'
     },
     '18.10.2018': {
       'gun': 'Perşembe',
@@ -45,6 +45,17 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
         'Tatlı hemde kazandibi',
         'Kavun '
       ],
+      'kalori': '950 Kcal'
+    },
+    '19.10.2018': {
+      'gun': 'Pazartesi',
+      'menu': [
+        'Tarhana Çorbası',
+        'Kıymalı Ispanak',
+        'Peynirli Makarna',
+        'Kase Yoğurt',
+        'Elma'
+      ],
       'kalori': '(950 Kcal)'
     },
     '20.10.2018': {
@@ -54,7 +65,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
         'Kıymalı Ispanak',
         'Peynirli Makarna',
         'Kase Yoğurt',
-        'Kavun '
+        'Elma'
       ],
       'kalori': '(950 Kcal)'
     }
@@ -156,27 +167,38 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                 ],
               ),
               SizedBox(
-                height: 300.0,
+                height: 350.0,
                 child: Container(
-                  color: Colors.green,
+                  //color: Colors.green,
                   child: Center(
                     child: ListView.builder(
                       itemCount:
                           yemek_listesi[widget._seciliGun]['menu'].length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                            title: Text(yemek_listesi[widget._seciliGun]['menu'][index]));
+                        return Column(
+                          children: <Widget>[
+                            ListTile(
+                                title: Text(yemek_listesi[widget._seciliGun]
+                                    ['menu'][index])),
+                            Divider()
+                          ],
+                        );
                       },
                     ),
                   ),
                 ),
               ),
+              
+              ListTile(
+                title: Text("Toplam Kalori : " +
+                    (yemek_listesi[widget._seciliGun]['kalori'])),
+              ),
               SizedBox(
-                height: 100.0,
+                height: 50.0,
                 child: Container(
                     color: Colors.deepOrange,
                     child: Center(
-                      child: Text(widget._seciliGun),
+                      child: Text(yemek_listesi[widget._seciliGun]['gun']),
                     )),
               )
             ],
