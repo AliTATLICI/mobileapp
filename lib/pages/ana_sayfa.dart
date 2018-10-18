@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:intl/intl.dart';
 
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
@@ -169,7 +170,7 @@ class ChoiceCard extends StatelessWidget {
     onTap: () {
             Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => YemekhaneSayfasi('18.10.2018')),
+    MaterialPageRoute(builder: (context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy").format(DateTime.now()))),
   );
           },
         );

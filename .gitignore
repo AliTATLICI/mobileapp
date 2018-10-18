@@ -12,3 +12,5 @@ node_modules/
 functions
 
 .idea
+
+pubspec.lock

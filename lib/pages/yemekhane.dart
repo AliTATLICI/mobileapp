@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -22,8 +24,15 @@ class YemekhaneSayfasi extends StatefulWidget {
 class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   String _selectedText = "Öğle Yemeği";
   int _menuId;
+  var date = new DateTime(2018, 10, 18);
+  var ayin_gunu = DateTime.parse(DateTime.now().toString());
+  var gunun_sayi_degeri;
 
   String bugun_ne = DateFormat("dd.MM.yyyy").format(DateTime.now());
+  List<String> gunler;
+  DateTime _date = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
+
   Map<String, dynamic> yemek_listesi = {
     '01.10.2018': {
       'gun': 'Pazartesi',
@@ -61,11 +70,11 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
     '20.10.2018': {
       'gun': 'Pazartesi',
       'menu': [
-        'Tarhana Çorbası',
-        'Kıymalı Ispanak',
-        'Peynirli Makarna',
-        'Kase Yoğurt',
-        'Elma'
+        'Düğün Çorbası',
+        'Orman Kebabı',
+        'Bulgur Pilavı',
+        'Cacık',
+        'Armut'
       ],
       'kalori': '(950 Kcal)'
     }
@@ -75,7 +84,23 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   void initState() {
     _selectedText = "Öğle Yemeği";
     widget._seciliGun = bugun_ne;
+    gunun_sayi_degeri = ayin_gunu.day.toInt();
     super.initState();
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2018),
+        lastDate: DateTime(2019));
+    if (picked != null) {
+      print('Date selected : ${_date.toString()}');
+      setState(() {
+              _date = picked;
+              widget._seciliGun = DateFormat("dd.MM.yyyy").format(_date);
+            });
+    }
   }
 
   @override
@@ -113,17 +138,20 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                                 color: Colors.yellow,
                                 onPressed: () {
                                   //Sol tarafa geri tuşuna basıldığında bir önceki gündeki yemek listelenmesi lazım
+
                                   setState(() {
-                                    widget._seciliGun = '18.10.2018';
+                                    gunun_sayi_degeri--;
+                                    widget._seciliGun =
+                                        (gunun_sayi_degeri).toString() +
+                                            '.10.2018';
                                   });
                                 },
                                 child: Icon(Icons.arrow_back_ios)),
                           ),
                           FlatButton(
                               onPressed: () {
-                                //tarih yazan kısma tıklandığında tarih widget i çıkması lazım.
-                              },
-                              child: Text(widget._seciliGun)),
+                                _selectDate(context);
+                              }, child: Text(widget._seciliGun)),
                           SizedBox(
                             width: 50.0,
                             child: RaisedButton(
@@ -131,7 +159,10 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                                 onPressed: () {
                                   //Sol tarafa geri tuşuna basıldığında bir önceki gündeki yemek listelenmesi lazım
                                   setState(() {
-                                    widget._seciliGun = '01.10.2018';
+                                    gunun_sayi_degeri++;
+                                    widget._seciliGun =
+                                        (gunun_sayi_degeri).toString() +
+                                            '.10.2018';
                                   });
                                 },
                                 child: Icon(Icons.arrow_forward_ios)),
@@ -188,7 +219,6 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                   ),
                 ),
               ),
-              
               ListTile(
                 title: Text("Toplam Kalori : " +
                     (yemek_listesi[widget._seciliGun]['kalori'])),
@@ -198,7 +228,9 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                 child: Container(
                     color: Colors.deepOrange,
                     child: Center(
-                      child: Text(yemek_listesi[widget._seciliGun]['gun']),
+                      child: Text(_date.toString() +
+                          "---" +
+                          widget._seciliGun),
                     )),
               )
             ],
