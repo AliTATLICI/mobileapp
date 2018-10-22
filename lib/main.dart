@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -29,9 +30,14 @@ import './widgets/helpers/custom_route.dart';
 import './shared/adaptive_theme.dart';
 import './pages/ana_sayfa.dart';
 import './pages/yemekhane.dart';
+import './pages/eczane.dart';
+import './pages/eczane_map.dart';
 
 void main() {
-  //debugPaintSizeEnabled = true;
+  // debugPaintSizeEnabled = true;
+  // debugPaintBaselinesEnabled = true;
+  // debugPaintPointersEnabled = true;
+  MapView.setApiKey('AIzaSyCESLdlBDj2ptHMyXAYYGsr_Qm27xtcb1w');
   runApp(MyApp());
 }
 
@@ -96,13 +102,17 @@ class _MyAppState extends State<MyApp> {
           '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
           '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
-                                  .format(DateTime.now()))
+                                  .format(DateTime.now())),
+           '/eczane': (BuildContext context) => EczaneSayfasi(_model),
+           '/eczane2': (BuildContext context) => EczaneSayfasi2()
         },
         onGenerateRoute: (RouteSettings settings) {
+          /*
           if (!_isAuthenticated) {
             return MaterialPageRoute<bool>(
                 builder: (BuildContext contex) => AuthPage());
           }
+          */
           final List<String> pathElements = settings.name.split('/');
           if (pathElements[0] != '') {
             return null;
@@ -139,7 +149,7 @@ class _MyAppState extends State<MyApp> {
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : PersonellerSayfa(_model));
+              builder: (BuildContext context) => AnaSayfa(_model));
         },
       ),
     );

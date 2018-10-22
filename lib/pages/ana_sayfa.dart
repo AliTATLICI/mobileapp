@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
 import './yemekhane.dart';
+import './eczane.dart';
 
 class AnaSayfa extends StatefulWidget {
   final MainModel model;
@@ -112,18 +113,18 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   )),
             ),
             Expanded(
-                          child: Container(
+              child: Container(
                 padding: EdgeInsets.all(10.0),
                 height: 350.0,
                 color: Colors.grey[250],
                 child: GridView.count(
-          crossAxisCount: 3,
-          children: List.generate(choices.length, (index) {
-                return Center(
-                  child: ChoiceCard(choice: choices[index]),
-                );
-           }
-          ),),
+                  crossAxisCount: 3,
+                  children: List.generate(choices.length, (index) {
+                    return Center(
+                      child: ChoiceCard(choice: choices[index]),
+                    );
+                  }),
+                ),
               ),
             ),
           ],
@@ -134,17 +135,21 @@ class _AnaSayfaState extends State<AnaSayfa> {
 }
 
 class Choice {
-  const Choice({this.title, this.icon});
+  const Choice({this.title, this.icon, this.page});
 
   final String title;
   final IconData icon;
+  final String page;
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Profil', icon: Icons.perm_identity),
-  const Choice(title: 'ISUBÜ', icon: Icons.home),
-  const Choice(title: 'Yemekhane', icon: Icons.restaurant_menu),
-  const Choice(title: 'Kısayol ekle', icon: Icons.add_circle_outline),
+  const Choice(title: 'Profil', icon: Icons.perm_identity, page: 'profil'),
+  const Choice(title: 'ISUBÜ', icon: Icons.home, page: 'anasayfa'),
+  const Choice(
+      title: 'Yemekhane', icon: Icons.restaurant_menu, page: 'yemekhane'),
+  const Choice(title: 'Eczene', icon: Icons.explicit, page: 'eczane'),
+  const Choice(
+      title: 'Kısayol ekle', icon: Icons.add_circle_outline, page: 'kısayol'),
 ];
 
 class ChoiceCard extends StatelessWidget {
@@ -154,25 +159,34 @@ class ChoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
-        return GestureDetector(
-                  child: Card(
-            color: Colors.white,
-            child: Center(child: Column(
+    return GestureDetector(
+      child: Card(
+          color: Colors.white,
+          child: Center(
+            child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(choice.icon, size:60.0, color: Colors.lightBlue),
+                  Icon(choice.icon, size: 60.0, color: Colors.lightBlue),
                   Text(choice.title, style: TextStyle(fontSize: 16.0)),
-            ]
-          ),
-      )
-    ),
-    onTap: () {
+                ]),
+          )),
+      onTap: () {
+        debugPrint(choice.page);
+        switch (choice.page) {
+          case 'yemekhane':
             Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy").format(DateTime.now()))),
-  );
-          },
-        );
+              context,
+              MaterialPageRoute(
+                  builder: (context) => YemekhaneSayfasi(
+                      DateFormat("dd.MM.yyyy").format(DateTime.now()))),
+            );
+            break;
+          case 'eczane':
+            Navigator.pushNamed(context, "/eczane");
+            break;
+        }
+      },
+    );
   }
 }

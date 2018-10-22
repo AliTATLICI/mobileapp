@@ -6,18 +6,22 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../shared/global_config.dart';
+
 import '../models/personel.dart';
 import '../models/student.dart';
 import '../models/haber.dart';
 import '../models/duyuru.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
+import '../models/eczane.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
   List<Student> _students = [];
   List<Haber> _haberler = [];
   List<Duyuru> _duyurular = [];
+  List<Eczane> _eczaneler = [];
   String _selPersonelId;
   String _selStudentId;
   String _selHaberId;
@@ -41,6 +45,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_duyurular);
   }
 
+  List<Eczane> get allEczaneler {
+    return List.from(_eczaneler);
+  }
+
   List<Personel> get displayedPersoneller {
     if (_gosterFavorites) {
       return _personeller
@@ -56,6 +64,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   List<Duyuru> get displayedDuyurular {
     return List.from(_duyurular);
+  }
+
+  List<Eczane> get displayedEczaneler {
+    return List.from(_eczaneler);
   }
 
   int get selectedPersonelIndex {
@@ -365,6 +377,47 @@ class PersonellerModel extends ConnectedPersonellerModel {
       _isYukleme = false;
       notifyListeners();
       _selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  Future<Null> fetchEczaneler({onlyForUser = false}) {
+    print("fetchEczane metodun içine girildi");
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            apiWebIp+ '/haber/eczaneler/',)
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<Eczane> fetchedEczaneList = [];
+      final Map<String, dynamic> eczaneListData = json.decode(utf8.decode(response.bodyBytes));
+      if (eczaneListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      //print("HABERLISTDATA:" + haberListData["results"].toString());
+      eczaneListData["results"].forEach((dynamic eczaneData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final Eczane eczane = Eczane(
+            adi: eczaneData['adi'],
+            semt: eczaneData['semt'],
+            telefon: eczaneData['telefon'],
+            adres: eczaneData['adres']      
+            );
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedEczaneList.add(eczane);
+      });
+      _eczaneler = fetchedEczaneList;
+      print("***************---------------------__ECZANELER***********");
+      print(_eczaneler);
+      _isYukleme = false;
+      notifyListeners();
+      //_selHaberId = null;
     }).catchError((error) {
       _isYukleme = false;
       notifyListeners();

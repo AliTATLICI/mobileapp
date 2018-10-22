@@ -42,8 +42,12 @@ class HaberCard extends StatelessWidget {
           icon: Icon(Icons.info),
           //iconSize: 20.0,
           color: Theme.of(context).accentColor,
-          onPressed: () => Navigator.pushNamed<bool>(
-              context, '/haber/' + model.allHaberler[haberIndex].id),
+          onPressed: () {
+            debugPrint("i butonuna basıldı***********");
+            debugPrint(model.allHaberler[haberIndex].id);
+            Navigator.pushNamed<bool>(
+              context, '/haber/' + model.allHaberler[haberIndex].id);
+          },
         ),
         CepTag(haber.createdDate),
        

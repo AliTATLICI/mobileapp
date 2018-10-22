@@ -98,6 +98,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
               Navigator.pushReplacementNamed(context, '/personel-arama');
             },
           ),
+          ListTile(
+            leading: Icon(Icons.explicit),
+            title: Text('Eczane'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/eczane');
+            },
+          ),
           Divider(),
           CikisYapListTile()
         ],
