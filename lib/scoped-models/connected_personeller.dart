@@ -15,6 +15,7 @@ import '../models/duyuru.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
 import '../models/eczane.dart';
+import '../models/yemek.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
@@ -22,6 +23,7 @@ class ConnectedPersonellerModel extends Model {
   List<Haber> _haberler = [];
   List<Duyuru> _duyurular = [];
   List<Eczane> _eczaneler = [];
+  List<Yemek> _yemekler = [];
   String _selPersonelId;
   String _selStudentId;
   String _selHaberId;
@@ -47,6 +49,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   List<Eczane> get allEczaneler {
     return List.from(_eczaneler);
+  }
+
+  List<Yemek> get allYemekler {
+    return List.from(_yemekler);
   }
 
   List<Personel> get displayedPersoneller {
@@ -425,6 +431,44 @@ class PersonellerModel extends ConnectedPersonellerModel {
     });
   }
 
+  Future<Null> fetchYemekler({onlyForUser = false}) {
+    print("fetchYemeklerMetodu metodun içine girildi");
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            apiWebIp+ '/haber/yemekler/',)
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<Yemek> fetchedYemekList = [];
+      final Map<String, dynamic> yemekListData = json.decode(utf8.decode(response.bodyBytes));
+      if (yemekListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      yemekListData["results"].forEach((dynamic yemekData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final Yemek yemek = Yemek(
+            tarih: yemekData['tarih'],
+            gun: yemekData['gun'],
+            menu: yemekData['menu'],
+            kalori: yemekData['kalori']      
+            );
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedYemekList.add(yemek);
+      });
+      _yemekler = fetchedYemekList;
+      _isYukleme = false;
+      notifyListeners();
+      //_selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
 
   void togglePersonelFavoriteStatus() async {
     final bool isCurrentlyFavorite = selectedPersonel.isFavorite;
@@ -558,15 +602,11 @@ class KullaniciModel extends ConnectedPersonellerModel {
     };
     http.Response response;
     if (mode == AuthMode.Login) {
-      response = await http.post('http://192.168.1.35:8000/pbs/api/login',
+      response = await http.post(apiWebIp +'/pbs/api/login',
           body: json.encode(authData),
           headers: {'Content-Type': 'application/json'});
     } else {
-      response = await http.post(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyC9HZLbyM32OcWy1CCymy7vFyBkyIByQ4o',
-        body: json.encode(authData),
-        headers: {'Content-Type': 'application/json'},
-      );
+      
     }
 
     final Map<String, dynamic> responseData = json.decode(response.body);

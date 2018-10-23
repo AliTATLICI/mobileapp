@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
         //home: PersonellerSayfa(),
         routes: {
           '/': (BuildContext context) =>
-              AnaSayfa(_model),
+              !_isAuthenticated ? AuthPage() : AnaSayfa(_model),
           '/ogrenciler': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>
@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
           '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
           '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
-                                  .format(DateTime.now())),
+                                  .format(DateTime.now()), _model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
            '/eczane2': (BuildContext context) => EczaneSayfasi2()
         },

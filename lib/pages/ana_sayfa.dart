@@ -175,12 +175,7 @@ class ChoiceCard extends StatelessWidget {
         debugPrint(choice.page);
         switch (choice.page) {
           case 'yemekhane':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => YemekhaneSayfasi(
-                      DateFormat("dd.MM.yyyy").format(DateTime.now()))),
-            );
+            Navigator.pushNamed(context, "/yemekhane");
             break;
           case 'eczane':
             Navigator.pushNamed(context, "/eczane");
