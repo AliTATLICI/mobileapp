@@ -91,8 +91,8 @@ class _MyAppState extends State<MyApp> {
         theme: getAdaptiveThemeData(context),
         //home: PersonellerSayfa(),
         routes: {
-          '/': (BuildContext context) =>
-              !_isAuthenticated ? AuthPage() : AnaSayfa(_model),
+          '/': (BuildContext context) => AnaSayfa(_model),
+          '/personeller': (BuildContext context) => PersonellerSayfa(_model),
           '/ogrenciler': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>

@@ -27,7 +27,7 @@ class PersonelAdminSayfa extends StatelessWidget {
             leading: Icon(Icons.people),
             title: Text('Tüm Personeller'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/personeller');
             },
           ),
           Divider(),

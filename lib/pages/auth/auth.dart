@@ -60,8 +60,6 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
       },
       onSaved: (String value) {
         _formData['email'] = value;
-        print('EMAIL BİLGİSİ NE ACABA***********');
-        print(_formData['email']);
       },
     );
   }
@@ -127,7 +125,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
     successInformation = await authenticate(
         _formData['email'], _formData['password'], _authMode);
     if (successInformation['success']) {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/personeller');
     } else {
       showDialog(
         context: context,
