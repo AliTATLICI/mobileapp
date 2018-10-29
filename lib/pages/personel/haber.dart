@@ -94,7 +94,7 @@ class HaberSayfa extends StatelessWidget {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              expandedHeight: 250.0,
+              expandedHeight: 200.0,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
@@ -125,7 +125,7 @@ class HaberSayfa extends StatelessWidget {
                       ? FadeInImage(
                           image: NetworkImage(
                               "http://w3.sdu.edu.tr/" + haber.icerik[index]),
-                          height: 300.0,
+                          height: 200.0,
                           fit: BoxFit.cover,
                           placeholder: AssetImage('assets/staff-default.png'),
                         )

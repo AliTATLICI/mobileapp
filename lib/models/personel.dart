@@ -6,7 +6,8 @@ class Personel {
   final String sicil;
   final String eposta;  
   final String bolum;
-  final String cep;  
+  final String cep;
+  final String birim;  
   // final String userId;
   final bool isFavorite;
   final String userEmail;
@@ -20,6 +21,7 @@ class Personel {
     @required this.eposta,
     @required this.bolum, 
     @required this.cep,
+    @required this.birim,
     @required this.userEmail,
     @required this.userId,      
     // @required this.userId,

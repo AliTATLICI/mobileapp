@@ -15,39 +15,39 @@ class Entry {
 // The entire multilevel list displayed by this app.
 final List<Entry> data = <Entry>[
   Entry(
-    'Chapter A',
+    'Pazartesi',
     <Entry>[
       Entry(
-        'Section A0',
+        'Ders 1',
         <Entry>[
-          Entry('Item A0.1'),
-          Entry('Item A0.2'),
-          Entry('Item A0.3'),
+          Entry('Saat 1'),
+          Entry('Saat 2'),
+          Entry('Saat 3'),
         ],
       ),
-      Entry('Section A1'),
-      Entry('Section A2'),
+      Entry('Ders 2'),
+      Entry('Ders 3'),
     ],
   ),
   Entry(
-    'Chapter B',
+    'Salı',
     <Entry>[
-      Entry('Section B0'),
-      Entry('Section B1'),
+      Entry('Ders 1'),
+      Entry('Ders 2'),
     ],
   ),
   Entry(
-    'Chapter C',
+    'Çarşamba',
     <Entry>[
-      Entry('Section C0'),
-      Entry('Section C1'),
+      Entry('Ders 1'),
+      Entry('Ders 2'),
       Entry(
-        'Section C2',
+        'Ders 3',
         <Entry>[
-          Entry('Item C2.0'),
-          Entry('Item C2.1'),
-          Entry('Item C2.2'),
-          Entry('Item C2.3'),
+          Entry('Saat 1'),
+          Entry('Saat 2'),
+          Entry('Saat 3'),
+          Entry('Saat 4'),
         ],
       ),
     ],

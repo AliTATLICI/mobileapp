@@ -9,6 +9,7 @@ import 'package:rxdart/subjects.dart';
 import '../shared/global_config.dart';
 
 import '../models/personel.dart';
+import '../models/personel_arama.dart';
 import '../models/student.dart';
 import '../models/haber.dart';
 import '../models/duyuru.dart';
@@ -19,6 +20,7 @@ import '../models/yemek.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
+  List<PersonelArama> _personellerArama = [];
   List<Student> _students = [];
   List<Haber> _haberler = [];
   List<Duyuru> _duyurular = [];
@@ -34,9 +36,15 @@ class ConnectedPersonellerModel extends Model {
 
 class PersonellerModel extends ConnectedPersonellerModel {
   bool _gosterFavorites = false;
+  bool _gosterAkademikIdari = false;
+
 
   List<Personel> get allPersoneller {
     return List.from(_personeller);
+  }
+
+   List<PersonelArama> get allPersonellerArama {
+    return List.from(_personellerArama);
   }
 
   List<Haber> get allHaberler {
@@ -97,6 +105,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   bool get displayedFavoriteOnly {
     return _gosterFavorites;
+  }
+
+  bool get displayedAkamikIdari {
+    return _gosterAkademikIdari;
   }
 
   Future<bool> eklePersonel(String adSoyad, String sicil, String eposta,
@@ -265,9 +277,9 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            apiWebIp+'/pbs/personeller/',  headers: {'Authorization': 'token ${_authenticatedKullanici.token}'})
+            apiWebIp+'/pbs/personeller/',)
         .then<Null>((http.Response response) {
-      print(json.decode(response.body));
+      //print(json.decode(response.body));
       final List<Personel> fetchedPersonelList = [];
       final Map<String, dynamic> personelListData = json.decode(utf8.decode(response.bodyBytes));
       if (personelListData == null) {
@@ -275,28 +287,68 @@ class PersonellerModel extends ConnectedPersonellerModel {
         notifyListeners();
         return;
       }
-      print("PERSONELLISTDATA:" + personelListData["results"].toString());
+      //print("PERSONELLISTDATA:" + personelListData["results"].toString());
       personelListData["results"].forEach((dynamic personelData) {
-        print("PERSONELDATA-FOREACH-----------------------" + personelData['adi_soyadi']);
+        //print("PERSONELDATA-FOREACH-----------------------" + personelData['adi_soyadi']);
         final Personel personel = Personel(
             id: personelData['sicil'],
             adSoyad: personelData['adi_soyadi'],
             sicil: personelData['sicil'],
             eposta: personelData['e_posta'],
-            bolum: personelData['sicil'],
+            bolum: personelData['bolum'],
             cep: personelData['telefon'],
+            birim: personelData['birim'],
             userEmail: personelData['sicil'],
             userId: personelData['sicil'],
             isFavorite: personelData['wishlistUsers'] == null ? false: (personelData['wishlistUsers'] as Map<String, dynamic>)
                 .containsKey(_authenticatedKullanici.id));
-        print("personelTOSTRING-" + personel.toString());
+        //print("personelTOSTRING-" + personel.toString());
         fetchedPersonelList.add(personel);
       });
       _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
         return personel.userId == _authenticatedKullanici.id;
       }).toList() : fetchedPersonelList;
-      print("TUM PERSONELLER--------**********-------");
-      print(_personeller);
+      //print("TUM PERSONELLER--------**********-------");
+      //print(_personeller.length.toString());
+      _isYukleme = false;
+      notifyListeners();
+      _selPersonelId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  Future<Null> fetchPersonellerArama({onlyForUser = false}) {
+    print("fetchPersonelARAMA-DJANGO metodun içine GİRDİ");
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+            apiWebIp+'/pbs/personeller/')
+        .then<Null>((http.Response response) {
+      //print(json.decode(response.body));
+      final List<PersonelArama> fetchedPersonelList = [];
+      final Map<String, dynamic> personelListData = json.decode(utf8.decode(response.bodyBytes));
+      if (personelListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      //print("PERSONELLISTDATA:" + personelListData["results"].toString());
+      personelListData["results"].forEach((dynamic personelData) {
+        //print("PERSONELDATA-FOREACH-----------------------" + personelData['adi_soyadi']);
+        final PersonelArama personel = PersonelArama(
+            id: personelData['id'],
+            adSoyad: personelData['adi_soyadi'],
+            sicil: personelData['sicil']);
+        //print("personelTOSTRING-" + personel.toString());
+        fetchedPersonelList.add(personel);
+      });
+      _personellerArama = fetchedPersonelList;
+      //print("TUM PERSONELLER SAYISI--------**********-------");
+      //print(_personeller.length.toString());
       _isYukleme = false;
       notifyListeners();
       _selPersonelId = null;
@@ -517,6 +569,11 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   void toogleGoruntuMode() {
     _gosterFavorites = !_gosterFavorites;
+    notifyListeners();
+  }
+
+  void toogleAkademikIdari() {
+    _gosterAkademikIdari = !_gosterAkademikIdari;
     notifyListeners();
   }
 }

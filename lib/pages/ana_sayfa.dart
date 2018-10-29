@@ -175,7 +175,7 @@ class ChoiceCard extends StatelessWidget {
         debugPrint(choice.page);
         switch (choice.page) {
           case 'yemekhane':
-            Navigator.pushNamed(context, "/yemekhane");
+            Navigator.pushNamed(context, "/yemek");
             break;
           case 'eczane':
             Navigator.pushNamed(context, "/eczane");

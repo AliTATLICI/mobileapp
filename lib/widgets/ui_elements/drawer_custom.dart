@@ -58,7 +58,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
           ),
          ListTile(
             leading: Icon(Icons.info_outline),
-            title: Text('Haberler'),
+            title: Text('Haber, Duyuru ve Etkinlikler'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/haberler');
             },
@@ -75,6 +75,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
             title: Text('Personel Yönetimi'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/admin');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Personel ISUBU'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/isubu_personeller');
             },
           ),
           ListTile(

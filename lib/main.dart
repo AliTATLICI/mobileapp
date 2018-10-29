@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_course/pages/personel/personeller_isubu.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
@@ -32,6 +33,7 @@ import './pages/ana_sayfa.dart';
 import './pages/yemekhane.dart';
 import './pages/eczane.dart';
 import './pages/eczane_map.dart';
+import './pages/yemek_listesi.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -71,6 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _model.otomatikAuthenticate();
+    //_model.fetchPersonellerArama();
     _model.kullaniciSubject.listen((bool isAuthenticated) {
       setState(() {
         _isAuthenticated = isAuthenticated;
@@ -103,6 +106,7 @@ class _MyAppState extends State<MyApp> {
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
           '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
                                   .format(DateTime.now()), _model),
+          '/yemek' : (BuildContext context) => YemekListesiSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
            '/eczane2': (BuildContext context) => EczaneSayfasi2()
         },
@@ -124,8 +128,7 @@ class _MyAppState extends State<MyApp> {
               return personel.id == personelId;
             });
             return MaterialPageRoute<bool>(
-                builder: (BuildContext contex) =>
-                    !_isAuthenticated ? AuthPage() : PersonelSayfa(personel));
+                builder: (BuildContext contex) => PersonelSayfa(personel));
           }
           if (pathElements[1] == 'haber') {
             final String haberId = pathElements[2];

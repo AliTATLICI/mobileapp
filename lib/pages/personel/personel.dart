@@ -71,13 +71,13 @@ class PersonelSayfa extends StatelessWidget {
       return Future.value(false);
     }, child: Scaffold(
           appBar: AppBar(
-            title: Text(personel.adSoyad),
+            title: Text('Personel Detayı'),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               FadeInImage(
-                image: NetworkImage("http://w3.sdu.edu.tr/foto.aspx?sicil_no=" + personel.sicil),
+                image: NetworkImage("http://isparta.edu.tr/foto.aspx?sicil_no=" + personel.sicil),
                 height: 300.0,
                 fit: BoxFit.cover,
                 placeholder: AssetImage('assets/staff-default.png'),
@@ -86,16 +86,16 @@ class PersonelSayfa extends StatelessWidget {
                 padding: EdgeInsets.all(5.0),
                 child: AdiSoyadiDefault(personel.adSoyad),
               ),
-              _buildBolumCepRow(personel.eposta, personel.cep),
+              _buildBolumCepRow(personel.eposta, personel.cep != null ? personel.cep : ''),
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
-                  personel.bolum,
+                  personel.birim,
                   textAlign: TextAlign.center,
                 ),
               ),
-              Text('haftalık ders programı'),
-              Expanded(child: ListView.builder(
+              personel.bolum == null ? Container() : Text('Haftalık Ders Programı', style: TextStyle(color: Colors.amber),),
+              personel.bolum == null ? Container() : Expanded(child: ListView.builder(
           itemBuilder: (BuildContext context, int index) =>
               EntryItem(data[index]),
           itemCount: data.length,

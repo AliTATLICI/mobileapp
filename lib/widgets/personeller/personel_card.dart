@@ -67,7 +67,7 @@ class PersonelCard extends StatelessWidget {
         children: <Widget>[
           FadeInImage(
             image: NetworkImage(
-                "http://w3.sdu.edu.tr/foto.aspx?sicil_no=" + personel.sicil),
+                "http://isparta.edu.tr/foto.aspx?sicil_no=" + personel.sicil),
             height: 300.0,
             fit: BoxFit.cover,
             placeholder: AssetImage('assets/staff-default.png'),
