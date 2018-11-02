@@ -31,6 +31,8 @@ class YemekListesiSayfasi extends StatefulWidget {
 }
 
 class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
+  List<String> popMenu = ['Günlük', 'Haftalık', 'Aylık'];
+  int _selectedRadio = 0;
   
   @override
   initState() {
@@ -54,6 +56,46 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
     });
   }
 
+  void _select(String choice) {
+    if (choice == popMenu[0]) {
+      //debugPrint('Haftalık secildi');
+      setState(() {
+        _selectedRadio = 0;
+      });
+      Navigator.pushNamed(context, "/yemekhane");
+    } else if (choice == popMenu[1]) {
+      //debugPrint('Günlük seçildi');
+      setState(() {
+        _selectedRadio = 1;
+      });
+      
+      /*showDialog(context: context, builder: (context) => Center(
+                              child: Card(
+                                child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: makeRadios(),
+                      ),
+                ),
+              ));
+              */
+
+    } else if (choice == popMenu[2]) {
+      //debugPrint('Aylık secildi');
+      /*
+      showDialog(context: context, builder: (context) => Center(
+                              child: Card(
+                                child: DropdownButton(
+            value: _statusSel,
+            items: _dropDowmMenuItems,
+            onChanged: changedDropDownItem,
+          ),
+                ),
+              ));
+              */
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +103,16 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
       appBar: AppBar(
         title: Text("Haftalık Yemek Listesi"),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
+          PopupMenuButton(
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return popMenu.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
           )
         ],
       ),

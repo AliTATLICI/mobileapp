@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ import '../models/kullanici.dart';
 import '../models/auth.dart';
 import '../models/eczane.dart';
 import '../models/yemek.dart';
+import '../models/kisayol.dart';
 
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
@@ -26,6 +28,19 @@ class ConnectedPersonellerModel extends Model {
   List<Duyuru> _duyurular = [];
   List<Eczane> _eczaneler = [];
   List<Yemek> _yemekler = [];
+  List<KisaYol> _kisayollar = <KisaYol>[
+    KisaYol(no: 0, baslik: "Profil", page: "profil", icon: Icons.perm_identity),
+    KisaYol(no: 1, baslik: "ISUBÜ", page: "web_anasayfa", icon: Icons.home),
+    KisaYol(no: 2, baslik: "Duyurular", page: "duyurular", icon: Icons.announcement),
+    KisaYol(no: 3, baslik: "Haberler", page: "haberler", icon: Icons.info_outline),
+    KisaYol(no: 4, baslik: "Yemekhane", page: "yemek", icon: Icons.restaurant_menu),
+    KisaYol(no: 5, baslik: "Personel Arama", page: "personel-arama", icon: Icons.person_pin_circle),
+    KisaYol(no: 6, baslik: "Öğrenci Arama", page: "ogrenciler", icon: Icons.school),
+    KisaYol(no: 7, baslik: "Akademik Takvim", page: "akademik-takvim", icon: Icons.calendar_today),
+    KisaYol(no: 8, baslik: "Eczane", page: "eczane", icon: Icons.explicit),
+    KisaYol(no: 9, baslik: "Kısayol Ekle", page: "kisayol", icon: Icons.add_circle_outline)
+  ];
+  List<String> _kisayolId = ["2", "3", "4", "5", "6", "7", "8"];
   String _selPersonelId;
   String _selStudentId;
   String _selHaberId;
@@ -38,12 +53,11 @@ class PersonellerModel extends ConnectedPersonellerModel {
   bool _gosterFavorites = false;
   bool _gosterAkademikIdari = false;
 
-
   List<Personel> get allPersoneller {
     return List.from(_personeller);
   }
 
-   List<PersonelArama> get allPersonellerArama {
+  List<PersonelArama> get allPersonellerArama {
     return List.from(_personellerArama);
   }
 
@@ -254,13 +268,17 @@ class PersonellerModel extends ConnectedPersonellerModel {
             cep: personelData['cep'],
             userEmail: personelData['userEmail'],
             userId: personelData['userId'],
-            isFavorite: personelData['wishlistUsers'] == null ? false: (personelData['wishlistUsers'] as Map<String, dynamic>)
-                .containsKey(_authenticatedKullanici.id));
+            isFavorite: personelData['wishlistUsers'] == null
+                ? false
+                : (personelData['wishlistUsers'] as Map<String, dynamic>)
+                    .containsKey(_authenticatedKullanici.id));
         fetchedPersonelList.add(personel);
       });
-      _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
-        return personel.userId == _authenticatedKullanici.id;
-      }).toList() : fetchedPersonelList;
+      _personeller = onlyForUser
+          ? fetchedPersonelList.where((Personel personel) {
+              return personel.userId == _authenticatedKullanici.id;
+            }).toList()
+          : fetchedPersonelList;
       _isYukleme = false;
       notifyListeners();
       _selPersonelId = null;
@@ -277,11 +295,13 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            apiWebIp+'/pbs/personeller/',)
+      apiWebIp + '/pbs/personeller/',
+    )
         .then<Null>((http.Response response) {
       //print(json.decode(response.body));
       final List<Personel> fetchedPersonelList = [];
-      final Map<String, dynamic> personelListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> personelListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (personelListData == null) {
         _isYukleme = false;
         notifyListeners();
@@ -300,14 +320,18 @@ class PersonellerModel extends ConnectedPersonellerModel {
             birim: personelData['birim'],
             userEmail: personelData['sicil'],
             userId: personelData['sicil'],
-            isFavorite: personelData['wishlistUsers'] == null ? false: (personelData['wishlistUsers'] as Map<String, dynamic>)
-                .containsKey(_authenticatedKullanici.id));
+            isFavorite: personelData['wishlistUsers'] == null
+                ? false
+                : (personelData['wishlistUsers'] as Map<String, dynamic>)
+                    .containsKey(_authenticatedKullanici.id));
         //print("personelTOSTRING-" + personel.toString());
         fetchedPersonelList.add(personel);
       });
-      _personeller = onlyForUser ? fetchedPersonelList.where((Personel personel) {
-        return personel.userId == _authenticatedKullanici.id;
-      }).toList() : fetchedPersonelList;
+      _personeller = onlyForUser
+          ? fetchedPersonelList.where((Personel personel) {
+              return personel.userId == _authenticatedKullanici.id;
+            }).toList()
+          : fetchedPersonelList;
       //print("TUM PERSONELLER--------**********-------");
       //print(_personeller.length.toString());
       _isYukleme = false;
@@ -325,12 +349,12 @@ class PersonellerModel extends ConnectedPersonellerModel {
     _isYukleme = true;
     notifyListeners();
     return http
-        .get(
-            apiWebIp+'/pbs/personeller/')
+        .get(apiWebIp + '/pbs/personeller/')
         .then<Null>((http.Response response) {
       //print(json.decode(response.body));
       final List<PersonelArama> fetchedPersonelList = [];
-      final Map<String, dynamic> personelListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> personelListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (personelListData == null) {
         _isYukleme = false;
         notifyListeners();
@@ -365,11 +389,13 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            'http://192.168.1.35:8000/haber/haberler/',)
+      apiWebIp + '/haber/haberler/',
+    )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Haber> fetchedHaberList = [];
-      final Map<String, dynamic> haberListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> haberListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (haberListData == null) {
         _isYukleme = false;
         notifyListeners();
@@ -383,9 +409,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
             numarasi: haberData['numarasi'],
             baslik: haberData['baslik'],
             createdDate: haberData['created_date'],
-            icerik: haberData['icerik']
-      
-            );
+            icerik: haberData['icerik']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedHaberList.add(haber);
       });
@@ -400,24 +424,25 @@ class PersonellerModel extends ConnectedPersonellerModel {
     });
   }
 
-
   Future<Null> fetchDuyurularDjango({onlyForUser = false}) {
     print("fetchDuyurularDJANGO metodun içine GİRDİ");
     _isYukleme = true;
     notifyListeners();
     return http
         .get(
-            'http://192.168.1.35:8000/haber/duyurular/',)
+      apiWebIp + '/haber/duyurular/',
+    )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Duyuru> fetchedDuyuruList = [];
-      final Map<String, dynamic> duyuruListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> duyuruListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (duyuruListData == null) {
         _isYukleme = false;
         notifyListeners();
         return;
       }
-      //print("HABERLISTDATA:" + haberListData["results"].toString());
+      print("HABERLISTDATA:" + duyuruListData["results"].toString());
       duyuruListData["results"].forEach((dynamic duyuruData) {
         //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
         final Duyuru duyuru = Duyuru(
@@ -425,9 +450,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
             numarasi: duyuruData['numarasi'],
             baslik: duyuruData['baslik'],
             createdDate: duyuruData['created_date'],
-            icerik: duyuruData['icerik']
-      
-            );
+            icerik: duyuruData['icerik']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedDuyuruList.add(duyuru);
       });
@@ -448,11 +471,13 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            apiWebIp+ '/haber/eczaneler/',)
+      apiWebIp + '/haber/eczaneler/',
+    )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Eczane> fetchedEczaneList = [];
-      final Map<String, dynamic> eczaneListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> eczaneListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (eczaneListData == null) {
         _isYukleme = false;
         notifyListeners();
@@ -465,8 +490,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
             adi: eczaneData['adi'],
             semt: eczaneData['semt'],
             telefon: eczaneData['telefon'],
-            adres: eczaneData['adres']      
-            );
+            adres: eczaneData['adres']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedEczaneList.add(eczane);
       });
@@ -489,11 +513,13 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
     return http
         .get(
-            apiWebIp+ '/haber/yemekler/',)
+      apiWebIp + '/haber/yemekler/',
+    )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<Yemek> fetchedYemekList = [];
-      final Map<String, dynamic> yemekListData = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> yemekListData =
+          json.decode(utf8.decode(response.bodyBytes));
       if (yemekListData == null) {
         _isYukleme = false;
         notifyListeners();
@@ -505,8 +531,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
             tarih: yemekData['tarih'],
             gun: yemekData['gun'],
             menu: yemekData['menu'],
-            kalori: yemekData['kalori']      
-            );
+            kalori: yemekData['kalori']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedYemekList.add(yemek);
       });
@@ -520,7 +545,6 @@ class PersonellerModel extends ConnectedPersonellerModel {
       return;
     });
   }
-
 
   void togglePersonelFavoriteStatus() async {
     final bool isCurrentlyFavorite = selectedPersonel.isFavorite;
@@ -591,7 +615,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
   }
 
   Future<Map<String, dynamic>> kimlikdogrulama(String email, String password,
-    [AuthMode mode = AuthMode.Login]) async {
+      [AuthMode mode = AuthMode.Login]) async {
     _isYukleme = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
@@ -601,7 +625,8 @@ class KullaniciModel extends ConnectedPersonellerModel {
     };
     http.Response response;
     if (mode == AuthMode.Login) {
-      response = await http.post('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyC9HZLbyM32OcWy1CCymy7vFyBkyIByQ4o',
+      response = await http.post(
+          'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyC9HZLbyM32OcWy1CCymy7vFyBkyIByQ4o',
           body: json.encode(authData),
           headers: {'Content-Type': 'application/json'});
     } else {
@@ -648,8 +673,9 @@ class KullaniciModel extends ConnectedPersonellerModel {
     return {'success': !hasError, 'message': message};
   }
 
-  Future<Map<String, dynamic>> kimlikdogrulamaDjango(String email, String password,
-    [AuthMode mode = AuthMode.Login]) async {
+  Future<Map<String, dynamic>> kimlikdogrulamaDjango(
+      String email, String password,
+      [AuthMode mode = AuthMode.Login]) async {
     _isYukleme = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
@@ -660,17 +686,15 @@ class KullaniciModel extends ConnectedPersonellerModel {
     http.Response response;
     if (mode == AuthMode.Login) {
       response = await http.post('${apiWebIp}/pbs/api/login',
-          body: {'username': email, 'password' : password},
+          body: {'username': email, 'password': password},
           headers: {'Content-Type': 'application/x-www-form-urlencoded'});
-    } else {
-      
-    }
+    } else {}
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool hasError = true;
     String message = 'Bir şeyler yanlış!';
     //print('GELEN TIME BUDUR:' + responseData['expiresIn']);
-    print('GELEN RESPONSE DATA BUDUR'+ responseData.toString());
+    print('GELEN RESPONSE DATA BUDUR' + responseData.toString());
     if (responseData.containsKey('token')) {
       hasError = false;
       message = 'Authentication succeeded!';
@@ -706,6 +730,8 @@ class KullaniciModel extends ConnectedPersonellerModel {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
     final String expiryTimeString = prefs.getString('expiryTime');
+    //final KisaYol kisayollar = prefs.getStringList('kisayollar');
+    //_kisayollar = kisayollar;
     if (token != null) {
       final DateTime now = DateTime.now();
       final parsedExpiryTime = DateTime.parse(expiryTimeString);
@@ -745,10 +771,46 @@ class YardimciModel extends ConnectedPersonellerModel {
   bool get isYukleme {
     return _isYukleme;
   }
+
+  List<KisaYol> get allKisayollar {
+    return List.from(_kisayollar);
+  }
+
+  List<String> get allKisayolId {
+    return List.from(_kisayolId);
+  }
+
+  Future<Null> kisayolIdCek() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _kisayolId = prefs.getStringList('kalanKisayollar') == null ? _kisayolId : prefs.getStringList('kalanKisayollar');
+  }
+
+  Future<Null> kisayolEkle(int gelenId) async {
+    List<String> anasayfaKisayol = ["0", "1", "9"];
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> onbellekid = prefs.getStringList('kisayollar') == null ? anasayfaKisayol : prefs.getStringList('kisayollar');
+    onbellekid.add(gelenId.toString());
+    prefs.setStringList('kisayollar', onbellekid);
+    _kisayolId.remove(gelenId.toString());
+    prefs.setStringList('kalanKisayollar', _kisayolId);
+    
+    notifyListeners();
+    //kisayolIdCek();
+  }
+
+  Future<Null> kisayolSil(int gelenId) async {
+    List<String> anasayfaKisayol = ["0", "1", "9"];
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> onbellekid = prefs.getStringList('kisayollar') == null ? anasayfaKisayol : prefs.getStringList('kisayollar');
+    onbellekid.remove(gelenId.toString());
+    prefs.setStringList('kisayollar', onbellekid);
+    _kisayolId.add(gelenId.toString());
+    prefs.setStringList('kalanKisayollar', _kisayolId);
+    notifyListeners();
+  }
 }
 
 class StudentModel extends ConnectedPersonellerModel {
-  
   List<Student> get allStudents {
     return List.from(_students);
   }
@@ -776,8 +838,6 @@ class StudentModel extends ConnectedPersonellerModel {
     });
   }
 
-
-  
   Future<Null> fetchStudents({onlyForUser = false}) {
     _isYukleme = true;
     notifyListeners();
@@ -796,13 +856,14 @@ class StudentModel extends ConnectedPersonellerModel {
       print("JSON UZUNLUGU" + studentListData.length.toString());
       studentListData.forEach((String studentId, dynamic studentData) {
         final Student student = Student(
-            id: studentId,
-            name: studentData['name'],
-            certificate: studentData['certificate'],
-            phone: studentData['phone'],
-            status: studentData['status'],
-            statusDate: studentData['statusData'],
-            situation: studentData['stuation'],);
+          id: studentId,
+          name: studentData['name'],
+          certificate: studentData['certificate'],
+          phone: studentData['phone'],
+          status: studentData['status'],
+          statusDate: studentData['statusData'],
+          situation: studentData['stuation'],
+        );
         fetchedStudentList.add(student);
       });
       _students = fetchedStudentList;
@@ -820,5 +881,4 @@ class StudentModel extends ConnectedPersonellerModel {
     _selStudentId = studentId;
     notifyListeners();
   }
-
 }

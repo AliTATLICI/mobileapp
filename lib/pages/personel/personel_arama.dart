@@ -19,7 +19,7 @@ enum _RadioGroup { foo1, foo2 }
 class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
-  String _secilenBirim = "Isparta Meslek Yüksekokulu Müdürlüğü";
+  String _secilenBirim = "Aksu Mehmet Süreyya Demiraslan Meslek Yüksekokulu Müdürlüğü";
 
   List<String> popMenu = ['Akademik', 'İdari'];
   List<DropdownMenuItem<String>> _dropDowmMenuItems = [];
@@ -282,22 +282,6 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
                                 fontWeight: FontWeight.bold),
                           )
                         ],
-                      ),
-                    ),
-                    Positioned(
-                      left: 0.0,
-                      top: 0.0,
-                      child: Container(
-                        color: Colors.red,
-                        child: Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            filtrePersonelList[index].sicil,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
                       ),
                     )
                   ],

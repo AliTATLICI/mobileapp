@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_course/pages/personel/personeller_isubu.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
@@ -34,6 +35,7 @@ import './pages/yemekhane.dart';
 import './pages/eczane.dart';
 import './pages/eczane_map.dart';
 import './pages/yemek_listesi.dart';
+import './pages/akademik_takvim.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -54,6 +56,7 @@ class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
   final _platformChannel = MethodChannel('flutter-course.com/battery');
   bool _isAuthenticated = false;
+  List<String> _kisayolMenu =[];
 
 
   Future<Null> _getBatteryLevel() async {
@@ -88,7 +91,7 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
-        title: "SDÜ UBYS Mobil",
+        title: "ISUBÜ Mobil",
         //debugShowMaterialGrid: true,
         debugShowCheckedModeBanner: false,
         theme: getAdaptiveThemeData(context),
@@ -108,7 +111,8 @@ class _MyAppState extends State<MyApp> {
                                   .format(DateTime.now()), _model),
           '/yemek' : (BuildContext context) => YemekListesiSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
-           '/eczane2': (BuildContext context) => EczaneSayfasi2()
+           '/eczane2': (BuildContext context) => EczaneSayfasi2(),
+           '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi()
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

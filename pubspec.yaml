@@ -26,15 +26,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: ^0.5.2
+  flutter_launcher_icons: ^0.6.1
 
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/sdu_logo.jpg"
+  image_path: "assets/icon/isubu_logo.png"
   adaptive_icon_background: "#FFFAFAFA"
-  adaptive_icon_foreground: "assets/icon/sdu_logo.jpg"
+  adaptive_icon_foreground: "assets/icon/isubu_logo.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -59,6 +59,7 @@ flutter:
     - assets/anasayfa1.jpg
     - assets/anasayfa2.jpg
     - assets/anasayfa3.jpg
+    - assets/load_json/akademik_takvim.json
 
   #  - images/a_dot_ham.jpeg
 

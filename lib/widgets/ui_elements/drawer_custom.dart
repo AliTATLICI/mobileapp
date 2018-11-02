@@ -57,45 +57,24 @@ class _DrawerCustomState extends State<DrawerCustom> {
             },
           ),
          ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('Haber, Duyuru ve Etkinlikler'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/haberler');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.history),
+            leading: Icon(Icons.announcement),
             title: Text('Duyurular'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/duyurular');
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Personel Yönetimi'),
+            leading: Icon(Icons.info_outline),
+            title: Text('Haberler'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/admin');
+              Navigator.pushReplacementNamed(context, '/haberler');
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Personel ISUBU'),
+            leading: Icon(Icons.restaurant_menu),
+            title: Text('Yemekhane'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/isubu_personeller');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Öğrenci Bilgi Sistemi'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/obs');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.school),
-            title: Text('Öğrenci Arama'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/ogrenciler');
+              Navigator.pushReplacementNamed(context, '/yemek');
             },
           ),
           ListTile(
@@ -106,10 +85,31 @@ class _DrawerCustomState extends State<DrawerCustom> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.school),
+            title: Text('Öğrenci Arama'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/ogrenciler');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.calendar_today),
+            title: Text('Akademik Takvim'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/akademik-takvim');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.explicit),
-            title: Text('Eczane'),
+            title: Text('Nöbetçi Eczane'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/eczane');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.vpn_key),
+            title: Text('Üniversite Bilgi Yönetim Sistemi (UBYS)'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/ubys');
             },
           ),
           Divider(),

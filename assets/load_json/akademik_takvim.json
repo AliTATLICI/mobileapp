@@ -1,0 +1,56 @@
+{ "guz" : [
+    {
+      "tarih": "01-29 Ağustos 2018",
+      "detay": "Yeterlilik Sınavına Girmek İsteyen Öğrencilerin Şahşen veya Dilekçe ileYabancı Diller Yüksekokuluna Müracaatı"
+    },
+    {
+      "tarih": "10-21 Eylül 2018",
+      "detay": "Güz Yarıyılı Öğrenci Katkı Payı ve Öğrenim Ücreti Yatırma "
+    },
+    {
+      "tarih": "17-21 Eylül 2018",
+      "detay":
+          "Ders Kaydı ve İnternet Üzerinden Kayıt Yenileme\n(BİRİNCİ SINIF ÖĞRENCİLERİ DAHİL) "
+    },
+    {"tarih": "24 Eylül - 31 Aralık 2018", "detay": "GÜZ YARIYILI DERS DÖNEMİ"},
+    {
+      "tarih": "24-26 Eylül 2018",
+      "detay":
+          "Güz Yarıyılı Öğrencilerin Okullarına Dilekçe ile Mazeretli Kayıt Başvurusu"
+    },
+    {"tarih": "01-05 Ekim 2018", "detay": "Ders Ekleme-Bırakma "},
+    {"tarih": "10-18 Kasım 2018", "detay": "Güz Yarıyılı Arasınavları "},
+    {"tarih": "02-16 Ocak 2019", "detay": "Güz Yarıyıl Sonu Sınavları "},
+    {"tarih": "24-28 Ocak 2019", "detay": "Güz Yarıyılı Bütünleme Sınavları"}
+
+    ],
+
+    "bahar": [
+        {
+          "tarih": "02-08 Şubat 2019",
+          "detay": "Bahar Yarıyılı Öğrenci Katkı Payı ve Öğrenim Ücreti Yatırma "
+        },
+        {
+          "tarih": "04-08 Şubat 2019",
+          "detay":
+              "Ders Kaydı ve İnternet Üzerinden Kayıt Yenileme\n(BİRİNCİ SINIF ÖĞRENCİLERİ DAHİL) "
+        },
+        {"tarih": "11 Şubat - 21 Mayıs 2019", "detay": "BAHAR YARIYILI DERS DÖNEMİ"},
+        {
+          "tarih": "11-13 Şubat 2019",
+          "detay":
+              "Bahar Yarıyılı Öğrencilerin Okullarına Dilekçe ile Mazeretli Kayıt Başvurusu"
+        },
+        {"tarih": "15-20 Şubat 2019", "detay": "Ders Ekleme-Bırakma "},
+        {
+          "tarih": "30 Mart - 07 Nisan Kasım 2019",
+          "detay": "Bahar Yarıyılı Arasınavları "
+        },
+        {
+          "tarih": "22 Mayıs - 16 Haziran 2019",
+          "detay":
+              "Bahar Yarıyıl Sonu Sınavları (1-9 Haziran tarihleri arasında sınav yapılmayacaktır.) "
+        },
+        {"tarih": "26-30 Haziran 2019", "detay": "Bahar Yarıyılı Bütünleme Sınavları"}
+      ]
+}

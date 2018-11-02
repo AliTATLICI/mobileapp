@@ -36,6 +36,9 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   TimeOfDay _time = TimeOfDay.now();
   List<Yemek> yemek_listesi;
 
+  List<String> popMenu = ['Günlük', 'Haftalık', 'Aylık'];
+  int _selectedRadio = 0;
+
   @override
   void initState() {
     _selectedText = "Öğle Yemeği";
@@ -63,6 +66,43 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
             });
     }
   }
+  void _select(String choice) {
+    if (choice == popMenu[0]) {
+      //debugPrint('Haftalık secildi');
+      setState(() {
+        _selectedRadio = 0;
+      });
+    } else if (choice == popMenu[1]) {
+      //debugPrint('Günlük seçildi');
+      setState(() {
+        _selectedRadio = 1;
+      });
+      Navigator.pushNamed(context, "/yemek");
+      /*showDialog(context: context, builder: (context) => Center(
+                              child: Card(
+                                child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: makeRadios(),
+                      ),
+                ),
+              ));
+              */
+
+    } else if (choice == popMenu[2]) {
+      //debugPrint('Aylık secildi');
+      /*
+      showDialog(context: context, builder: (context) => Center(
+                              child: Card(
+                                child: DropdownButton(
+            value: _statusSel,
+            items: _dropDowmMenuItems,
+            onChanged: changedDropDownItem,
+          ),
+                ),
+              ));
+              */
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +111,19 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
           return Scaffold(
         drawer: DrawerCustom(),
         appBar: AppBar(
-          title: Text("Yemekhane"),
+          title: Text("Yemek Listesi (Günlük)"),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            )
+            PopupMenuButton(
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return popMenu.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          )
           ],
         ),
         body: Center(
