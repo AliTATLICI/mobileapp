@@ -12,7 +12,7 @@ import '../shared/global_config.dart';
 import '../models/personel.dart';
 import '../models/personel_arama.dart';
 import '../models/student.dart';
-import '../models/haber.dart';
+import '../models/haber_duyuru.dart';
 import '../models/duyuru.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
@@ -24,8 +24,8 @@ class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
   List<PersonelArama> _personellerArama = [];
   List<Student> _students = [];
-  List<Haber> _haberler = [];
-  List<Duyuru> _duyurular = [];
+  List<HaberDuyuru> _haberler = [];
+  List<HaberDuyuru> _duyurular = [];
   List<Eczane> _eczaneler = [];
   List<Yemek> _yemekler = [];
   List<KisaYol> _kisayollar = <KisaYol>[
@@ -61,11 +61,11 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_personellerArama);
   }
 
-  List<Haber> get allHaberler {
+  List<HaberDuyuru> get allHaberler {
     return List.from(_haberler);
   }
 
-  List<Duyuru> get allDuyurular {
+  List<HaberDuyuru> get allDuyurular {
     return List.from(_duyurular);
   }
 
@@ -86,11 +86,11 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_personeller);
   }
 
-  List<Haber> get displayedHaberler {
+  List<HaberDuyuru> get displayedHaberler {
     return List.from(_haberler);
   }
 
-  List<Duyuru> get displayedDuyurular {
+  List<HaberDuyuru> get displayedDuyurular {
     return List.from(_duyurular);
   }
 
@@ -393,7 +393,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
     )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
-      final List<Haber> fetchedHaberList = [];
+      final List<HaberDuyuru> fetchedHaberList = [];
       final Map<String, dynamic> haberListData =
           json.decode(utf8.decode(response.bodyBytes));
       if (haberListData == null) {
@@ -404,11 +404,12 @@ class PersonellerModel extends ConnectedPersonellerModel {
       //print("HABERLISTDATA:" + haberListData["results"].toString());
       haberListData["results"].forEach((dynamic haberData) {
         //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
-        final Haber haber = Haber(
+        final HaberDuyuru haber = HaberDuyuru(
             id: haberData['id'].toString(),
             numarasi: haberData['numarasi'],
             baslik: haberData['baslik'],
             createdDate: haberData['created_date'],
+            okunma: haberData['okunma'],
             icerik: haberData['icerik']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedHaberList.add(haber);
@@ -434,7 +435,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
     )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
-      final List<Duyuru> fetchedDuyuruList = [];
+      final List<HaberDuyuru> fetchedDuyuruList = [];
       final Map<String, dynamic> duyuruListData =
           json.decode(utf8.decode(response.bodyBytes));
       if (duyuruListData == null) {
@@ -445,11 +446,12 @@ class PersonellerModel extends ConnectedPersonellerModel {
       print("HABERLISTDATA:" + duyuruListData["results"].toString());
       duyuruListData["results"].forEach((dynamic duyuruData) {
         //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
-        final Duyuru duyuru = Duyuru(
+        final HaberDuyuru duyuru = HaberDuyuru(
             id: duyuruData['id'].toString(),
             numarasi: duyuruData['numarasi'],
             baslik: duyuruData['baslik'],
             createdDate: duyuruData['created_date'],
+            okunma: duyuruData['okunma'],
             icerik: duyuruData['icerik']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedDuyuruList.add(duyuru);

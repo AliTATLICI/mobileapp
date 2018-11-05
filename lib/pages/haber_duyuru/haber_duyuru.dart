@@ -5,40 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/ui_elements/adi_soyadi_default.dart';
-import '../../models/haber.dart';
+import '../../models/haber_duyuru.dart';
 import '../../scoped-models/main.dart';
 import '../../widgets/personeller/personel_dersler.dart';
-import '../../widgets/personeller/haber_fab.dart';
+import '../../widgets/haberler_duyurular/haber_fab.dart';
 
-class HaberSayfa extends StatelessWidget {
-  final Haber haber;
+class HaberDuyuruSayfasi extends StatelessWidget {
+  final HaberDuyuru haber;
+  final String gelenHaberMiDuyuruMu;
 
-  HaberSayfa(this.haber);
-  _showWarnigDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Emin misiniz?"),
-            content: Text("Bu işlem geri alınamaz!"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("İPTAL"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text("DEVAM"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context, true);
-                },
-              ),
-            ],
-          );
-        });
-  }
+  HaberDuyuruSayfasi(this.haber, this.gelenHaberMiDuyuruMu);
+  
 
   Widget _buildBolumCepRow(String eposta, String cep) {
     return Row(
@@ -80,7 +57,7 @@ class HaberSayfa extends StatelessWidget {
     List haber_icerikleri = haber.icerik;
     String ilkresim = haber.icerik.firstWhere(
         (o) => o.startsWith('/SDU_Files/'),
-        orElse: () => '/SDU_Files/Images/IMG_9529.JPG');
+        orElse: () => '/assets/images/sdu-logo-3@2x.png');
     return WillPopScope(
       onWillPop: () {
         print("< Geri Butonuna Basıldı");
@@ -99,18 +76,18 @@ class HaberSayfa extends StatelessWidget {
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
                 title: Text(
-                  haber.baslik,
+                  "$gelenHaberMiDuyuruMu Detayı",
                   softWrap: true,
-                  style: TextStyle(fontSize: cihazGenisligi > 700 ? 20 : 12.0,),
+                  style: TextStyle(fontSize: cihazGenisligi > 700 ? 20 : 16.0,),
                   textAlign: TextAlign.start,
                 ),
                 background: Hero(
                   tag: haber.id,
                   child: FadeInImage(
                     image: NetworkImage("http://w3.sdu.edu.tr/" + ilkresim),
-                    height: 300.0,
+                    height: 200.0,
                     fit: BoxFit.cover,
-                    placeholder: AssetImage('assets/staff-default.png'),
+                    placeholder: AssetImage('assets/isubu_logo_opacity2.png'),
                   ),
                 ),
               ),
@@ -118,20 +95,21 @@ class HaberSayfa extends StatelessWidget {
             SliverList(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
-                return Container(
+                return index == 0 ? Container(padding: EdgeInsets.only(top: 15.0), child: Text(haber.baslik, style: TextStyle(color: Colors.red, fontSize: 16.0), textAlign: TextAlign.center,),) :  haber.icerik[index-1].startsWith(ilkresim) != true ? Container(
+                  padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 10.0),
                   alignment: Alignment.center,
-                  color: Colors.teal[100 * (index % 9)],
-                  child: haber.icerik[index].startsWith("/SDU_Files/")
+                  color: Colors.teal[100 * (index-1 % 9)],
+                  child: haber.icerik[index-1].startsWith("/SDU_Files/")
                       ? FadeInImage(
                           image: NetworkImage(
-                              "http://w3.sdu.edu.tr/" + haber.icerik[index]),
+                              "http://w3.sdu.edu.tr/" + haber.icerik[index-1]),
                           height: 200.0,
                           fit: BoxFit.cover,
-                          placeholder: AssetImage('assets/staff-default.png'),
+                          placeholder: AssetImage('assets/isubu_logo_opacity2.png'),
                         )
-                      : Text(haber.icerik[index]),
-                );
-              }, childCount: haber.icerik.length),
+                      : Text(haber.icerik[index-1]),
+                ) : Container();
+              }, childCount: haber.icerik.length+1),
             )
           ],
         ),

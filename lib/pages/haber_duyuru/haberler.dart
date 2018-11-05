@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../widgets/personeller/haberler.dart';
+import '../../widgets/haberler_duyurular/haberler_duyurular.dart';
 import '../../widgets/ui_elements/drawer_custom.dart';
 import '../../widgets/ui_elements/adaptive_progress_indicator.dart';
 import '../../scoped-models/main.dart';
@@ -33,7 +33,7 @@ class _HaberlerSayfaState extends State<HaberlerSayfa> {
         builder: (BuildContext context, Widget child, MainModel model) {
       Widget content = Center(child: Text('Haber bulunamadı!'+ model.displayedHaberler.length.toString()));
       if (model.displayedHaberler.length > 0 ) {
-        content = Haberler();
+        content = HaberlerDuyurular("Haber");
       } else if (model.isYukleme) {
         content = Center(child: AdaptiveProgressIndicator());
       }

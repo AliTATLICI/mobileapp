@@ -14,7 +14,10 @@ class HaberBasligi extends StatelessWidget {
           child: Center(
                       child: Text(
         haberBasligi,
-        style: textTheme.subhead,
+        style: TextStyle(
+        fontSize: 13.0, 
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Oswald'),
       ),
           ),
     );

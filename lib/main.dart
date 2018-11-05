@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_course/pages/personel/personeller_isubu.dart';
+import 'package:flutter_course/pages/webview.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
@@ -16,8 +17,7 @@ import './pages/personel/personeller.dart';
 import './pages/students/students.dart';
 import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
-import './pages/personel/haber.dart';
-import './pages/personel/duyuru.dart';
+import './pages/haber_duyuru/haber_duyuru.dart';
 import './pages/personel/personel_arama.dart';
 
 import './pages/obs/obs_giris.dart';
@@ -26,7 +26,7 @@ import './pages/haber_duyuru/haberler.dart';
 import './pages/haber_duyuru/duyurular.dart';
 import './scoped-models/main.dart';
 import './models/personel.dart';
-import './models/haber.dart';
+import './models/haber_duyuru.dart';
 import './models/duyuru.dart';
 import './widgets/helpers/custom_route.dart';
 import './shared/adaptive_theme.dart';
@@ -112,7 +112,8 @@ class _MyAppState extends State<MyApp> {
           '/yemek' : (BuildContext context) => YemekListesiSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
            '/eczane2': (BuildContext context) => EczaneSayfasi2(),
-           '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi()
+           '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(),
+           '/web_anasayfa': (BuildContext contex) => WebViewPage()
         },
         onGenerateRoute: (RouteSettings settings) {
           /*
@@ -136,21 +137,21 @@ class _MyAppState extends State<MyApp> {
           }
           if (pathElements[1] == 'haber') {
             final String haberId = pathElements[2];
-            final Haber haber =
-                _model.allHaberler.firstWhere((Haber haber) {
+            final HaberDuyuru haber =
+                _model.allHaberler.firstWhere((HaberDuyuru haber) {
               return haber.id == haberId;
             });
             return CustomRoute<bool>(
-                builder: (BuildContext contex) => HaberSayfa(haber));
+                builder: (BuildContext contex) => HaberDuyuruSayfasi(haber, "Haber"));
           }
           if (pathElements[1] == 'duyuru') {
             final String duyuruId = pathElements[2];
-            final Duyuru duyuru =
-                _model.allDuyurular.firstWhere((Duyuru duyuru) {
+            final HaberDuyuru duyuru =
+                _model.allDuyurular.firstWhere((HaberDuyuru duyuru) {
               return duyuru.id == duyuruId;
             });
             return MaterialPageRoute<bool>(
-                builder: (BuildContext contex) => DuyuruSayfa(duyuru));
+                builder: (BuildContext contex) => HaberDuyuruSayfasi(duyuru, "Duyuru"));
           }
           return null;
         },

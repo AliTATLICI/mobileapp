@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
-import '../../widgets/personeller/duyurular.dart';
+import '../../widgets/haberler_duyurular/haberler_duyurular.dart';
 import '../../widgets/ui_elements/cikisyap_list_tile.dart';
 import '../../widgets/ui_elements/drawer_custom.dart';
 
@@ -33,9 +33,9 @@ class _DuyurularSayfaState extends State<DuyurularSayfa> {
   Widget _buildHaberlerList() {
     return ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
-      Widget content = Center(child: Text('Duyuru bulunamadı!'+ model.displayedHaberler.length.toString()));
-      if (model.displayedHaberler.length > 0 ) {
-        content = Duyurular();
+      Widget content = Center(child: Text('Duyuru bulunamadı!'+ model.displayedDuyurular.length.toString()));
+      if (model.displayedDuyurular.length > 0 ) {
+        content = HaberlerDuyurular("Duyuru");
       } else if (model.isYukleme) {
         content = Center(child: CircularProgressIndicator());
       }

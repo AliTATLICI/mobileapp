@@ -1,6 +1,7 @@
 name: flutter_course
 description: A new Flutter project.
 
+
 dependencies:
   flutter:
     sdk: flutter
@@ -20,6 +21,7 @@ dependencies:
   cached_network_image: "^0.4.1"
   carousel_pro: ^0.0.13
   intl: ^0.15.7
+  flutter_webview_plugin: ^0.2.1+2
 
 
 dev_dependencies:
@@ -60,6 +62,11 @@ flutter:
     - assets/anasayfa2.jpg
     - assets/anasayfa3.jpg
     - assets/load_json/akademik_takvim.json
+    - assets/logo_108.png
+    - assets/isubu_logo_opacity2.png
+    - assets/isubu_logo_opacity.png
+
+
 
   #  - images/a_dot_ham.jpeg
 
