@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_course/pages/personel/personeller_isubu.dart';
 import 'package:flutter_course/pages/webview.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
@@ -35,6 +34,7 @@ import './pages/yemekhane.dart';
 import './pages/eczane.dart';
 import './pages/eczane_map.dart';
 import './pages/yemek_listesi.dart';
+import './pages/yemek_listesi_aylik.dart';
 import './pages/akademik_takvim.dart';
 
 void main() {
@@ -110,6 +110,7 @@ class _MyAppState extends State<MyApp> {
           '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
                                   .format(DateTime.now()), _model),
           '/yemek' : (BuildContext context) => YemekListesiSayfasi(_model),
+          '/yemek-aylik' : (BuildContext context) => YemekListesiAylikSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
            '/eczane2': (BuildContext context) => EczaneSayfasi2(),
            '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(),

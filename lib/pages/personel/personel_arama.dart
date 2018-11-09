@@ -19,7 +19,7 @@ enum _RadioGroup { foo1, foo2 }
 class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
-  String _secilenBirim = "Aksu Mehmet Süreyya Demiraslan Meslek Yüksekokulu Müdürlüğü";
+  String _secilenBirim = "Birim Seçiniz!";
 
   List<String> popMenu = ['Akademik', 'İdari'];
   List<DropdownMenuItem<String>> _dropDowmMenuItems = [];
@@ -27,6 +27,11 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
 
   List<DropdownMenuItem<String>> _getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
+
+    items.add(DropdownMenuItem(
+      value: '00',
+      child: Text("Birim Seçiniz!"),
+    ));
 
     items.add(DropdownMenuItem(
       value: '01',
@@ -149,6 +154,9 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
       _statusSel = selectedItem;
       print("SELECTED ITEM  :$selectedItem");
       switch (_statusSel) {
+        case '00':
+          _secilenBirim = 'Birim Seçiniz!';
+          break;
         case '01':
           _secilenBirim = 'Aksu Mehmet Süreyya Demiraslan Meslek Yüksekokulu Müdürlüğü';
           break;
@@ -245,7 +253,8 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   }
 
   Widget myBody() {
-    return ScopedModelDescendant(
+    try {
+      return ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
       final List<Personel> filtrePersonelList = model.allPersoneller.where((p) {
         if (_selectedRadio == 1) {
@@ -254,7 +263,8 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
           return p.birim == _secilenBirim && p.bolum != null;
         }
       }).toList();
-      return GridView.builder(
+       try{
+         return GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, childAspectRatio: 1.0),
         itemCount: filtrePersonelList.length,
@@ -265,10 +275,13 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    Image.network(
-                      "http://isparta.edu.tr/foto.aspx?sicil_no=${filtrePersonelList[index].sicil}",
-                      fit: BoxFit.cover,
-                    ),
+                    FadeInImage(
+                          image: NetworkImage(
+                              "http://isparta.edu.tr/foto.aspx?sicil_no=${filtrePersonelList[index].sicil}"),
+                          height: 200.0,
+                          fit: BoxFit.cover,
+                          placeholder: AssetImage('assets/staff-default.png'),
+                        ),
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Column(
@@ -289,7 +302,15 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
               ),
             ),
       );
+       }
+       catch(e) {
+         print(e.toString());
+       };
     });
+    } catch (e) {
+      print("HATA BUDUR----------------------------------------*********");
+      print(e.toString());
+    }
   }
 
   void changeItemType(
@@ -412,7 +433,7 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
-            color: Colors.tealAccent,
+            color: Colors.blue.shade200,
             child: SizedBox(
               height: 40.0,
               child: Wrap(
@@ -429,9 +450,17 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
               ),
             ),
           ),
-          Expanded(
-            child: myBody(),
-          ),
+         _secilenBirim == "Birim Seçiniz!" ? Container(
+           color: Colors.white,
+           child: Center(
+                        child: SizedBox(
+               height: 200.0,
+               child: Padding(
+                 padding: EdgeInsets.only(top: 20.0),
+                 child: Text("Personel aramak için yukarıdan birim seçebilirsiniz ya da arama kısmından isim veya soyisme göre arama yapabilirsiniz. \n Birim seçtikten sonra akademik ve idari kısmını sağ üst köşeden değiştirebilirsiniz. ", style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center,)),
+             ),
+           ),
+         ) : Expanded(child: myBody(),) 
         ],
       ),
     );

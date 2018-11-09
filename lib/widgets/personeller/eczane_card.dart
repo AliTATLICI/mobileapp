@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -30,7 +31,7 @@ class EczaneCard extends StatelessWidget {
               children: <Widget>[
                 ListTile(
         //leading: CircleAvatar(child: Text(eczane.semt)),
-        title: Text(eczane.adi + " / " + eczane.semt),
+        title: Text(eczane.adi + " / " + eczane.semt, style: TextStyle(fontWeight: FontWeight.bold),),
         subtitle: Text("""${eczane.adres}
 ${eczane.telefon}"""),
 
@@ -45,17 +46,11 @@ ${eczane.telefon}"""),
                 Padding(padding: EdgeInsets.all(5.0),),
                 Text('Eczaneyi Ara')
               ],),
-              onPressed: () { /* ... */ },
-            ),
-            FlatButton(
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.room),
-                  Text('Harita ile Yol Tarifi')
-                ],
-              ),
-              onPressed: () { /* ... */ },
-            ),
+              onPressed: () {
+                _launchURL(eczane.telefon);
+              }
+              
+            )
           ],
         ),
       ),
@@ -69,4 +64,14 @@ ${eczane.telefon}"""),
       },
     );
   }
+
+  _launchURL(String gelen) async {
+  String tel = 'tel:0${gelen}';
+  if (await canLaunch(tel)) {
+    await launch(tel);
+  } else {
+    throw 'Could not launch $tel';
+  }
+}
+
 }

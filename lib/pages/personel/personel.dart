@@ -71,7 +71,7 @@ class PersonelSayfa extends StatelessWidget {
       return Future.value(false);
     }, child: Scaffold(
           appBar: AppBar(
-            title: Text('Personel Detayı'),
+            title: Text('Personel Detayı (${personel.sicil})'),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

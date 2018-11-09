@@ -68,12 +68,12 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   }
   void _select(String choice) {
     if (choice == popMenu[0]) {
-      //debugPrint('Haftalık secildi');
+      //debugPrint('Günlük secildi');
       setState(() {
         _selectedRadio = 0;
       });
     } else if (choice == popMenu[1]) {
-      //debugPrint('Günlük seçildi');
+      //debugPrint('Haftalık seçildi');
       setState(() {
         _selectedRadio = 1;
       });
@@ -89,6 +89,10 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
               */
 
     } else if (choice == popMenu[2]) {
+      setState(() {
+        _selectedRadio = 2;
+      });
+      Navigator.pushNamed(context, "/yemek-aylik");
       //debugPrint('Aylık secildi');
       /*
       showDialog(context: context, builder: (context) => Center(
@@ -136,7 +140,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                       height: 50.0,
                       width: 210.0,
                       child: Container(
-                        color: Colors.red,
+                        color: Colors.blueAccent,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,7 +149,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                             SizedBox(
                               width: 50.0,
                               child: RaisedButton(
-                                  color: Colors.yellow,
+                                  color: Colors.lightBlueAccent,
                                   onPressed: () {
                                     //Sol tarafa geri tuşuna basıldığında bir önceki gündeki yemek listelenmesi lazım
                                     //print(model.allYemekler.forEach((Yemek yemek) {print(yemek.tarih.toString());} ));
@@ -166,7 +170,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                             SizedBox(
                               width: 50.0,
                               child: RaisedButton(
-                                  color: Colors.yellow,
+                                  color: Colors.lightBlueAccent,
                                   onPressed: () {
                                     //Sağ tuşuna basıldığında bir sonraki gündeki yemek listelenmesi lazım
                                     setState(() {

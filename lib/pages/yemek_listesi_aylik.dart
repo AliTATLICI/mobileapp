@@ -18,19 +18,19 @@ import '../shared/global_config.dart';
 import '../widgets/ui_elements/adaptive_progress_indicator.dart';
 import '../widgets/personeller/yemekler.dart';
 
-class YemekListesiSayfasi extends StatefulWidget {
+class YemekListesiAylikSayfasi extends StatefulWidget {
   final MainModel model;
 
-  YemekListesiSayfasi(this.model);
+  YemekListesiAylikSayfasi(this.model);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _YemekListesiSayfasiState();
+    return _YemekListesiAylikSayfasiState();
   }
 }
 
-class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
+class _YemekListesiAylikSayfasiState extends State<YemekListesiAylikSayfasi> {
   List<String> popMenu = ['Günlük', 'Haftalık', 'Aylık'];
   int _selectedRadio = 0;
   
@@ -45,7 +45,7 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
         builder: (BuildContext context, Widget child, MainModel model) {
       Widget content = Center(child: Text('Yemek bulunamadı!'+ model.allYemekler.length.toString()));
       if (model.allYemekler.length > 0 ) {
-        content = Yemekler("haftalik");
+        content = Yemekler("aylik");
       } else if (model.isYukleme) {
         content = Center(child: AdaptiveProgressIndicator());
       }
@@ -68,7 +68,7 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
       setState(() {
         _selectedRadio = 1;
       });
-      
+      Navigator.pushNamed(context, "/yemek");
       /*showDialog(context: context, builder: (context) => Center(
                               child: Card(
                                 child:  Row(
@@ -80,10 +80,10 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
               */
 
     } else if (choice == popMenu[2]) {
-       setState(() {
+      setState(() {
         _selectedRadio = 2;
       });
-      Navigator.pushNamed(context, "/yemek-aylik");
+
       //debugPrint('Aylık secildi');
       /*
       showDialog(context: context, builder: (context) => Center(
@@ -105,7 +105,7 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
     return Scaffold(
       drawer: DrawerCustom(),
       appBar: AppBar(
-        title: Text("Haftalık Yemek Listesi"),
+        title: Text("Aylık Yemek Listesi"),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: _select,

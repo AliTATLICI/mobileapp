@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 final ThemeData _androidTheme = ThemeData(
           brightness: Brightness.light,
-          primarySwatch: Colors.teal,         
-          accentColor: Colors.deepPurple,
+          primarySwatch: Colors.blue,         
+          accentColor: Colors.teal[300],
           buttonColor: Colors.blueAccent,
          
         );

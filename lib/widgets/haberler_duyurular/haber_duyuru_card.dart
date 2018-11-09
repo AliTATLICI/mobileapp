@@ -67,7 +67,7 @@ class HaberDuyuruCard extends StatelessWidget {
     if (ilkresim != null) {
      fadeInImage = FadeInImage(
               image: NetworkImage(
-                  "http://w3.sdu.edu.tr" + ilkresim),
+                  "http://isparta.edu.tr" + ilkresim),
               height: 120.0,
               fit: BoxFit.cover,
               placeholder: AssetImage('assets/logo_108.png'),

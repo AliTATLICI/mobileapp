@@ -57,7 +57,7 @@ class HaberDuyuruSayfasi extends StatelessWidget {
     List haber_icerikleri = haber.icerik;
     String ilkresim = haber.icerik.firstWhere(
         (o) => o.startsWith('/SDU_Files/'),
-        orElse: () => '/assets/images/sdu-logo-3@2x.png');
+        orElse: () => '/assets/images/isubu-logo@2x.png');
     return WillPopScope(
       onWillPop: () {
         print("< Geri Butonuna Basıldı");
@@ -84,7 +84,7 @@ class HaberDuyuruSayfasi extends StatelessWidget {
                 background: Hero(
                   tag: haber.id,
                   child: FadeInImage(
-                    image: NetworkImage("http://w3.sdu.edu.tr/" + ilkresim),
+                    image: NetworkImage("http://isparta.edu.tr/" + ilkresim),
                     height: 200.0,
                     fit: BoxFit.cover,
                     placeholder: AssetImage('assets/isubu_logo_opacity2.png'),
@@ -102,7 +102,7 @@ class HaberDuyuruSayfasi extends StatelessWidget {
                   child: haber.icerik[index-1].startsWith("/SDU_Files/")
                       ? FadeInImage(
                           image: NetworkImage(
-                              "http://w3.sdu.edu.tr/" + haber.icerik[index-1]),
+                              "http://isparta.edu.tr/" + haber.icerik[index-1]),
                           height: 200.0,
                           fit: BoxFit.cover,
                           placeholder: AssetImage('assets/isubu_logo_opacity2.png'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -21,7 +22,8 @@ class YemekCard extends StatelessWidget {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
     return GestureDetector(
       child: Card(
-          color: yemek.gun == "Cuma" ? Colors.yellow : Colors.white,
+          color: yemek.tarih == DateFormat("dd.MM.yyyy")
+                                  .format(DateTime.now()) ? Colors.yellow : Colors.white,
           child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +38,7 @@ ${yemek.kalori}"""),
                 
               ])),
       onTap: () {
-        debugPrint(yemek.gun);
+        debugPrint(yemek.tarih);
         // Card a tıklandıgında tek günün yemek sayfası çıkabilir page > yemekhane.dart
         
       },

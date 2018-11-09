@@ -103,18 +103,11 @@ class AkademikTakvimSayfasiState extends State<AkademikTakvimSayfasi>
               children: [
                 Container(
           padding: EdgeInsets.only(top: 15.0),
-          child: FutureBuilder(
-            future: DefaultAssetBundle.of(context).loadString("assets/load_json/akademik_takvim.json"),
-            builder: (context, cevap) {
-              takvim = jsonDecode(cevap.data.toString());
-              //debugPrint(takvim.toString());
-              return ListView.builder(
-              itemCount: takvim['guz'].length,
-              itemBuilder: (BuildContext context, int index) {
-                return MyTimeLine(
-                    takvim['guz'][index]['tarih'], takvim['guz'][index]['detay']);
-              },
-            );
+          child: ListView.builder(
+            itemCount: takvimGuz.length,
+            itemBuilder: (context, index) {
+              return MyTimeLine(
+                  takvimGuz[index]['tarih'], takvimGuz[index]['detay']);
             },
           ),
         ),
