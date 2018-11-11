@@ -58,14 +58,16 @@ flutter:
     - assets/profil.jpg
     - assets/staff-default.png
     - assets/sdu_obs_giris.jpg
-    - assets/anasayfa1.jpg
+    - assets/menu_genel_tanitim.png
     - assets/anasayfa2.jpg
     - assets/anasayfa3.jpg
     - assets/load_json/akademik_takvim.json
     - assets/logo_108.png
     - assets/isubu_logo_opacity2.png
     - assets/isubu_logo_opacity.png
-
+    - assets/ISUBU.jpg
+    - assets/ISUBU_1.jpg
+    - assets/ISUBU_2.jpg
 
 
   #  - images/a_dot_ham.jpeg

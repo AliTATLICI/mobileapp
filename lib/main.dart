@@ -26,10 +26,10 @@ import './pages/haber_duyuru/duyurular.dart';
 import './scoped-models/main.dart';
 import './models/personel.dart';
 import './models/haber_duyuru.dart';
-import './models/duyuru.dart';
 import './widgets/helpers/custom_route.dart';
 import './shared/adaptive_theme.dart';
 import './pages/ana_sayfa.dart';
+import './pages/ubys.dart';
 import './pages/yemekhane.dart';
 import './pages/eczane.dart';
 import './pages/eczane_map.dart';
@@ -98,6 +98,7 @@ class _MyAppState extends State<MyApp> {
         //home: PersonellerSayfa(),
         routes: {
           '/': (BuildContext context) => AnaSayfa(_model),
+          '/ubys': (BuildContext context) => UBYSSayfa(_model),
           '/personeller': (BuildContext context) => PersonellerSayfa(_model),
           '/ogrenciler': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : StudentsPage(_model),

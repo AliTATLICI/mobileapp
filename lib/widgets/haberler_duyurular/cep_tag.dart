@@ -9,7 +9,8 @@ class CepTag extends StatelessWidget {
     Widget build(BuildContext context) {
       // TODO: implement build
       return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+        width: MediaQuery.of(context).size.width * 2.8 / 14.0,
+                  padding: EdgeInsets.symmetric(vertical: 3.0),
                   decoration: BoxDecoration(
                       color: Theme.of(context).accentColor,
                       borderRadius: BorderRadius.circular(5.0)),

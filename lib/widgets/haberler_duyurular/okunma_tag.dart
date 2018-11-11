@@ -9,6 +9,7 @@ class OkunmaTag extends StatelessWidget {
     Widget build(BuildContext context) {
       // TODO: implement build
       return Container(
+        width: MediaQuery.of(context).size.width * 2.8 / 16.0,
                   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
                   decoration: BoxDecoration(
                       color: Theme.of(context).accentColor,
@@ -16,7 +17,7 @@ class OkunmaTag extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.visibility, color: Colors.white,),
                       Text(

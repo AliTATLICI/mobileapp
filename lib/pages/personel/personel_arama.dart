@@ -456,7 +456,7 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
                         child: SizedBox(
                height: 200.0,
                child: Padding(
-                 padding: EdgeInsets.only(top: 20.0),
+                 padding: EdgeInsets.only(top: 20.0, right: 8.0, left: 8.0),
                  child: Text("Personel aramak için yukarıdan birim seçebilirsiniz ya da arama kısmından isim veya soyisme göre arama yapabilirsiniz. \n Birim seçtikten sonra akademik ve idari kısmını sağ üst köşeden değiştirebilirsiniz. ", style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center,)),
              ),
            ),

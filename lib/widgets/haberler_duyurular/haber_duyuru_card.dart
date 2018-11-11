@@ -38,7 +38,7 @@ class HaberDuyuruCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         ButtonTheme(
-          minWidth: 50.0,
+          minWidth: MediaQuery.of(context).size.width * 2.8 / 12.0,
                   child: FlatButton(
             color: Theme.of(context).accentColor,
             textColor: Colors.white,
@@ -90,26 +90,26 @@ class HaberDuyuruCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: 100.0,
-              width: 100.0,
+              height: MediaQuery.of(context).size.height / 7.0,
+              width: MediaQuery.of(context).size.width * 1.1/ 4.0,  
                           child: _haberResmiVarYok(),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
             SizedBox(
-              height: 65.0,
-              width: 250.0,
+              height: MediaQuery.of(context).size.height * 2.2/21.0,
+              width: MediaQuery.of(context).size.width * 2.8 / 4.0,
                           child: _buildAdiSoyadiSicilRow(),
             ),    
             SizedBox(
-              height: 25.0,
-              width: 250.0,
+              height: MediaQuery.of(context).size.height * 1.0/ 21.0,
+              width: MediaQuery.of(context).size.width * 2.8/ 4.0,
                           child: _buildActionButtons(context),
             )
               ],

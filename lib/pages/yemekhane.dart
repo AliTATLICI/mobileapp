@@ -27,8 +27,12 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   String _selectedText = "Öğle Yemeği";
   int _menuIndex;
   var date = new DateTime(2018, 10, 18);
-  var ayin_gunu = DateTime.parse(DateTime.now().toString());
+  var bugun = DateTime.parse(DateTime.now().toString());
   var gunun_sayi_degeri;
+  var ayin_sayi_degeri;
+  var yilin_sayi_degeri;
+
+
 
   String bugun_ne = DateFormat("dd.MM.yyyy").format(DateTime.now());
   List<String> gunler;
@@ -43,10 +47,12 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
   void initState() {
     _selectedText = "Öğle Yemeği";
     widget._seciliGun = bugun_ne;
-    gunun_sayi_degeri = ayin_gunu.day.toInt();
+    gunun_sayi_degeri = bugun.day.toInt();
+    ayin_sayi_degeri = bugun.month.toInt();
+    yilin_sayi_degeri = bugun.year.toInt();
     widget.model.fetchYemekler();
     yemek_listesi = widget.model.allYemekler;
-    _menuIndex = widget.model.allYemekler.indexWhere((Yemek yemek) => yemek.tarih.startsWith(widget._seciliGun));
+    _menuIndex = 8;
     super.initState();
   }
 
@@ -115,7 +121,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
           return Scaffold(
         drawer: DrawerCustom(),
         appBar: AppBar(
-          title: Text("Yemek Listesi (Günlük)"),
+          title: Text(gunun_sayi_degeri.toString()),
           actions: <Widget>[
             PopupMenuButton(
             onSelected: _select,
@@ -177,8 +183,8 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                                       gunun_sayi_degeri++;
                                       _menuIndex++;
                                       widget._seciliGun =
-                                          (gunun_sayi_degeri).toString() +
-                                              '.10.2018';
+                                          (gunun_sayi_degeri).toString() + ayin_sayi_degeri.toString() +
+                                              '.2018';
                                     });
                                   },
                                   child: Icon(Icons.arrow_forward_ios)),

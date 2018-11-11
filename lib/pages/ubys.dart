@@ -13,101 +13,29 @@ import './yemekhane.dart';
 import './eczane.dart';
 import '../models/kisayol.dart';
 
-class AnaSayfa extends StatefulWidget {
+class UBYSSayfa extends StatefulWidget {
   final MainModel model;
 
-  AnaSayfa(this.model);
+  UBYSSayfa(this.model);
   @override
-  _AnaSayfaState createState() => _AnaSayfaState();
+  _UBYSSayfaState createState() => _UBYSSayfaState();
 }
 
-class _AnaSayfaState extends State<AnaSayfa> {
-  List<String> anasayfaKisayol = ["0", "1", "9"];
-  List<String> anasayfaKalanKisayol = ["2", "3", "4", "5", "6", "7", "8"];
+class _UBYSSayfaState extends State<UBYSSayfa> {
   List<KisaYol> kisayolMenusu = <KisaYol>[
-    KisaYol(no: 1, baslik: 'Profil', icon: Icons.perm_identity, page: 'profil'),
-    KisaYol(no: 2, baslik: 'ISUBÜ', icon: Icons.home, page: 'web_anasayfa'),
-    KisaYol(
-        no: 9,
-        baslik: 'Kısayol ekle',
-        icon: Icons.add_circle_outline,
-        page: 'kisayol'),
+    KisaYol(no: 1, baslik: 'Elektronik Posta', icon: Icons.email, page: 'kisayol'),
+    KisaYol(no: 2, baslik: 'Öğrenci Bilgi Sistemi', icon: Icons.school, page: 'profil'),
+    KisaYol(no: 3, baslik: 'Personel Bilgi Sistemi', icon: Icons.supervisor_account, page: 'web_anasayfa'),
+    KisaYol(no: 4, baslik: 'Elektronik Belge Yön.', icon: Icons.picture_as_pdf, page: 'kisayol'),
+    KisaYol(no: 5, baslik: 'Online Ödeme Sistemi', icon: Icons.payment, page: 'kisayol'),
+    KisaYol(no: 6, baslik: 'SKS Yönetim Sistemi', icon: Icons.shutter_speed, page: 'kisayol'),
+    KisaYol(no: 7, baslik: 'Servis Destek İşlemleri', icon: Icons.pan_tool, page: 'kisayol'),
+    KisaYol(no: 8, baslik: 'Kalite Yönetim Sistemi', icon: Icons.star_half, page: 'kisayol'),
+    KisaYol(no: 9, baslik: 'Mezun Takip Sistemi', icon: Icons.person_pin, page: 'kisayol'),
+
   ];
 
-  Widget buildGrid(BuildContext context) {
-    var myGridView = new GridView.builder(
-      itemCount: kisayolMenusu.length,
-      gridDelegate:
-          new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      itemBuilder: (BuildContext context, int index) {
-        return new GestureDetector(
-          child: new Card(
-            elevation: 5.0,
-            child: new Container(
-              //padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 20.0),
-              alignment: Alignment.centerLeft,
-              margin: new EdgeInsets.only(top: 20.0, bottom: 20.0, left: 20.0),
-              child: new Text("kisayolMenusu[index]"),
-            ),
-          ),
-          onTap: () {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                child: new CupertinoAlertDialog(
-                  title: new Column(
-                    children: <Widget>[
-                      new Text("GridView"),
-                      new Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-                  content: new Text("kisayolMenusu[index]"),
-                  actions: <Widget>[
-                    new FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: new Text("OK"))
-                  ],
-                ));
-          },
-        );
-      },
-    );
-    return myGridView;
-  }
-
-  @override
-  void initState() {
-    widget.model.kisayolIdCek();
-    kayitGoster();
-    kalankayitGoster();
-    super.initState();
-  }
-
-  void kayitGoster() async {
-    final kayitAraci = await SharedPreferences.getInstance();
-    List<String> kmenu = kayitAraci.getStringList('kisayollar');
-    print("ANASAYFA BASLAMADAN ONCE SHARED BU" + kmenu.toString());
-    setState(() {
-      anasayfaKisayol = kmenu != null ? kmenu : anasayfaKisayol;
-      anasayfaKisayol.sort();
-    });
-  }
-
-  void kalankayitGoster() async {
-    final kayitAraci = await SharedPreferences.getInstance();
-    List<String> kmenu = kayitAraci.getStringList('kalanKisayollar');
-    print("ANASAYFA BASLAMADAN ONCE SHARED BU" + kmenu.toString());
-    setState(() {
-      anasayfaKalanKisayol = kmenu != null ? kmenu : anasayfaKalanKisayol;
-      anasayfaKalanKisayol.sort();
-    });
-  }
-
+  
   Widget buildCard(KisaYol kisayol) {
     return GestureDetector(
       child: Card(
@@ -121,7 +49,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       size: 60.0,
                       color: kisayol.icon == Icons.add_circle_outline
                           ? Colors.grey
-                          : Colors.lightBlue),
+                          : Color(0xFF75BDB5)),
                   Text(kisayol.baslik, style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center,),
                 ]),
           )),
@@ -133,7 +61,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
               return new SimpleDialog(
                 children: <Widget>[
                   new Container(
-                    height: 60.0 * anasayfaKalanKisayol.length,
+                    height: 60.0 * kisayolMenusu.length,
                     width: 150.0,
                     child: ListView.builder(
                       itemCount: widget.model.allKisayolId.length,
@@ -226,19 +154,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ISUBÜ Mobil"),
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              tooltip: "Bildirimleriniz",
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                showOverlay(context);
-              },
-            ),
-          )
-        ],
+        title: Text("Üniversite Bilgi Yönetim Sistemi", style: TextStyle(fontSize: 18.0),),
       ),
       drawer: DrawerCustom(),
       body: Container(
@@ -252,10 +168,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   height: MediaQuery.of(context).size.height * 0.9 / 3,
                   width: MediaQuery.of(context).size.width,
                   child: new Carousel(
+                    autoplayDuration: Duration(seconds: 8),
                     images: [
-                      ExactAssetImage("assets/menu_genel_tanitim.png"),
-                      ExactAssetImage("assets/anasayfa2.jpg"),
-                      ExactAssetImage("assets/anasayfa3.jpg")
+                      ExactAssetImage("assets/ISUBU.jpg"),
+                      ExactAssetImage("assets/ISUBU_1.jpg"),
+                      ExactAssetImage("assets/ISUBU_2.jpg")
                     ],
                     dotSize: 4.0,
                     dotSpacing: 15.0,
@@ -273,14 +190,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 child: GridView.count(
                   crossAxisCount: 3,
                   children: List.generate(
-                      anasayfaKisayol == null
-                          ? kisayolMenusu.length
-                          : anasayfaKisayol.length, (index) {
+                      kisayolMenusu.length, (index) {
                     return Center(
-                      child: buildCard(anasayfaKisayol == null
-                          ? kisayolMenusu[index]
-                          : widget.model.allKisayollar[
-                              int.parse(anasayfaKisayol[index])]),
+                      child: buildCard(kisayolMenusu[index]
+                          ),
                     );
                   }),
                 ),
@@ -297,33 +210,5 @@ class _AnaSayfaState extends State<AnaSayfa> {
         ),
       ),
     );
-  }
-}
-
-class Choice {
-  const Choice({this.title, this.icon, this.page});
-
-  final String title;
-  final IconData icon;
-  final String page;
-}
-
-const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Profil', icon: Icons.perm_identity, page: 'profil'),
-  const Choice(title: 'ISUBÜ', icon: Icons.home, page: 'anasayfa'),
-  const Choice(
-      title: 'Yemekhane', icon: Icons.restaurant_menu, page: 'yemekhane'),
-  const Choice(title: 'Eczane', icon: Icons.explicit, page: 'eczane'),
-  const Choice(
-      title: 'Kısayol ekle', icon: Icons.add_circle_outline, page: 'kısayol'),
-];
-
-class ChoiceCard extends StatelessWidget {
-  const ChoiceCard({Key key, this.choice}) : super(key: key);
-  final KisaYol choice;
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle textStyle = Theme.of(context).textTheme.display1;
   }
 }

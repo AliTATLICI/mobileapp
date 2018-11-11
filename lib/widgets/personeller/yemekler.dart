@@ -36,6 +36,9 @@ class Yemekler extends StatelessWidget {
       case 'Mon':
       tarihBul = tarihBul;
       break;
+      case 'Sun':
+      tarihBul = tarihBul+8;
+      break;
       default:
         print("Demekki günlerden Cumartesi ya da Pazar");
     }
