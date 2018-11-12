@@ -13,13 +13,12 @@ import 'package:scoped_model/scoped_model.dart';
 
 import './pages/auth/auth.dart';
 import './pages/personel/personeller.dart';
-import './pages/students/students.dart';
 import './pages/personel/personel_admin.dart';
 import './pages/personel/personel.dart';
 import './pages/haber_duyuru/haber_duyuru.dart';
 import './pages/personel/personel_arama.dart';
+import './pages/profil/profil.dart';
 
-import './pages/obs/obs_giris.dart';
 
 import './pages/haber_duyuru/haberler.dart';
 import './pages/haber_duyuru/duyurular.dart';
@@ -98,15 +97,13 @@ class _MyAppState extends State<MyApp> {
         //home: PersonellerSayfa(),
         routes: {
           '/': (BuildContext context) => AnaSayfa(_model),
+          '/login': (BuildContext context) => AuthPage(),
           '/ubys': (BuildContext context) => UBYSSayfa(_model),
           '/personeller': (BuildContext context) => PersonellerSayfa(_model),
-          '/ogrenciler': (BuildContext context) =>
-              !_isAuthenticated ? AuthPage() : StudentsPage(_model),
           '/admin': (BuildContext context) =>
               !_isAuthenticated ? AuthPage() : PersonelAdminSayfa(_model),
           '/haberler': (BuildContext context) => HaberlerSayfa(_model),
           '/duyurular': (BuildContext context) => DuyurularSayfa(_model),
-          '/obs': (BuildContext context) => OBSGirisSayfasi(_model),
           '/personel-arama': (BuildContext context) => PersonelAramaSayfasi(_model),
           '/yemekhane': (BuildContext context) => YemekhaneSayfasi(DateFormat("dd.MM.yyyy")
                                   .format(DateTime.now()), _model),
@@ -114,8 +111,9 @@ class _MyAppState extends State<MyApp> {
           '/yemek-aylik' : (BuildContext context) => YemekListesiAylikSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
            '/eczane2': (BuildContext context) => EczaneSayfasi2(),
-           '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(),
-           '/web_anasayfa': (BuildContext contex) => WebViewPage()
+           '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(_model),
+           '/web_anasayfa': (BuildContext contex) => WebViewPage(),
+           '/profil': (BuildContext contex) => ProfilSayfasi(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

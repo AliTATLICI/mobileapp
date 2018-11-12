@@ -103,7 +103,7 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       appBar: AppBar(
         title: Text("Haftalık Yemek Listesi"),
         actions: <Widget>[

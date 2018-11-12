@@ -119,7 +119,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
     return ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
           return Scaffold(
-        drawer: DrawerCustom(),
+        drawer: DrawerCustom(widget.model),
         appBar: AppBar(
           title: Text(gunun_sayi_degeri.toString()),
           actions: <Widget>[

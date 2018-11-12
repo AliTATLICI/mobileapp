@@ -27,10 +27,6 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
     super.initState();
   }
 
-  Widget _buildSideDrawer(BuildContext context) {
-    return DrawerCustom();
-  }
-
   Widget _buildPersonellerList() {
     return ScopedModelDescendant(
         builder: (BuildContext context, Widget child, MainModel model) {
@@ -51,7 +47,7 @@ class _PersonellerSayfaState extends State<PersonellerSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       appBar: AppBar(
         title: Text("Personel Listesi"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 4.0 : 0.0,

@@ -156,7 +156,7 @@ class _UBYSSayfaState extends State<UBYSSayfa> {
       appBar: AppBar(
         title: Text("Üniversite Bilgi Yönetim Sistemi", style: TextStyle(fontSize: 18.0),),
       ),
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

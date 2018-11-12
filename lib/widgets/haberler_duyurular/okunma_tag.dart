@@ -9,20 +9,20 @@ class OkunmaTag extends StatelessWidget {
     Widget build(BuildContext context) {
       // TODO: implement build
       return Container(
-        width: MediaQuery.of(context).size.width * 2.8 / 16.0,
-                  padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+        width: MediaQuery.of(context).size.width * 2.8 / 14.0,
+                  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 1.0),
                   decoration: BoxDecoration(
                       color: Theme.of(context).accentColor,
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.visibility, color: Colors.white,),
                       Text(
                     sayi,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white), textDirection: TextDirection.ltr,
                   )
                     ],
                   ),

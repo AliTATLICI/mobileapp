@@ -240,7 +240,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
           )
         ],
       ),
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

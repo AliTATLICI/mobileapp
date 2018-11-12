@@ -57,7 +57,7 @@ class _EczaneSayfasiState extends State<EczaneSayfasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       appBar: AppBar(
         title: Text("Nöbetçi Eczaneler"),
         actions: <Widget>[

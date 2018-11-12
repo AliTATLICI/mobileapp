@@ -50,7 +50,7 @@ class _DuyurularSayfaState extends State<DuyurularSayfa> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      drawer: DrawerCustom(),
+      drawer: DrawerCustom(widget.model),
       appBar: AppBar(
         title: Text("Duyurular"),
         elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,

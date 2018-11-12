@@ -6,14 +6,26 @@ import './cikisyap_list_tile.dart';
 
 class DrawerCustom extends StatefulWidget {
 
-  //final MainModel model;
+  final MainModel model;
 
-  //DrawerCustom(this.model);
+  DrawerCustom(this.model);
   @override
   _DrawerCustomState createState() => _DrawerCustomState();
 }
 
 class _DrawerCustomState extends State<DrawerCustom> {
+  bool _isAuthenticated = false;
+
+  @override
+    void initState() {
+      widget.model.otomatikAuthenticate();
+      widget.model.kullaniciSubject.listen((bool isAuthenticated) {
+      setState(() {
+        _isAuthenticated = isAuthenticated;
+      });
+    });
+      super.initState();
+    }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -30,19 +42,28 @@ class _DrawerCustomState extends State<DrawerCustom> {
           // ),
           ScopedModelDescendant(
             builder: (BuildContext context, Widget child, MainModel model) {
-              return UserAccountsDrawerHeader(
-                accountName: Text("Ali TATLICI"),
-                accountEmail: Text("eposta yazacak"),//model.kullanici.email
+              return !_isAuthenticated ? Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                              child: ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Giriş'),
+            onTap: () {
+                Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+              ) : UserAccountsDrawerHeader(
+                accountName: Text(model.kullanici.firstName.toString() + " " + model.kullanici.lastName.toString()),
+                accountEmail: Text(model.kullanici.email),//model.kullanici.email
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Theme.of(context).platform == TargetPlatform.iOS ? Colors.purple : Colors.white,
                   backgroundImage: NetworkImage(
-                    "http://isparta.edu.tr/resim.aspx?sicil_no=01582",
+                    "http://isparta.edu.tr/resim.aspx?sicil_no="+model.kullanici.username,
                   ),
                 ),
                 otherAccountsPictures: <Widget>[
                   CircleAvatar(
                   backgroundImage: NetworkImage(
-                    "http://isparta.edu.tr/foto.aspx?sicil_no=01582",
+                    "http://isparta.edu.tr/foto.aspx?sicil_no="+model.kullanici.username,
                   ),
                 )
                 ],
@@ -88,7 +109,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
             leading: Icon(Icons.school),
             title: Text('Öğrenci Arama'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/ogrenciler');
+              Navigator.pushReplacementNamed(context, '/ogrenci-arama');
             },
           ),
           ListTile(

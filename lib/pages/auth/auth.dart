@@ -50,12 +50,10 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'E-mail', filled: true, fillColor: Colors.white),
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       validator: (String value) {
-        if (value.isEmpty ||
-            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                .hasMatch(value)) {
-          return 'Geçerli bir eposta adresi giriniz!';
+        if (value.isEmpty || value.length < 5) {
+          return '5 rakamlı sicil numarası veya 10 rakamlı öğrenci numarası giriniz!';
         }
       },
       onSaved: (String value) {

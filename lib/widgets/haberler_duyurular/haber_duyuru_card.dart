@@ -49,11 +49,11 @@ class HaberDuyuruCard extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 5.0,
+          width: 4.0,
         ),
         OkunmaTag(haberDuyuru.okunma),
         SizedBox(
-          width: 5.0,
+          width: 4.0,
         ),
         CepTag(haberDuyuru.createdDate),
        
@@ -88,9 +88,9 @@ class HaberDuyuruCard extends StatelessWidget {
       padding: EdgeInsets.only(top: 6.0, bottom: 6.0),
           child: Card(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: MediaQuery.of(context).size.height / 7.0,

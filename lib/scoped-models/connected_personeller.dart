@@ -13,7 +13,6 @@ import '../models/personel.dart';
 import '../models/personel_arama.dart';
 import '../models/student.dart';
 import '../models/haber_duyuru.dart';
-import '../models/duyuru.dart';
 import '../models/kullanici.dart';
 import '../models/auth.dart';
 import '../models/eczane.dart';
@@ -35,7 +34,7 @@ class ConnectedPersonellerModel extends Model {
     KisaYol(no: 3, baslik: "Haberler", page: "haberler", icon: Icons.info_outline),
     KisaYol(no: 4, baslik: "Yemekhane", page: "yemek", icon: Icons.restaurant_menu),
     KisaYol(no: 5, baslik: "Personel Arama", page: "personel-arama", icon: Icons.person_pin_circle),
-    KisaYol(no: 6, baslik: "Öğrenci Arama", page: "ogrenciler", icon: Icons.school),
+    KisaYol(no: 6, baslik: "Öğrenci Arama", page: "ogrenci-arama", icon: Icons.school),
     KisaYol(no: 7, baslik: "Akademik Takvim", page: "akademik-takvim", icon: Icons.calendar_today),
     KisaYol(no: 8, baslik: "Eczane", page: "eczane", icon: Icons.explicit),
     KisaYol(no: 9, baslik: "Kısayol Ekle", page: "kisayol", icon: Icons.add_circle_outline)
@@ -676,23 +675,23 @@ class KullaniciModel extends ConnectedPersonellerModel {
   }
 
   Future<Map<String, dynamic>> kimlikdogrulamaDjango(
-      String email, String password,
+      String username, String password,
       [AuthMode mode = AuthMode.Login]) async {
     _isYukleme = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
-      'username': email,
+      'username': username,
       'password': password,
       'returnSecureToken': true
     };
     http.Response response;
     if (mode == AuthMode.Login) {
       response = await http.post('${apiWebIp}/pbs/api/login',
-          body: {'username': email, 'password': password},
+          body: {'username': username, 'password': password},
           headers: {'Content-Type': 'application/x-www-form-urlencoded'});
     } else {}
 
-    final Map<String, dynamic> responseData = json.decode(response.body);
+    final Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
     bool hasError = true;
     String message = 'Bir şeyler yanlış!';
     //print('GELEN TIME BUDUR:' + responseData['expiresIn']);
@@ -702,8 +701,12 @@ class KullaniciModel extends ConnectedPersonellerModel {
       message = 'Authentication succeeded!';
       _authenticatedKullanici = Kullanici(
           id: responseData['localId'].toString(),
-          email: email,
-          token: responseData['token']);
+          email: responseData['email'],
+          token: responseData['token'],
+          username: responseData['username'],
+          firstName: responseData['first_name'],
+          lastName: responseData['last_name']
+          );
       ayarlaAuthTimeout(int.parse(responseData['expireIn']));
       _kullaniciSubject.add(true);
       final DateTime now = DateTime.now();
@@ -711,8 +714,11 @@ class KullaniciModel extends ConnectedPersonellerModel {
           now.add(Duration(seconds: int.parse(responseData['expireIn'])));
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', responseData['token']);
-      prefs.setString('userEmail', email);
+      prefs.setString('userEmail', responseData['email'].toString());
       prefs.setString('userId', responseData['localId'].toString());
+      prefs.setString('username', username);
+      prefs.setString('firstname', responseData['first_name'].toString());
+      prefs.setString('lastname', responseData['last_name'].toString());
       prefs.setString('expiryTime', expiryTime.toIso8601String());
     } else if (responseData['error'] == 'EMAIL_EXISTS') {
       message = 'Bu eposta kayıtlı! Başka bir eposta giriniz.';
@@ -744,9 +750,12 @@ class KullaniciModel extends ConnectedPersonellerModel {
       }
       final String userEmail = prefs.getString('userEmail');
       final String userId = prefs.getString('userId');
+      final String username = prefs.getString('username');
+      final String firstname = prefs.getString('firstname');
+      final String lastname = prefs.getString('lastname');
       final int tokenLifespan = parsedExpiryTime.difference(now).inSeconds;
       _authenticatedKullanici =
-          Kullanici(id: userId, email: userEmail, token: token);
+          Kullanici(id: userId, email: userEmail, token: token, username: username, firstName: firstname, lastName: lastname);
       _kullaniciSubject.add(true);
       ayarlaAuthTimeout(tokenLifespan);
       notifyListeners();
@@ -762,6 +771,10 @@ class KullaniciModel extends ConnectedPersonellerModel {
     prefs.remove('token');
     prefs.remove('userEmail');
     prefs.remove('userId');
+    prefs.remove('username');
+    prefs.remove('firstname');
+    prefs.remove('lastname');
+
   }
 
   void ayarlaAuthTimeout(int time) {

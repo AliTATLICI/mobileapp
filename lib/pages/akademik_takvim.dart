@@ -8,6 +8,9 @@ import '../scoped-models/main.dart';
 
 
 class AkademikTakvimSayfasi extends StatefulWidget {
+  final MainModel model;
+
+  AkademikTakvimSayfasi(this.model);
   
   @override
   State<StatefulWidget> createState() {
@@ -89,7 +92,7 @@ class AkademikTakvimSayfasiState extends State<AkademikTakvimSayfasi>
     return DefaultTabController(
       length: 2,
           child: new Scaffold(
-        drawer: DrawerCustom(),
+        drawer: DrawerCustom(widget.model),
         appBar: AppBar(
           title: Text('Akademik Takvim'),
           bottom: TabBar(
