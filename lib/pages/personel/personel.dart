@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/ui_elements/adi_soyadi_default.dart';
 import '../../models/personel.dart';
-import '../../scoped-models/main.dart';
 import '../../widgets/personeller/personel_dersler.dart';
 
 class PersonelSayfa extends StatelessWidget {

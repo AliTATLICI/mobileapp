@@ -17,13 +17,31 @@ class PersonelAramaSayfasi extends StatefulWidget {
 enum _RadioGroup { foo1, foo2 }
 
 class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
+  
   _RadioGroup _itemType = _RadioGroup.foo1;
-  int _selectedRadio = 0;
+  //int _selectedRadio = 0;
   String _secilenBirim = "Birim Seçiniz!";
+  //String _secilenBolum = "Bölüm Seçiniz!";
 
   List<String> popMenu = ['Akademik', 'İdari'];
   List<DropdownMenuItem<String>> _dropDowmMenuItems = [];
+  //List<DropdownMenuItem<String>> _dropDowmBolumMenuItems = [];
   String _statusSel;
+  
+  String _statusBolum;
+  bool _birimDegisti = true;
+
+  List<DropdownMenuItem<String>> _getDropDownBolumIlkMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+
+    items.add(DropdownMenuItem(
+      value: '00',
+      child: Text("Bölümmmm Seçççç"),
+    ));
+    return items;
+  }
+
+  
 
   List<DropdownMenuItem<String>> _getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
@@ -121,27 +139,27 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
       value: '21',
       child: Text("Teknoloji Fakültesi"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '22',
       child: Text("Uluborlu Selahattin Karasoy MYO"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '23',
       child: Text("Uzaktan Eğitim MYO"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '24',
       child: Text("Yalvaç Büyükkutlu Uyg. Bil. Yüksekokulu"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '25',
       child: Text("Yalvaç MYO"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '26',
       child: Text("Yalvaç Teknik Bilimler MYO"),
     ));
-     items.add(DropdownMenuItem(
+    items.add(DropdownMenuItem(
       value: '27',
       child: Text("Yenişarbademli MYO"),
     ));
@@ -150,163 +168,198 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   }
 
   void changedDropDownItem(String selectedItem) {
-    setState(() {
+    
+    
       _statusSel = selectedItem;
+      _birimDegisti = true;
+      
       print("SELECTED ITEM  :$selectedItem");
       switch (_statusSel) {
         case '00':
-          _secilenBirim = 'Birim Seçiniz!';
+          widget.model.setBirimGotur("Birim Seçiniz!");
           break;
         case '01':
-          _secilenBirim = 'Aksu Mehmet Süreyya Demiraslan Meslek Yüksekokulu Müdürlüğü';
+          //widget.model.getDropDownBolumMenuItemsBirimden(_secilenBirim, _selectedRadio); 
+          widget.model.setBirimGotur("Aksu Mehmet Süreyya Demiraslan Meslek Yüksekokulu Müdürlüğü");
           break;
         case '02':
-          _secilenBirim = 'Atabey Meslek Yüksekokulu Müdürlüğü';
+          //widget.model.getDropDownBolumMenuItemsBirimden(_secilenBirim, _selectedRadio);
+          widget.model.setBirimGotur("Atabey Meslek Yüksekokulu Müdürlüğü");          
           break;
         case '03':
-          _secilenBirim = 'Bilgi İşlem Daire Başkanlığı';
+          widget.model.setBirimGotur("Bilgi İşlem Daire Başkanlığı");
           break;
         case '04':
-          _secilenBirim = 'Eğirdir Meslek Yüksekokulu Müdürlüğü';
+          //widget.model.getDropDownBolumMenuItemsBirimden(_secilenBirim, _selectedRadio);
+          widget.model.setBirimGotur("Eğirdir Meslek Yüksekokulu Müdürlüğü");
+          
           break;
         case '05':
-          _secilenBirim = 'Eğirdir Su Ürünleri Fakültesi Dekanlığı';
+          widget.model.setBirimGotur("Eğirdir Su Ürünleri Fakültesi Dekanlığı");
           break;
         case '06':
-          _secilenBirim = 'Eğirdir Turizm Ve Otelcilik Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Eğirdir Turizm Ve Otelcilik Yüksekokulu Müdürlüğü");
           break;
         case '07':
-          _secilenBirim = 'Gelendost Meslek Yüksekokulu Müdürlüğü';
+          //widget.model.getDropDownBolumMenuItemsBirimden(_secilenBirim, _selectedRadio);
+          widget.model.setBirimGotur("Gelendost Meslek Yüksekokulu Müdürlüğü");
+          
           break;
         case '08':
-          _secilenBirim = 'Genel Sekreterlik';
+          widget.model.setBirimGotur("Genel Sekreterlik");
           break;
         case '09':
-          _secilenBirim = 'Gönen Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Gönen Meslek Yüksekokulu Müdürlüğü");
           break;
         case '10':
-          _secilenBirim = 'Isparta Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Isparta Meslek Yüksekokulu Müdürlüğü");
           break;
         case '11':
-          _secilenBirim = 'Keçiborlu Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Keçiborlu Meslek Yüksekokulu Müdürlüğü");
           break;
         case '12':
-          _secilenBirim = 'Lisansüstü Eğitim Enstitüsü Müdürlüğü';
+          widget.model.setBirimGotur("Lisansüstü Eğitim Enstitüsü Müdürlüğü");
           break;
         case '13':
-          _secilenBirim = 'Orman Fakültesi Dekanlığı';
+          widget.model.setBirimGotur("Orman Fakültesi Dekanlığı");
           break;
         case '14':
-          _secilenBirim = 'Personel Daire Başkanlığı';
+          widget.model.setBirimGotur("Personel Daire Başkanlığı");
           break;
         case '15':
-          _secilenBirim = 'Senirkent Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Senirkent Meslek Yüksekokulu Müdürlüğü");
           break;
         case '16':
-          _secilenBirim = 'Sütçüler Prof. Dr. Hasan Gürbüz Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Sütçüler Prof. Dr. Hasan Gürbüz Meslek Yüksekokulu Müdürlüğü");
           break;
         case '17':
-          _secilenBirim = 'Şarkikaraağaç Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Şarkikaraağaç Meslek Yüksekokulu Müdürlüğü");
           break;
         case '18':
-          _secilenBirim = 'Şarkikaraağaç Turizm Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Şarkikaraağaç Turizm Meslek Yüksekokulu Müdürlüğü");
           break;
         case '19':
-          _secilenBirim = 'Tarım Bilimleri Ve Teknolojileri Fakültesi Dekanlığı';
+          widget.model.setBirimGotur("Tarım Bilimleri Ve Teknolojileri Fakültesi Dekanlığı");
           break;
         case '20':
-          _secilenBirim = 'Teknik Bilimler Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Teknik Bilimler Meslek Yüksekokulu Müdürlüğü");
           break;
         case '21':
-          _secilenBirim = 'Teknoloji Fakültesi Dekanlığı';
+          widget.model.setBirimGotur("Teknoloji Fakültesi Dekanlığı");
           break;
         case '22':
-          _secilenBirim = 'Uluborlu Selahattin Karasoy Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Uluborlu Selahattin Karasoy Meslek Yüksekokulu Müdürlüğü");
           break;
         case '23':
-          _secilenBirim = 'Uzaktan Eğitim Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Uzaktan Eğitim Meslek Yüksekokulu Müdürlüğü");
           break;
         case '24':
-          _secilenBirim = 'Yalvaç Büyükkutlu Uygulamalı Bilimler Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Yalvaç Büyükkutlu Uygulamalı Bilimler Yüksekokulu Müdürlüğü");
           break;
         case '25':
-          _secilenBirim = 'Yalvaç Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Yalvaç Meslek Yüksekokulu Müdürlüğü");
           break;
         case '26':
-          _secilenBirim = 'Yalvaç Teknik Bilimler Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Yalvaç Teknik Bilimler Meslek Yüksekokulu Müdürlüğü");
           break;
         case '27':
-          _secilenBirim = 'Yenişarbademli Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Yenişarbademli Meslek Yüksekokulu Müdürlüğü");
           break;
         default:
-          _secilenBirim = 'Isparta Meslek Yüksekokulu Müdürlüğü';
+          widget.model.setBirimGotur("Isparta Meslek Yüksekokulu Müdürlüğü");
       }
-    });
+      //_statusBolum="Bölüm Seçiniz!";
+    
+    
+    widget.model.setBolumGotur("Tüm Bölümler");
+    
+    widget.model.getDropDownBolumMenuItemsBirimden(widget.model.getBirimGetir, widget.model.getSecilenRadioGetir);
+    //widget.model.setBolumGotur("Bölüm Seçiniz!");
+
+  }
+
+  void changedBolumDropDownItem(String selectedItem) {
+    widget.model.setBolumGotur(selectedItem);
+    debugPrint("SECİLEN BOLUM *********************---------------");
+    debugPrint(selectedItem);
+    
   }
 
   @override
   initState() {
     widget.model.fetchPersonellerDjango();
     _dropDowmMenuItems = _getDropDownMenuItems();
+    //_dropDowmBolumMenuItems = widget.model.gelsinBolumItemler;
     _statusSel = _dropDowmMenuItems[0].value;
+    //_secilenBolum = _dropDowmBolumMenuItems[0].value;
     super.initState();
   }
+
 
   Widget myBody() {
     try {
       return ScopedModelDescendant(
-        builder: (BuildContext context, Widget child, MainModel model) {
-      final List<Personel> filtrePersonelList = model.allPersoneller.where((p) {
-        if (_selectedRadio == 1) {
-          return p.birim == _secilenBirim && p.bolum == null;
-        } else {
-          return p.birim == _secilenBirim && p.bolum != null;
-        }
-      }).toList();
-       try{
-         return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 1.0),
-        itemCount: filtrePersonelList.length,
-        itemBuilder: (context, index) => InkWell(
-              onTap: () => Navigator.pushNamed<bool>(
-                  context, '/personel/' + filtrePersonelList[index].id),
-              child: Card(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    FadeInImage(
+          builder: (BuildContext context, Widget child, MainModel model) {
+           
+        final List<Personel> filtrePersonelList =
+            model.allPersoneller.where((p) {
+          if (widget.model.getSecilenRadioGetir == 1) {
+            return p.birim == widget.model.getBirimGetir && p.bolum == null;
+          } 
+          else if(model.getBolumGetir != "Bölüm Seçiniz!" && model.getBolumGetir != "Tüm Bölümler") {
+            return p.birim == widget.model.getBirimGetir && p.bolum == model.getBolumGetir;
+          }
+          else {
+            //_birimDegisti = false;         
+            //debugPrint(_secilenBolum);   
+            return p.birim == widget.model.getBirimGetir && p.bolum != null;
+          }
+        }).toList();    
+        try {
+          // widget.model.getDropDownBolumMenuItems(filtrePersonelBirimList);  
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 1.0),
+            itemCount: filtrePersonelList.length,
+            itemBuilder: (context, index) => InkWell(
+                  onTap: () => Navigator.pushNamed<bool>(
+                      context, '/personel/' + filtrePersonelList[index].id),
+                  child: Card(
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: <Widget>[
+                        FadeInImage(
                           image: NetworkImage(
                               "http://isparta.edu.tr/foto.aspx?sicil_no=${filtrePersonelList[index].sicil}"),
                           height: 200.0,
                           fit: BoxFit.cover,
                           placeholder: AssetImage('assets/staff-default.png'),
                         ),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Text(
-                            filtrePersonelList[index].adSoyad,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                filtrePersonelList[index].adSoyad,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-      );
-       }
-       catch(e) {
-         print(e.toString());
-       };
-    });
+          );
+        } catch (e) {
+          print(e.toString());
+        }
+        
+      });
     } catch (e) {
       print("HATA BUDUR----------------------------------------*********");
       print(e.toString());
@@ -316,13 +369,13 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   void changeItemType(
     _RadioGroup type,
   ) {
-    setState(() {
-      widget.model.toogleAkademikIdari();
-      print(widget.model.displayedAkamikIdari.toString());
-      _itemType = widget.model.displayedAkamikIdari == false
-          ? _RadioGroup.foo1
-          : _RadioGroup.foo2;
-    });
+    
+    widget.model.toogleAkademikIdari();
+    print(widget.model.displayedAkamikIdari.toString());
+    widget.model.setRadioGotur(widget.model.displayedAkamikIdari == false
+        ? _RadioGroup.foo1
+        : _RadioGroup.foo2);
+    
   }
 
   void showDemoDialog<T>({BuildContext context, Widget child}) {
@@ -333,10 +386,10 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   }
 
   void onChangedRadio(int value) {
-    setState(() {
-      _selectedRadio = value;
-      print("RADIO DEGISTIRILDI: $value");
-    });
+    
+    widget.model.setSecilenRadioGotur(value);
+    print("RADIO DEGISTIRILDI: $value");
+    
   }
 
   List<Widget> makeRadios() {
@@ -346,7 +399,7 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
       children: <Widget>[
         Radio(
             value: 0,
-            groupValue: _selectedRadio,
+            groupValue: widget.model.getSecilenRadioGetir,
             onChanged: (int value) => onChangedRadio(value)),
         Text('Akademik')
       ],
@@ -355,7 +408,7 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
       children: <Widget>[
         Radio(
             value: 1,
-            groupValue: _selectedRadio,
+            groupValue: widget.model.getSecilenRadioGetir,
             onChanged: (int value) => onChangedRadio(value)),
         Text('İdari')
       ],
@@ -367,14 +420,14 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
   void _select(String choice) {
     if (choice == popMenu[0]) {
       debugPrint('Akademik secildi');
-      setState(() {
-        _selectedRadio = 0;
-      });
+      
+        widget.model.setSecilenRadioGotur(0);
+      
     } else if (choice == popMenu[1]) {
       debugPrint('İdari seçildi');
-      setState(() {
-        _selectedRadio = 1;
-      });
+      
+        widget.model.setSecilenRadioGotur(1);
+      
       /*showDialog(context: context, builder: (context) => Center(
                               child: Card(
                                 child:  Row(
@@ -400,9 +453,12 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
               */
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    return ScopedModelDescendant(
+          builder: (BuildContext context, Widget child, MainModel model) {
     return Scaffold(
       drawer: DrawerCustom(widget.model),
       appBar: AppBar(
@@ -434,37 +490,54 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
         children: <Widget>[
           Container(
             color: Colors.blue.shade200,
-            child: SizedBox(
-              height: 40.0,
-              child: Wrap(
-                textDirection: TextDirection.rtl,
-                direction: Axis.horizontal,
-                children: <Widget>[
-                  DropdownButton<String>(
-                    hint: Text('Birim Seçiniz'),
-                    value: _statusSel,
-                    items: _dropDowmMenuItems,
-                    onChanged: changedDropDownItem,
-                  )
-                ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 40.0,
+                  child: Wrap(
+                    textDirection: TextDirection.rtl,
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      DropdownButton<String>(
+                        hint: Text('Birim Seçiniz'),
+                        value: _statusSel,
+                        items: _dropDowmMenuItems,
+                        onChanged: changedDropDownItem,
+                      )
+                    ],
+                  ),
+                ),
+                widget.model.getBirimGetir != "Birim Seçiniz!"
+                    ? SizedBox(
+                        height: 60.0,
+                        child: Wrap(
+                          textDirection: TextDirection.rtl,
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            DropdownButton<String>(
+                              iconSize: 0.0,
+                              isDense: true,
+                              hint: Text('Bölüm Seçiniz'),
+                              value: model.getBolumGetir,
+                              items: _birimDegisti == true ? model.gelsinBolumItemler : _getDropDownBolumIlkMenuItems(),
+                              onChanged: changedBolumDropDownItem,
+                            )
+                          ],
+                        ),
+                      )
+                    : Container(),
+              ],
             ),
           ),
-         _secilenBirim == "Birim Seçiniz!" ? Container(
-           color: Colors.white,
-           child: Center(
-                        child: SizedBox(
-               height: 200.0,
-               child: Padding(
-                 padding: EdgeInsets.only(top: 20.0, right: 8.0, left: 8.0),
-                 child: Text("Personel aramak için yukarıdan birim seçebilirsiniz ya da arama kısmından isim veya soyisme göre arama yapabilirsiniz. \n Birim seçtikten sonra akademik ve idari kısmını sağ üst köşeden değiştirebilirsiniz. ", style: TextStyle(fontSize: 16.0), textAlign: TextAlign.center,)),
-             ),
-           ),
-         ) : Expanded(child: myBody(),) 
+          Expanded(
+                  child: myBody(),
+                )
         ],
       ),
     );
-  }
+  });}
 }
 
 class DataSearch extends SearchDelegate<MainModel> {

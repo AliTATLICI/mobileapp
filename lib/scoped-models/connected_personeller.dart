@@ -19,6 +19,8 @@ import '../models/eczane.dart';
 import '../models/yemek.dart';
 import '../models/kisayol.dart';
 
+enum _RadioGroup { foo1, foo2 }
+
 class ConnectedPersonellerModel extends Model {
   List<Personel> _personeller = [];
   List<PersonelArama> _personellerArama = [];
@@ -46,11 +48,117 @@ class ConnectedPersonellerModel extends Model {
   String _selDuyuruId;
   Kullanici _authenticatedKullanici;
   bool _isYukleme = false;
+
+  String _secilenBirim = "Birim Seçiniz!";
+
+  List<Personel> bolumFiltre = [];
+  List<DropdownMenuItem<String>> _dropDowmBolumMenuItems = [];
+  String _secilenBolum = "Bölüm Seçiniz!";
+
+  _RadioGroup _itemType = _RadioGroup.foo1;
+  int _selectedRadio = 0;
+  
 }
 
 class PersonellerModel extends ConnectedPersonellerModel {
   bool _gosterFavorites = false;
   bool _gosterAkademikIdari = false;
+
+  int get getSecilenRadioGetir{
+    return _selectedRadio;
+  }
+
+  void setSecilenRadioGotur(gelenRadio){
+    _selectedRadio = gelenRadio;
+  }
+
+  _RadioGroup get getRadioGetir{
+    return _itemType;
+  }
+
+  void setRadioGotur(gelenRadio){
+    _itemType = gelenRadio;
+  }
+
+  String get getBirimGetir{
+    return _secilenBirim;
+  }
+
+  void setBirimGotur(gelenBirim){
+    _secilenBirim = gelenBirim;
+  }
+
+  String get getBolumGetir{
+    return _secilenBolum;
+  }
+
+  void setBolumGotur(gelenBolum){
+    _secilenBolum = gelenBolum;
+  }
+
+  List<DropdownMenuItem<String>> getDropDownBolumMenuItems(List<Personel> personel) {
+    List<DropdownMenuItem<String>> items = new List();
+    List<String> bolumler =[];
+
+    for(var i=0; i<personel.length; i++){
+      if(bolumler.indexOf(personel[i].bolum) == -1){
+        items.add(DropdownMenuItem(
+      value: personel[i].bolum,
+      child: Container(
+        width: 350.0,
+        child: Text(personel[i].bolum, softWrap: true,)),
+    ));
+    //debugPrint(personel[i].bolum.toString());
+    bolumler.add(personel[i].bolum);
+      }      
+    
+    }
+    _dropDowmBolumMenuItems = items;
+    notifyListeners();
+  }
+
+  List<DropdownMenuItem<String>> getDropDownBolumMenuItemsBirimden(String birim, int gelenRadio) {
+    List<DropdownMenuItem<String>> items = new List();
+    List<String> bolumler =[];
+    final List<Personel> filtrePersonelBirimList =
+            allPersoneller.where((p) {
+          if (gelenRadio == 1) {
+            return p.birim == birim && p.bolum == null;
+          } 
+          else {         
+            //debugPrint(_secilenBolum);   
+            return p.birim == birim && p.bolum != null;
+          }
+        }).toList(); 
+
+    items.add(DropdownMenuItem(
+      value: "Tüm Bölümler",
+      child: Container(
+        width: 350.0,
+        child: Text("Tüm Bölümler", softWrap: true, style: TextStyle(fontWeight: FontWeight.bold),)),
+    ));
+    for(var i=0; i<filtrePersonelBirimList.length; i++){
+      if(bolumler.indexOf(filtrePersonelBirimList[i].bolum) == -1){
+        items.add(DropdownMenuItem(
+      value: filtrePersonelBirimList[i].bolum,
+      child: Container(
+        width: 350.0,
+        child: Text(filtrePersonelBirimList[i].bolum, softWrap: true,)),
+    ));
+    //debugPrint(personel[i].bolum.toString());
+    bolumler.add(filtrePersonelBirimList[i].bolum);
+      }      
+    
+    }
+    _dropDowmBolumMenuItems = items;
+    notifyListeners();
+  }
+
+  List<DropdownMenuItem<String>> get gelsinBolumItemler{
+    notifyListeners();
+    return List.from(_dropDowmBolumMenuItems);
+
+  }
 
   List<Personel> get allPersoneller {
     return List.from(_personeller);

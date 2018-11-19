@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:intl/intl.dart';
 
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
-import './yemekhane.dart';
-import './eczane.dart';
+
 import '../models/kisayol.dart';
 
 class UBYSSayfa extends StatefulWidget {

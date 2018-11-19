@@ -5,12 +5,10 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
-import './yemekhane.dart';
-import './eczane.dart';
 import '../models/kisayol.dart';
 
 class AnaSayfa extends StatefulWidget {
@@ -253,6 +251,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   width: MediaQuery.of(context).size.width,
                   child: new Carousel(
                     images: [
+                      ExactAssetImage("assets/anasayfa0.jpg"),
                       ExactAssetImage("assets/menu_genel_tanitim.png"),
                       ExactAssetImage("assets/anasayfa2.jpg"),
                       ExactAssetImage("assets/anasayfa3.jpg")

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -35,6 +35,8 @@ import './pages/eczane_map.dart';
 import './pages/yemek_listesi.dart';
 import './pages/yemek_listesi_aylik.dart';
 import './pages/akademik_takvim.dart';
+import './pages/giris_sayfasi.dart';
+
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -96,7 +98,8 @@ class _MyAppState extends State<MyApp> {
         theme: getAdaptiveThemeData(context),
         //home: PersonellerSayfa(),
         routes: {
-          '/': (BuildContext context) => AnaSayfa(_model),
+          '/': (BuildContext context) => GirisSayfasi(),
+          '/anasayfa': (BuildContext context) => AnaSayfa(_model),
           '/login': (BuildContext context) => AuthPage(),
           '/ubys': (BuildContext context) => UBYSSayfa(_model),
           '/personeller': (BuildContext context) => PersonellerSayfa(_model),
@@ -113,7 +116,7 @@ class _MyAppState extends State<MyApp> {
            '/eczane2': (BuildContext context) => EczaneSayfasi2(),
            '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(_model),
            '/web_anasayfa': (BuildContext contex) => WebViewPage(),
-           '/profil': (BuildContext contex) => ProfilSayfasi(_model),
+           '/profil': (BuildContext contex) => !_isAuthenticated ? AuthPage() : ProfilSayfasi(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

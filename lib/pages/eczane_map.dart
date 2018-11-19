@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import '../shared/global_config.dart';
 import 'package:map_view/map_view.dart';
 

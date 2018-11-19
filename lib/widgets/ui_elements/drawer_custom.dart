@@ -74,7 +74,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
             leading: Icon(Icons.home),
             title: Text('Anasayfa'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/anasayfa');
             },
           ),
          ListTile(

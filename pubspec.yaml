@@ -58,6 +58,7 @@ flutter:
     - assets/profil.jpg
     - assets/staff-default.png
     - assets/sdu_obs_giris.jpg
+    - assets/anasayfa0.jpg
     - assets/menu_genel_tanitim.png
     - assets/anasayfa2.jpg
     - assets/anasayfa3.jpg
@@ -68,6 +69,8 @@ flutter:
     - assets/ISUBU.jpg
     - assets/ISUBU_1.jpg
     - assets/ISUBU_2.jpg
+    - assets/isubu_logo1.jpg
+
 
 
   #  - images/a_dot_ham.jpeg

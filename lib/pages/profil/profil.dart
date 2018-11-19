@@ -15,7 +15,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(title: Text(widget.model.kullanici.email),),
+      appBar: AppBar(title: Text("Profil"),),
       drawer: DrawerCustom(widget.model),
         body: new Stack(
       children: <Widget>[
@@ -57,6 +57,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                       fontStyle: FontStyle.italic,
                       fontFamily: 'Montserrat'),
                 ),
+                Text(widget.model.kullanici.email, style: TextStyle(fontSize: 15.0, fontStyle: FontStyle.normal, fontFamily: 'Montserrat'),),
                 SizedBox(height: 25.0),
                 Container(
                     height: 30.0,

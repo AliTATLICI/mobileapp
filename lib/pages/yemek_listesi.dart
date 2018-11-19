@@ -1,20 +1,15 @@
-import 'dart:async';
-import 'dart:convert';
+//import 'dart:async';
+//import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:map_view/map_view.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:http/http.dart' as http;
+
 
 import '../scoped-models/main.dart';
 
 import '../widgets/ui_elements/drawer_custom.dart';
 //import '../widgets/form_inputs/location.dart';
 
-import '../models/eczane.dart';
-import '../shared/global_config.dart';
 import '../widgets/ui_elements/adaptive_progress_indicator.dart';
 import '../widgets/personeller/yemekler.dart';
 

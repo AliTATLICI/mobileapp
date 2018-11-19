@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../widgets/personeller/personeller.dart';
-import '../../widgets/ui_elements/cikisyap_list_tile.dart';
 import '../../widgets/ui_elements/drawer_custom.dart';
 import '../../scoped-models/main.dart';
 
