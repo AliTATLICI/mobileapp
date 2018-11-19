@@ -55,6 +55,10 @@ class ConnectedPersonellerModel extends Model {
   List<DropdownMenuItem<String>> _dropDowmBolumMenuItems = [];
   String _secilenBolum = "Bölüm Seçiniz!";
 
+  List<Personel> abdFiltre = [];
+  List<DropdownMenuItem<String>> _dropDowmABDMenuItems = [];
+  String _secilenABD = "ABD Seçiniz!";
+
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
   
@@ -96,26 +100,15 @@ class PersonellerModel extends ConnectedPersonellerModel {
     _secilenBolum = gelenBolum;
   }
 
-  List<DropdownMenuItem<String>> getDropDownBolumMenuItems(List<Personel> personel) {
-    List<DropdownMenuItem<String>> items = new List();
-    List<String> bolumler =[];
-
-    for(var i=0; i<personel.length; i++){
-      if(bolumler.indexOf(personel[i].bolum) == -1){
-        items.add(DropdownMenuItem(
-      value: personel[i].bolum,
-      child: Container(
-        width: 350.0,
-        child: Text(personel[i].bolum, softWrap: true,)),
-    ));
-    //debugPrint(personel[i].bolum.toString());
-    bolumler.add(personel[i].bolum);
-      }      
-    
-    }
-    _dropDowmBolumMenuItems = items;
-    notifyListeners();
+  String get getABDGetir{
+    return _secilenABD;
   }
+
+  void setABDGotur(gelenABD){
+    _secilenABD = gelenABD;
+  }
+
+  
 
   List<DropdownMenuItem<String>> getDropDownBolumMenuItemsBirimden(String birim, int gelenRadio) {
     List<DropdownMenuItem<String>> items = new List();
@@ -152,6 +145,49 @@ class PersonellerModel extends ConnectedPersonellerModel {
     }
     _dropDowmBolumMenuItems = items;
     notifyListeners();
+  }
+
+  List<DropdownMenuItem<String>> getDropDownABDMenuItemsBolumden(String birim, String bolum, int gelenRadio) {
+    List<DropdownMenuItem<String>> items = new List();
+    List<String> bolumler =[];
+    final List<Personel> filtrePersonelBirimList =
+            allPersoneller.where((p) {
+          if (gelenRadio == 1) {
+            return p.birim == birim && p.bolum == null;
+          } 
+          else {         
+            //debugPrint(_secilenBolum);   
+            return p.birim == birim && p.bolum == bolum;
+          }
+        }).toList(); 
+
+    items.add(DropdownMenuItem(
+      value: "Tüm Programlar",
+      child: Container(
+        width: 350.0,
+        child: Text("Tüm Programlar", softWrap: true, style: TextStyle(fontWeight: FontWeight.bold),)),
+    ));
+    for(var i=0; i<filtrePersonelBirimList.length; i++){
+      if(bolumler.indexOf(filtrePersonelBirimList[i].abd) == -1){
+        items.add(DropdownMenuItem(
+      value: filtrePersonelBirimList[i].abd,
+      child: Container(
+        width: 350.0,
+        child: Text(filtrePersonelBirimList[i].abd, softWrap: true,)),
+    ));
+    //debugPrint(personel[i].bolum.toString());
+    bolumler.add(filtrePersonelBirimList[i].abd);
+      }      
+    
+    }
+    _dropDowmABDMenuItems = items;
+    notifyListeners();
+  }
+
+  List<DropdownMenuItem<String>> get gelsinABDItemler{
+    notifyListeners();
+    return List.from(_dropDowmABDMenuItems);
+
   }
 
   List<DropdownMenuItem<String>> get gelsinBolumItemler{
@@ -425,6 +461,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
             bolum: personelData['bolum'],
             cep: personelData['telefon'],
             birim: personelData['birim'],
+            abd: personelData['ana_bilim_dali'],
             userEmail: personelData['sicil'],
             userId: personelData['sicil'],
             isFavorite: personelData['wishlistUsers'] == null

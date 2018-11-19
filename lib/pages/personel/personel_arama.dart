@@ -272,7 +272,7 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
     
     
     widget.model.setBolumGotur("Tüm Bölümler");
-    
+    widget.model.setABDGotur("Tüm Programlar");
     widget.model.getDropDownBolumMenuItemsBirimden(widget.model.getBirimGetir, widget.model.getSecilenRadioGetir);
     //widget.model.setBolumGotur("Bölüm Seçiniz!");
 
@@ -280,6 +280,17 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
 
   void changedBolumDropDownItem(String selectedItem) {
     widget.model.setBolumGotur(selectedItem);
+    debugPrint("SECİLEN BOLUM *********************---------------");
+    debugPrint(selectedItem);
+
+    widget.model.setABDGotur("Tüm Programlar");
+    widget.model.getDropDownABDMenuItemsBolumden(widget.model.getBirimGetir, widget.model.getBolumGetir, widget.model.getSecilenRadioGetir);
+    
+    
+  }
+
+  void changedABDDropDownItem(String selectedItem) {
+    widget.model.setABDGotur(selectedItem);
     debugPrint("SECİLEN BOLUM *********************---------------");
     debugPrint(selectedItem);
     
@@ -306,6 +317,9 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
           if (widget.model.getSecilenRadioGetir == 1) {
             return p.birim == widget.model.getBirimGetir && p.bolum == null;
           } 
+          else if(model.getABDGetir != "ABD Seçiniz!" && model.getABDGetir != "Tüm Programlar") {
+            return p.birim == widget.model.getBirimGetir && p.bolum == model.getBolumGetir && p.abd == model.getABDGetir;
+          }
           else if(model.getBolumGetir != "Bölüm Seçiniz!" && model.getBolumGetir != "Tüm Bölümler") {
             return p.birim == widget.model.getBirimGetir && p.bolum == model.getBolumGetir;
           }
@@ -521,8 +535,27 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
                               isDense: true,
                               hint: Text('Bölüm Seçiniz'),
                               value: model.getBolumGetir,
-                              items: _birimDegisti == true ? model.gelsinBolumItemler : _getDropDownBolumIlkMenuItems(),
+                              items: model.gelsinBolumItemler,
                               onChanged: changedBolumDropDownItem,
+                            )
+                          ],
+                        ),
+                      )
+                    : Container(),
+                widget.model.getBirimGetir != "Birim Seçiniz!" && widget.model.getBolumGetir != "Tüm Bölümler"
+                    ? SizedBox(
+                        height: 60.0,
+                        child: Wrap(
+                          textDirection: TextDirection.rtl,
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            DropdownButton<String>(
+                              iconSize: 0.0,
+                              isDense: true,
+                              hint: Text('Bölüm Seçiniz'),
+                              value: model.getABDGetir,
+                              items: model.gelsinABDItemler,
+                              onChanged: changedABDDropDownItem,
                             )
                           ],
                         ),
@@ -531,9 +564,9 @@ class _PersonelAramaSayfasiState extends State<PersonelAramaSayfasi> {
               ],
             ),
           ),
-          Expanded(
+          widget.model.getBirimGetir != "Birim Seçiniz!" ? Expanded(
                   child: myBody(),
-                )
+                ) : Container()
         ],
       ),
     );

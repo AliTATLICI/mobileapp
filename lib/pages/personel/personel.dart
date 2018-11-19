@@ -92,6 +92,20 @@ class PersonelSayfa extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  personel.birim != null ? personel.bolum : '',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  personel.birim != null ? personel.abd : '',
+                  textAlign: TextAlign.center,
+                ),
+              ),
               personel.bolum == null ? Container() : Text('Haftalık Ders Programı', style: TextStyle(color: Colors.amber),),
               personel.bolum == null ? Container() : Expanded(child: ListView.builder(
           itemBuilder: (BuildContext context, int index) =>
