@@ -3,11 +3,13 @@ import 'dart:async';
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_course/pages/norm_kadro.dart';
 
 import 'package:flutter_course/pages/webview.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -52,6 +54,15 @@ class MyApp extends StatefulWidget {
     return _MyAppState();
   }
 }
+class ClicksPerYear {
+  final String year;
+  final int clicks;
+  final charts.Color color;
+
+  ClicksPerYear(this.year, this.clicks, Color color)
+      : this.color = new charts.Color(
+            r: color.red, g: color.green, b: color.blue, a: color.alpha);
+}
 
 class _MyAppState extends State<MyApp> {
   final MainModel _model = MainModel();
@@ -86,9 +97,15 @@ class _MyAppState extends State<MyApp> {
     _getBatteryLevel();
     super.initState();
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    var data = [
+  new ClicksPerYear('2016', 12, Colors.red),
+  new ClicksPerYear('2017', 42, Colors.yellow),
+  new ClicksPerYear('2018', 30, Colors.green),
+];
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
@@ -117,6 +134,7 @@ class _MyAppState extends State<MyApp> {
            '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(_model),
            '/web_anasayfa': (BuildContext contex) => WebViewPage(),
            '/profil': (BuildContext contex) => !_isAuthenticated ? AuthPage() : ProfilSayfasi(_model),
+           '/norm-kadro': (BuildContext contex) => NormKadro(),
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

@@ -121,6 +121,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
           ),
           ListTile(
             leading: Icon(Icons.explicit),
+            title: Text('Norm Kadro'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/norm-kadro');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.explicit),
             title: Text('Nöbetçi Eczane'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/eczane');

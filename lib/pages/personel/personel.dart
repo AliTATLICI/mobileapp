@@ -95,14 +95,14 @@ class PersonelSayfa extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
-                  personel.birim != null ? personel.bolum : '',
+                  personel.bolum != null ? personel.bolum : '',
                   textAlign: TextAlign.center,
                 ),
               ),
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: Text(
-                  personel.birim != null ? personel.abd : '',
+                  personel.abd != null ? personel.abd : '',
                   textAlign: TextAlign.center,
                 ),
               ),

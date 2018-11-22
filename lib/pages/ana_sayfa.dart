@@ -6,6 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_advanced_networkimage/flutter_advanced_networkimage.dart';
+import 'package:flutter_advanced_networkimage/transition_to_image.dart';
+import 'package:flutter_advanced_networkimage/zoomable_widget.dart';
+import 'package:flutter/services.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 import '../widgets/ui_elements/drawer_custom.dart';
 import '../scoped-models/main.dart';
@@ -31,6 +38,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
         icon: Icons.add_circle_outline,
         page: 'kisayol'),
   ];
+
+  String _connectionStatus = 'Unknown';
+  final Connectivity _connectivity = new Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   Widget buildGrid(BuildContext context) {
     var myGridView = new GridView.builder(
@@ -84,6 +95,39 @@ class _AnaSayfaState extends State<AnaSayfa> {
     kayitGoster();
     kalankayitGoster();
     super.initState();
+     initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+          debugPrint(result.toString());
+      setState(() {});
+    });
+    
+  }
+
+  Future<Null> initConnectivity() async {
+    String connectionStatus;
+
+    try {
+      connectionStatus = (await _connectivity.checkConnectivity()).toString();
+    } on PlatformException catch (e) {
+      print(e.toString());
+      connectionStatus = 'Failed to get connectivity.';
+    }
+
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _connectionStatus = connectionStatus;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
   }
 
   void kayitGoster() async {
@@ -222,6 +266,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   Widget build(BuildContext context) {
+    int craousel=1;
     return Scaffold(
       appBar: AppBar(
         title: Text("ISUBÜ Mobil"),
@@ -250,8 +295,13 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   height: MediaQuery.of(context).size.height * 0.9 / 3,
                   width: MediaQuery.of(context).size.width,
                   child: new Carousel(
-                    images: [
-                      ExactAssetImage("assets/anasayfa0.jpg"),
+                    images: _connectionStatus == "ConnectivityResult.wifi" || _connectionStatus == "ConnectivityResult.mobile" ? [
+                      AdvancedNetworkImage("http://isparta.edu.tr/SDU_Files/Slider/cb91b4f3-b952-4105-97fc-46188c10a086.jpg", header: {"bas":"baslik kismi"}, useDiskCache: true,),
+                      NetworkImage("http://isparta.edu.tr/SDU_Files/Slider/cb91b4f3-b952-4105-97fc-46188c10a086.jpg"),
+                      ExactAssetImage("assets/menu_genel_tanitim.png"),
+                      ExactAssetImage("assets/anasayfa2.jpg"),
+                      ExactAssetImage("assets/anasayfa3.jpg")
+                    ] :  [
                       ExactAssetImage("assets/menu_genel_tanitim.png"),
                       ExactAssetImage("assets/anasayfa2.jpg"),
                       ExactAssetImage("assets/anasayfa3.jpg")
@@ -262,6 +312,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                     indicatorBgPadding: 5.0,
                     dotBgColor: Colors.lightBlue.withOpacity(0.5),
                     borderRadius: true,
+                    boxFit: BoxFit.fill,
                   )),
             ),
             Expanded(
