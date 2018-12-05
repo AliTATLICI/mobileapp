@@ -296,8 +296,6 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   width: MediaQuery.of(context).size.width,
                   child: new Carousel(
                     images: _connectionStatus == "ConnectivityResult.wifi" || _connectionStatus == "ConnectivityResult.mobile" ? [
-                      AdvancedNetworkImage("http://isparta.edu.tr/SDU_Files/Slider/cb91b4f3-b952-4105-97fc-46188c10a086.jpg", header: {"bas":"baslik kismi"}, useDiskCache: true,),
-                      NetworkImage("http://isparta.edu.tr/SDU_Files/Slider/cb91b4f3-b952-4105-97fc-46188c10a086.jpg"),
                       ExactAssetImage("assets/menu_genel_tanitim.png"),
                       ExactAssetImage("assets/anasayfa2.jpg"),
                       ExactAssetImage("assets/anasayfa3.jpg")

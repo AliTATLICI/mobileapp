@@ -2,8 +2,13 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
+//import 'package:html/dom.dart' show dom;
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -32,14 +37,36 @@ class ConnectedPersonellerModel extends Model {
   List<KisaYol> _kisayollar = <KisaYol>[
     KisaYol(no: 0, baslik: "Profil", page: "profil", icon: Icons.perm_identity),
     KisaYol(no: 1, baslik: "ISUBÜ", page: "web_anasayfa", icon: Icons.home),
-    KisaYol(no: 2, baslik: "Duyurular", page: "duyurular", icon: Icons.announcement),
-    KisaYol(no: 3, baslik: "Haberler", page: "haberler", icon: Icons.info_outline),
-    KisaYol(no: 4, baslik: "Yemekhane", page: "yemek", icon: Icons.restaurant_menu),
-    KisaYol(no: 5, baslik: "Personel Arama", page: "personel-arama", icon: Icons.person_pin_circle),
-    KisaYol(no: 6, baslik: "Öğrenci Arama", page: "ogrenci-arama", icon: Icons.school),
-    KisaYol(no: 7, baslik: "Akademik Takvim", page: "akademik-takvim", icon: Icons.calendar_today),
+    KisaYol(
+        no: 2,
+        baslik: "Duyurular",
+        page: "duyurular",
+        icon: Icons.announcement),
+    KisaYol(
+        no: 3, baslik: "Haberler", page: "haberler", icon: Icons.info_outline),
+    KisaYol(
+        no: 4, baslik: "Yemekhane", page: "yemek", icon: Icons.restaurant_menu),
+    KisaYol(
+        no: 5,
+        baslik: "Personel Arama",
+        page: "personel-arama",
+        icon: Icons.person_pin_circle),
+    KisaYol(
+        no: 6,
+        baslik: "Öğrenci Arama",
+        page: "ogrenci-arama",
+        icon: Icons.school),
+    KisaYol(
+        no: 7,
+        baslik: "Akademik Takvim",
+        page: "akademik-takvim",
+        icon: Icons.calendar_today),
     KisaYol(no: 8, baslik: "Eczane", page: "eczane", icon: Icons.explicit),
-    KisaYol(no: 9, baslik: "Kısayol Ekle", page: "kisayol", icon: Icons.add_circle_outline)
+    KisaYol(
+        no: 9,
+        baslik: "Kısayol Ekle",
+        page: "kisayol",
+        icon: Icons.add_circle_outline)
   ];
   List<String> _kisayolId = ["2", "3", "4", "5", "6", "7", "8"];
   String _selPersonelId;
@@ -63,58 +90,57 @@ class ConnectedPersonellerModel extends Model {
 
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
-  
 }
 
 class PersonellerModel extends ConnectedPersonellerModel {
   bool _gosterFavorites = false;
   bool _gosterAkademikIdari = false;
 
-  String get getBirimIDGetir{
+  String get getBirimIDGetir {
     return _statusSel;
   }
 
-  void setBirimIdGotur(gelenBirimID){
+  void setBirimIdGotur(gelenBirimID) {
     _statusSel = gelenBirimID;
   }
 
-  int get getSecilenRadioGetir{
+  int get getSecilenRadioGetir {
     return _selectedRadio;
   }
 
-  void setSecilenRadioGotur(gelenRadio){
+  void setSecilenRadioGotur(gelenRadio) {
     _selectedRadio = gelenRadio;
   }
 
-  _RadioGroup get getRadioGetir{
+  _RadioGroup get getRadioGetir {
     return _itemType;
   }
 
-  void setRadioGotur(gelenRadio){
+  void setRadioGotur(gelenRadio) {
     _itemType = gelenRadio;
   }
 
-  String get getBirimGetir{
+  String get getBirimGetir {
     return _secilenBirim;
   }
 
-  void setBirimGotur(gelenBirim){
+  void setBirimGotur(gelenBirim) {
     _secilenBirim = gelenBirim;
   }
 
-  String get getBolumGetir{
+  String get getBolumGetir {
     return _secilenBolum;
   }
 
-  void setBolumGotur(gelenBolum){
+  void setBolumGotur(gelenBolum) {
     _secilenBolum = gelenBolum;
   }
 
-  String get getABDGetir{
+  String get getABDGetir {
     return _secilenABD;
   }
 
-  void setABDGotur(gelenABD){
+  void setABDGotur(gelenABD) {
     _secilenABD = gelenABD;
   }
 
@@ -243,98 +269,103 @@ class PersonellerModel extends ConnectedPersonellerModel {
     notifyListeners();
   }
 
-  
-
-  List<DropdownMenuItem<String>> getDropDownBolumMenuItemsBirimden(String birim, int gelenRadio) {
+  List<DropdownMenuItem<String>> getDropDownBolumMenuItemsBirimden(
+      String birim, int gelenRadio) {
     List<DropdownMenuItem<String>> items = new List();
-    List<String> bolumler =[];
-    final List<Personel> filtrePersonelBirimList =
-            allPersoneller.where((p) {
-          if (gelenRadio == 1) {
-            return p.birim == birim && p.bolum == null;
-          } 
-          else {         
-            //debugPrint(_secilenBolum);   
-            return p.birim == birim && p.bolum != null;
-          }
-        }).toList(); 
+    List<String> bolumler = [];
+    final List<Personel> filtrePersonelBirimList = allPersoneller.where((p) {
+      if (gelenRadio == 1) {
+        return p.birim == birim && p.bolum == null;
+      } else {
+        //debugPrint(_secilenBolum);
+        return p.birim == birim && p.bolum != null;
+      }
+    }).toList();
 
     items.add(DropdownMenuItem(
       value: "Tüm Bölümler",
       child: Container(
-        width: 350.0,
-        child: Text("Tüm Bölümler", softWrap: true, style: TextStyle(fontWeight: FontWeight.bold),)),
+          width: 350.0,
+          child: Text(
+            "Tüm Bölümler",
+            softWrap: true,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
     ));
-    for(var i=0; i<filtrePersonelBirimList.length; i++){
-      if(bolumler.indexOf(filtrePersonelBirimList[i].bolum) == -1){
+    for (var i = 0; i < filtrePersonelBirimList.length; i++) {
+      if (bolumler.indexOf(filtrePersonelBirimList[i].bolum) == -1) {
         items.add(DropdownMenuItem(
-      value: filtrePersonelBirimList[i].bolum,
-      child: Container(
-        width: 350.0,
-        child: Text(filtrePersonelBirimList[i].bolum, softWrap: true,)),
-    ));
-    //debugPrint(personel[i].bolum.toString());
-    bolumler.add(filtrePersonelBirimList[i].bolum);
-      }      
-    
+          value: filtrePersonelBirimList[i].bolum,
+          child: Container(
+              width: 350.0,
+              child: Text(
+                filtrePersonelBirimList[i].bolum,
+                softWrap: true,
+              )),
+        ));
+        //debugPrint(personel[i].bolum.toString());
+        bolumler.add(filtrePersonelBirimList[i].bolum);
+      }
     }
     _dropDowmBolumMenuItems = items;
     notifyListeners();
   }
 
-  List<DropdownMenuItem<String>> getDropDownABDMenuItemsBolumden(String birim, String bolum, int gelenRadio) {
+  List<DropdownMenuItem<String>> getDropDownABDMenuItemsBolumden(
+      String birim, String bolum, int gelenRadio) {
     List<DropdownMenuItem<String>> items = new List();
-    List<String> bolumler =[];
-    final List<Personel> filtrePersonelBirimList =
-            allPersoneller.where((p) {
-          if (gelenRadio == 1) {
-            return p.birim == birim && p.bolum == null;
-          } 
-          else {         
-            //debugPrint(_secilenBolum);   
-            return p.birim == birim && p.bolum == bolum;
-          }
-        }).toList(); 
+    List<String> bolumler = [];
+    final List<Personel> filtrePersonelBirimList = allPersoneller.where((p) {
+      if (gelenRadio == 1) {
+        return p.birim == birim && p.bolum == null;
+      } else {
+        //debugPrint(_secilenBolum);
+        return p.birim == birim && p.bolum == bolum;
+      }
+    }).toList();
 
     items.add(DropdownMenuItem(
       value: "Tüm Programlar",
       child: Container(
-        width: 350.0,
-        child: Text("Tüm Programlar", softWrap: true, style: TextStyle(fontWeight: FontWeight.bold),)),
+          width: 350.0,
+          child: Text(
+            "Tüm Programlar",
+            softWrap: true,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
     ));
-    for(var i=0; i<filtrePersonelBirimList.length; i++){
-      if(bolumler.indexOf(filtrePersonelBirimList[i].abd) == -1){
+    for (var i = 0; i < filtrePersonelBirimList.length; i++) {
+      if (bolumler.indexOf(filtrePersonelBirimList[i].abd) == -1) {
         items.add(DropdownMenuItem(
-      value: filtrePersonelBirimList[i].abd,
-      child: Container(
-        width: 350.0,
-        child: Text(filtrePersonelBirimList[i].abd, softWrap: true,)),
-    ));
-    //debugPrint(personel[i].bolum.toString());
-    bolumler.add(filtrePersonelBirimList[i].abd);
-      }      
-    
+          value: filtrePersonelBirimList[i].abd,
+          child: Container(
+              width: 350.0,
+              child: Text(
+                filtrePersonelBirimList[i].abd,
+                softWrap: true,
+              )),
+        ));
+        //debugPrint(personel[i].bolum.toString());
+        bolumler.add(filtrePersonelBirimList[i].abd);
+      }
     }
     _dropDowmABDMenuItems = items;
     notifyListeners();
   }
 
-  List<DropdownMenuItem<String>> get gelsinABDItemler{
+  List<DropdownMenuItem<String>> get gelsinABDItemler {
     notifyListeners();
     return List.from(_dropDowmABDMenuItems);
-
   }
 
-  List<DropdownMenuItem<String>> get gelsinBirimItemler{
+  List<DropdownMenuItem<String>> get gelsinBirimItemler {
     notifyListeners();
     return List.from(_dropDowmBirimMenuItems);
-
   }
 
-  List<DropdownMenuItem<String>> get gelsinBolumItemler{
+  List<DropdownMenuItem<String>> get gelsinBolumItemler {
     notifyListeners();
     return List.from(_dropDowmBolumMenuItems);
-
   }
 
   List<Personel> get allPersoneller {
@@ -977,7 +1008,8 @@ class KullaniciModel extends ConnectedPersonellerModel {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'});
     } else {}
 
-    final Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
+    final Map<String, dynamic> responseData =
+        json.decode(utf8.decode(response.bodyBytes));
     bool hasError = true;
     String message = 'Bir şeyler yanlış!';
     //print('GELEN TIME BUDUR:' + responseData['expiresIn']);
@@ -991,8 +1023,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
           token: responseData['token'],
           username: responseData['username'],
           firstName: responseData['first_name'],
-          lastName: responseData['last_name']
-          );
+          lastName: responseData['last_name']);
       ayarlaAuthTimeout(int.parse(responseData['expireIn']));
       _kullaniciSubject.add(true);
       final DateTime now = DateTime.now();
@@ -1020,6 +1051,103 @@ class KullaniciModel extends ConnectedPersonellerModel {
     return {'success': !hasError, 'message': message};
   }
 
+  Future<Map<String, dynamic>> obsdogrulamaDjango(
+      String username, String password,
+      [AuthMode mode = AuthMode.Login]) async {
+    _isYukleme = true;
+    notifyListeners();
+    final Map<String, String> bodyData = {
+      'textKulID': username,
+      'textSifre': password,
+      'buttonTamam': 'Giriş'
+    };
+    String uri = "https://obs.sdu.edu.tr";
+
+    const timeout = const Duration(seconds: 3);
+
+    var client = http.Client();
+  
+    client
+        .get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"))
+        .then((response) {
+          var document = parse(response.body);
+          var priceElement = document.getElementsByTagName("input");
+          for (var i = 0; i < 8; i++) {
+            debugPrint(priceElement[i].attributes["name"] +
+                " : " +
+                priceElement[i].attributes["value"]);
+            bodyData[priceElement[i].attributes["name"]] =
+                priceElement[i].attributes["value"];
+          }
+          //debugPrint(priceElement[0].attributes["name"]);
+
+          debugPrint(
+              "OBS GET-1 SONRASI GELEN RESPONSE ********************************************************************************");
+          debugPrint(response.statusCode.toString());
+          //debugPrint(bodyData.toString());
+        })
+        .then((response) =>
+            client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
+              'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
+            })).then((response) {
+              timeout;
+              debugPrint(response.body);
+            } )        
+        .whenComplete(client.close);
+
+    
+
+      // client.get(Uri.encodeFull("https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"))
+      //   .then((cevap) {
+      //     debugPrint(cevap.statusCode.toString());
+      //     debugPrint(cevap.body.toString());
+      //   })
+
+
+    // final Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
+    bool hasError = true;
+    String message = 'Bir şeyler yanlış!';
+    // //print('GELEN TIME BUDUR:' + responseData['expiresIn']);
+    // print('GELEN RESPONSE DATA BUDUR' + responseData.toString());
+    // if (responseData.containsKey('token')) {
+    //   hasError = false;
+    //   message = 'Authentication succeeded!';
+    //   _authenticatedKullanici = Kullanici(
+    //       id: responseData['localId'].toString(),
+    //       email: responseData['email'],
+    //       token: responseData['token'],
+    //       username: responseData['username'],
+    //       firstName: responseData['first_name'],
+    //       lastName: responseData['last_name']
+    //       );
+    //   ayarlaAuthTimeout(int.parse(responseData['expireIn']));
+    //   _kullaniciSubject.add(true);
+    //   final DateTime now = DateTime.now();
+    //   final DateTime expiryTime =
+    //       now.add(Duration(seconds: int.parse(responseData['expireIn'])));
+    //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   prefs.setString('token', responseData['token']);
+    //   prefs.setString('userEmail', responseData['email'].toString());
+    //   prefs.setString('userId', responseData['localId'].toString());
+    //   prefs.setString('username', username);
+    //   prefs.setString('firstname', responseData['first_name'].toString());
+    //   prefs.setString('lastname', responseData['last_name'].toString());
+    //   prefs.setString('expiryTime', expiryTime.toIso8601String());
+    // } else if (responseData['error'] == 'EMAIL_EXISTS') {
+    //   message = 'Bu eposta kayıtlı! Başka bir eposta giriniz.';
+    // } else if (responseData['error'] == 'The user does not exist') {
+    //   message = 'Bu eposta kayıtlı değil!';
+    // } else if (responseData['error'] == 'Incorrect password') {
+    //   message = 'Parola geçerli değil!';
+    // }
+    // print('YUKLEME FALSE YAPAMADI');
+    // _isYukleme = false;
+    // print('YUKLEME FALSE YAPTI!!!!!!!');
+    // notifyListeners();
+    return {'success': !hasError, 'message': message};
+  }
+
   void otomatikAuthenticate() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token');
@@ -1040,8 +1168,13 @@ class KullaniciModel extends ConnectedPersonellerModel {
       final String firstname = prefs.getString('firstname');
       final String lastname = prefs.getString('lastname');
       final int tokenLifespan = parsedExpiryTime.difference(now).inSeconds;
-      _authenticatedKullanici =
-          Kullanici(id: userId, email: userEmail, token: token, username: username, firstName: firstname, lastName: lastname);
+      _authenticatedKullanici = Kullanici(
+          id: userId,
+          email: userEmail,
+          token: token,
+          username: username,
+          firstName: firstname,
+          lastName: lastname);
       _kullaniciSubject.add(true);
       ayarlaAuthTimeout(tokenLifespan);
       notifyListeners();
@@ -1060,13 +1193,13 @@ class KullaniciModel extends ConnectedPersonellerModel {
     prefs.remove('username');
     prefs.remove('firstname');
     prefs.remove('lastname');
-
   }
 
   void ayarlaAuthTimeout(int time) {
     _authTimer = Timer(Duration(seconds: time), cikisYap);
   }
 }
+
 
 class YardimciModel extends ConnectedPersonellerModel {
   bool get isYukleme {
@@ -1083,18 +1216,22 @@ class YardimciModel extends ConnectedPersonellerModel {
 
   Future<Null> kisayolIdCek() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _kisayolId = prefs.getStringList('kalanKisayollar') == null ? _kisayolId : prefs.getStringList('kalanKisayollar');
+    _kisayolId = prefs.getStringList('kalanKisayollar') == null
+        ? _kisayolId
+        : prefs.getStringList('kalanKisayollar');
   }
 
   Future<Null> kisayolEkle(int gelenId) async {
     List<String> anasayfaKisayol = ["0", "1", "9"];
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> onbellekid = prefs.getStringList('kisayollar') == null ? anasayfaKisayol : prefs.getStringList('kisayollar');
+    List<String> onbellekid = prefs.getStringList('kisayollar') == null
+        ? anasayfaKisayol
+        : prefs.getStringList('kisayollar');
     onbellekid.add(gelenId.toString());
     prefs.setStringList('kisayollar', onbellekid);
     _kisayolId.remove(gelenId.toString());
     prefs.setStringList('kalanKisayollar', _kisayolId);
-    
+
     notifyListeners();
     //kisayolIdCek();
   }
@@ -1102,7 +1239,9 @@ class YardimciModel extends ConnectedPersonellerModel {
   Future<Null> kisayolSil(int gelenId) async {
     List<String> anasayfaKisayol = ["0", "1", "9"];
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> onbellekid = prefs.getStringList('kisayollar') == null ? anasayfaKisayol : prefs.getStringList('kisayollar');
+    List<String> onbellekid = prefs.getStringList('kisayollar') == null
+        ? anasayfaKisayol
+        : prefs.getStringList('kisayollar');
     onbellekid.remove(gelenId.toString());
     prefs.setStringList('kisayollar', onbellekid);
     _kisayolId.add(gelenId.toString());

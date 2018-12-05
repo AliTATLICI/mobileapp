@@ -4,12 +4,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_course/pages/norm_kadro.dart';
+import 'package:flutter_course/pages/ubys/obs.dart';
 
 import 'package:flutter_course/pages/webview.dart';
 import 'package:intl/intl.dart';
 import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+
+import 'package:http/http.dart' as http;
 
 import 'package:scoped_model/scoped_model.dart';
 
@@ -135,6 +138,7 @@ class _MyAppState extends State<MyApp> {
            '/web_anasayfa': (BuildContext contex) => WebViewPage(),
            '/profil': (BuildContext contex) => !_isAuthenticated ? AuthPage() : ProfilSayfasi(_model),
            '/norm-kadro': (BuildContext contex) => NormKadro(),
+           '/ubys-obs': (BuildContext contex) => UbysObs(),
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

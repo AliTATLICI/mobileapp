@@ -43,6 +43,71 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget bodyData() => DataTable(
+      onSelectAll: (b) {},
+      sortColumnIndex: 1,
+      sortAscending: true,
+      columns: <DataColumn>[
+        DataColumn(
+          label: Text("First Name"),
+          numeric: false,
+          onSort: (i, b) {
+            print("$i $b");
+            setState(() {
+              names.sort((a, b) => a.firstName.compareTo(b.firstName));
+            });
+          },
+          tooltip: "To display first name of the Name",
+        ),
+        DataColumn(          
+          label: RotatedBox(
+            quarterTurns: 3,
+            child: Text("Last Name fsdfsdf", overflow: TextOverflow.ellipsis, textDirection: TextDirection.ltr, textAlign: TextAlign.left,)),
+          numeric: false,
+          onSort: (i, b) {
+            print("$i $b");
+            setState(() {
+              names.sort((a, b) => a.lastName.compareTo(b.lastName));
+            });
+          },
+          tooltip: "To display last name of the Name",
+        ),
+        DataColumn(          
+          label: Text("Last Name", overflow: TextOverflow.ellipsis, textDirection: TextDirection.rtl,),
+          numeric: false,
+          onSort: (i, b) {
+            print("$i $b");
+            setState(() {
+              names.sort((a, b) => a.lastName.compareTo(b.lastName));
+            });
+          },
+          tooltip: "To display last name of the Name",
+        ),
+      ],
+      rows: names
+          .map(
+            (name) => DataRow(
+                  cells: [
+                    DataCell(
+                      Text(name.firstName),
+                      showEditIcon: false,
+                      placeholder: false,
+                    ),
+                    DataCell(
+                      Text(name.lastName),
+                      showEditIcon: false,
+                      placeholder: false,
+                    ),
+                     DataCell(
+                      Text(name.lastName),
+                      showEditIcon: false,
+                      placeholder: false,
+                    )
+                  ],
+                ),
+          )
+          .toList());
+
   @override
   Widget build(BuildContext context) {
     var data = [
@@ -74,20 +139,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         title: new Text(widget.title),
       ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            chartWidget,
-          ],
-        ),
+      body: new Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          bodyData(),
+          new Text(
+            'You have pushed the button this many times:',
+          ),
+          new Text(
+            '$_counter',
+            style: Theme.of(context).textTheme.display1,
+          ),
+          //chartWidget,
+        ],
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: _incrementCounter,
@@ -97,3 +161,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class Name {
+  String firstName;
+  String lastName;
+
+  Name({this.firstName, this.lastName});
+}
+
+var names = <Name>[
+  Name(firstName: "Pawan sfsdf fsdfsf fsfsdfsdf safsfdsf assfsf", lastName: "Kumar"),
+  Name(firstName: "Aakash", lastName: "Tewari"),
+  Name(firstName: "Rohan", lastName: "Singh"),
+];
