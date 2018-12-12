@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1062,15 +1063,15 @@ class KullaniciModel extends ConnectedPersonellerModel {
       'buttonTamam': 'Giriş'
     };
     String uri = "https://obs.sdu.edu.tr";
+    String url = 'https://obs.sdu.edu.tr/index.aspx';
 
-    const timeout = const Duration(seconds: 3);
 
+    //UserAgentClient client;
     var client = http.Client();
-  
-    client
-        .get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"))
-        .then((response) {
-          var document = parse(response.body);
+    //var client = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", altclient);
+    //var altclient = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", client);
+    http.Response response = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"));
+    var document = parse(response.body);
           var priceElement = document.getElementsByTagName("input");
           for (var i = 0; i < 8; i++) {
             debugPrint(priceElement[i].attributes["name"] +
@@ -1084,17 +1085,67 @@ class KullaniciModel extends ConnectedPersonellerModel {
           debugPrint(
               "OBS GET-1 SONRASI GELEN RESPONSE ********************************************************************************");
           debugPrint(response.statusCode.toString());
-          //debugPrint(bodyData.toString());
-        })
-        .then((response) =>
-            client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
+      
+
+  
+    
+    debugPrint(response.isRedirect.toString());
+
+    // http.Request request;
+    // request.followRedirects = true;
+    // request.send();
+    http.Response response2 = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
               'User-Agent':
                   'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
-            })).then((response) {
-              timeout;
-              debugPrint(response.body);
-            } )        
-        .whenComplete(client.close);
+            });
+      debugPrint(
+              "OBS POST SONRASI GELEN RESPONSE ********************************************************************************");
+          debugPrint(response2.statusCode.toString());
+          debugPrint(response2.isRedirect.toString());
+          debugPrint(response2.body.toString());
+      
+    if (response2.statusCode == 302) {
+    url = response2.headers['location'];
+    debugPrint("LOCATION *-*****-*-*-*****************: $url");
+    http.Response cevap = await client.get(Uri.encodeFull(uri+url));
+    debugPrint(cevap.body);
+  }
+   else {
+     url = response2.headers['location'];
+    debugPrint("LOCATION *-*****-*-*-*****************: $url");
+    http.Response cevap = await client.get(Uri.encodeFull(uri+"/Birimler/Ogrenci/Bilgilerim.aspx"));
+    debugPrint(cevap.body);
+   }
+  //print(response2.body);
+    
+  
+    // client
+    //     .get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"))
+    //     .then((response) {
+    //       var document = parse(response.body);
+    //       var priceElement = document.getElementsByTagName("input");
+    //       for (var i = 0; i < 8; i++) {
+    //         debugPrint(priceElement[i].attributes["name"] +
+    //             " : " +
+    //             priceElement[i].attributes["value"]);
+    //         bodyData[priceElement[i].attributes["name"]] =
+    //             priceElement[i].attributes["value"];
+    //       }
+    //       //debugPrint(priceElement[0].attributes["name"]);
+
+    //       debugPrint(
+    //           "OBS GET-1 SONRASI GELEN RESPONSE ********************************************************************************");
+    //       debugPrint(response.statusCode.toString());
+    //       //debugPrint(bodyData.toString());
+    //     })
+    //     .then((response) =>
+    //         client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
+    //           'User-Agent':
+    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
+    //         })).then((response) {
+    //           debugPrint(response.body);
+    //         })        
+    //     .whenComplete(client.close);
 
     
 
@@ -1197,6 +1248,20 @@ class KullaniciModel extends ConnectedPersonellerModel {
 
   void ayarlaAuthTimeout(int time) {
     _authTimer = Timer(Duration(seconds: time), cikisYap);
+  }
+}
+
+class UserAgentClient extends http.BaseClient {
+  final String userAgent;
+  final http.Client _inner;
+
+  UserAgentClient(this.userAgent, this._inner);
+
+
+  Future<StreamedResponse> send(BaseRequest request) {
+    request.headers['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0';
+    request.followRedirects = true;
+    return _inner.send(request);
   }
 }
 
