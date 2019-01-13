@@ -4,11 +4,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_course/pages/norm_kadro.dart';
+import 'package:flutter_course/pages/personel/kadro_basvurulari.dart';
 import 'package:flutter_course/pages/ubys/obs.dart';
 
 import 'package:flutter_course/pages/webview.dart';
 import 'package:intl/intl.dart';
-import 'package:map_view/map_view.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -36,7 +36,6 @@ import './pages/ana_sayfa.dart';
 import './pages/ubys.dart';
 import './pages/yemekhane.dart';
 import './pages/eczane.dart';
-import './pages/eczane_map.dart';
 import './pages/yemek_listesi.dart';
 import './pages/yemek_listesi_aylik.dart';
 import './pages/akademik_takvim.dart';
@@ -47,7 +46,6 @@ void main() {
   // debugPaintSizeEnabled = true;
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
-  MapView.setApiKey('AIzaSyCESLdlBDj2ptHMyXAYYGsr_Qm27xtcb1w');
   runApp(MyApp());
 }
 
@@ -118,7 +116,7 @@ class _MyAppState extends State<MyApp> {
         theme: getAdaptiveThemeData(context),
         //home: PersonellerSayfa(),
         routes: {
-          '/': (BuildContext context) => GirisSayfasi(),
+          '/': (BuildContext context) => AnaSayfa(_model),//GirisSayfasi(),
           '/anasayfa': (BuildContext context) => AnaSayfa(_model),
           '/login': (BuildContext context) => AuthPage(),
           '/ubys': (BuildContext context) => UBYSSayfa(_model),
@@ -133,12 +131,12 @@ class _MyAppState extends State<MyApp> {
           '/yemek' : (BuildContext context) => YemekListesiSayfasi(_model),
           '/yemek-aylik' : (BuildContext context) => YemekListesiAylikSayfasi(_model),
            '/eczane': (BuildContext context) => EczaneSayfasi(_model),
-           '/eczane2': (BuildContext context) => EczaneSayfasi2(),
            '/akademik-takvim': (BuildContext context) => AkademikTakvimSayfasi(_model),
            '/web_anasayfa': (BuildContext contex) => WebViewPage(),
            '/profil': (BuildContext contex) => !_isAuthenticated ? AuthPage() : ProfilSayfasi(_model),
            '/norm-kadro': (BuildContext contex) => NormKadro(),
            '/ubys-obs': (BuildContext contex) => UbysObs(),
+           '/kadro-basvurulari': (BuildContext contex) => KadroBasvuruSayfasi(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           /*

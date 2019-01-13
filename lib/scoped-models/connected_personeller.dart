@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_course/models/kadro_basvurulari.dart';
 import 'package:http/http.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' show parse;
 //import 'package:html/dom.dart' show dom;
+//import 'package:http/browser_client.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/subjects.dart';
@@ -34,6 +36,8 @@ class ConnectedPersonellerModel extends Model {
   List<HaberDuyuru> _haberler = [];
   List<HaberDuyuru> _duyurular = [];
   List<Eczane> _eczaneler = [];
+  List<KadroBasvuru> _kadroBasvurulari = [];
+  List<KadroBasvuru> _kadroAramalari = [];
   List<Yemek> _yemekler = [];
   List<KisaYol> _kisayollar = <KisaYol>[
     KisaYol(no: 0, baslik: "Profil", page: "profil", icon: Icons.perm_identity),
@@ -91,11 +95,30 @@ class ConnectedPersonellerModel extends Model {
 
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
+
 }
 
 class PersonellerModel extends ConnectedPersonellerModel {
   bool _gosterFavorites = false;
   bool _gosterAkademikIdari = false;
+  bool _gosterArama = false;
+
+  TextEditingController controllerArama = new TextEditingController();
+
+  onSearchTextChanged(String text) async {
+    _kadroAramalari.clear();
+    if (text.isEmpty) {
+      notifyListeners();
+      return;
+    }
+
+    _kadroBasvurulari.forEach((kadroDetay) {
+      if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) || kadroDetay.birim.contains(text))
+        _kadroAramalari.add(kadroDetay);
+    });
+
+    notifyListeners();
+  }
 
   String get getBirimIDGetir {
     return _statusSel;
@@ -414,6 +437,14 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_eczaneler);
   }
 
+  List<KadroBasvuru> get displayedKadroBasvurulari {
+    return List.from(_kadroBasvurulari);
+  }
+
+   List<KadroBasvuru> get displayedKadroAramalari {
+    return List.from(_kadroAramalari);
+  }
+
   int get selectedPersonelIndex {
     return _personeller.indexWhere((Personel personel) {
       return personel.id == _selPersonelId;
@@ -439,6 +470,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   bool get displayedAkamikIdari {
     return _gosterAkademikIdari;
+  }
+
+  bool get displayedGosterArama{
+    return _gosterArama;
   }
 
   Future<bool> eklePersonel(String adSoyad, String sicil, String eposta,
@@ -826,6 +861,53 @@ class PersonellerModel extends ConnectedPersonellerModel {
     });
   }
 
+    Future<Null> fetchKadroBasvurulari({onlyForUser = false}) {
+    _isYukleme = true;
+    notifyListeners();
+    return http
+        .get(
+      apiWebIp + '/haber/kadrobasvurulari/',
+    )
+        .then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<KadroBasvuru> fetchedKadroList = [];
+      final Map<String, dynamic> kadroListData =
+          json.decode(utf8.decode(response.bodyBytes));
+      if (kadroListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      print("KADROLISTDATA:" + kadroListData["results"].toString());
+      kadroListData["results"].forEach((dynamic kadroData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final KadroBasvuru kadro = KadroBasvuru(
+            id: kadroData['id'].toString(),
+    kadroTuru: kadroData['kadro_turu'],
+    basvuran: kadroData['basvuran'],
+    sicilNo: kadroData['sicil_no'],
+    birim: kadroData['birim'],
+    bolum: kadroData['bolum'],
+    abdProgram: kadroData['abd_program'],
+    basvuruTarihi: kadroData['basvuru_tarihi'],
+    basvuruSayisi: kadroData['basvuru_sayisi'],
+    juriler: kadroData['juriler'],
+    aciklama: kadroData['aciklama'],
+    sonDurum: kadroData['son_durum']);
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedKadroList.add(kadro);
+      });
+      _kadroBasvurulari = fetchedKadroList;
+      _isYukleme = false;
+      notifyListeners();
+      //_selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
   Future<Null> fetchYemekler({onlyForUser = false}) {
     print("fetchYemeklerMetodu metodun içine girildi");
     _isYukleme = true;
@@ -917,6 +999,11 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   void toogleAkademikIdari() {
     _gosterAkademikIdari = !_gosterAkademikIdari;
+    notifyListeners();
+  }
+
+  void toogleArama() {
+    _gosterArama = !_gosterArama;
     notifyListeners();
   }
 }
@@ -1067,19 +1154,20 @@ class KullaniciModel extends ConnectedPersonellerModel {
 
 
     //UserAgentClient client;
-    var client = http.Client();
+    var client = new http.Client();
+  
     //var client = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", altclient);
     //var altclient = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", client);
-    http.Response response = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"));
-    var document = parse(response.body);
-          var priceElement = document.getElementsByTagName("input");
-          for (var i = 0; i < 8; i++) {
-            debugPrint(priceElement[i].attributes["name"] +
-                " : " +
-                priceElement[i].attributes["value"]);
-            bodyData[priceElement[i].attributes["name"]] =
-                priceElement[i].attributes["value"];
-          }
+    var response = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"));
+    // var document = parse(response.body);
+    //       var priceElement = document.getElementsByTagName("input");
+    //       for (var i = 0; i < 8; i++) {
+    //         debugPrint(priceElement[i].attributes["name"] +
+    //             " : " +
+    //             priceElement[i].attributes["value"]);
+    //         bodyData[priceElement[i].attributes["name"]] =
+    //             priceElement[i].attributes["value"];
+    //       }
           //debugPrint(priceElement[0].attributes["name"]);
 
           debugPrint(
@@ -1094,7 +1182,14 @@ class KullaniciModel extends ConnectedPersonellerModel {
     // http.Request request;
     // request.followRedirects = true;
     // request.send();
-    http.Response response2 = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
+
+    // http.Request request = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
+    //           'User-Agent':
+    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
+    //         })..isRedirect=true;
+    
+
+    var response2 = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
               'User-Agent':
                   'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
             });
@@ -1102,18 +1197,18 @@ class KullaniciModel extends ConnectedPersonellerModel {
               "OBS POST SONRASI GELEN RESPONSE ********************************************************************************");
           debugPrint(response2.statusCode.toString());
           debugPrint(response2.isRedirect.toString());
-          debugPrint(response2.body.toString());
+          //debugPrint(response2.body.toString());
       
     if (response2.statusCode == 302) {
-    url = response2.headers['location'];
+    url = response2.headers["location"];
     debugPrint("LOCATION *-*****-*-*-*****************: $url");
-    http.Response cevap = await client.get(Uri.encodeFull(uri+url));
+    var cevap = await client.get(Uri.parse("https://obs.sdu.edu.tr/Birimler/Ogrenci/Bilgilerim.aspx"));
     debugPrint(cevap.body);
   }
    else {
      url = response2.headers['location'];
     debugPrint("LOCATION *-*****-*-*-*****************: $url");
-    http.Response cevap = await client.get(Uri.encodeFull(uri+"/Birimler/Ogrenci/Bilgilerim.aspx"));
+    var cevap = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"));
     debugPrint(cevap.body);
    }
   //print(response2.body);
