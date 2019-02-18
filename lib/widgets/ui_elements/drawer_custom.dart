@@ -43,9 +43,9 @@ class _DrawerCustomState extends State<DrawerCustom> {
           ScopedModelDescendant(
             builder: (BuildContext context, Widget child, MainModel model) {
               return !_isAuthenticated ? Padding(
-                padding: EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.only(top: 30.0),
                               child: ListTile(
-            leading: Icon(Icons.home),
+            leading: Icon(Icons.keyboard_arrow_right),
             title: Text('Giriş'),
             onTap: () {
                 Navigator.pushReplacementNamed(context, '/login');
@@ -121,20 +121,6 @@ class _DrawerCustomState extends State<DrawerCustom> {
           ),
           ListTile(
             leading: Icon(Icons.explicit),
-            title: Text('Norm Kadro'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/norm-kadro');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.explicit),
-            title: Text('Kadro Başvuruları'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/kadro-basvurulari');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.explicit),
             title: Text('Nöbetçi Eczane'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/eczane');
@@ -147,8 +133,15 @@ class _DrawerCustomState extends State<DrawerCustom> {
               Navigator.pushReplacementNamed(context, '/ubys');
             },
           ),
+          _isAuthenticated ==true? ListTile(
+            leading: Icon(Icons.person_add),
+            title: Text('Kadro Başvuruları'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/kadro-basvurulari');
+            },
+          ):Padding(padding: EdgeInsets.only(top: 10.0),),
           Divider(),
-          CikisYapListTile()
+          _isAuthenticated ? CikisYapListTile():Padding(padding: EdgeInsets.only(top: 5.0),)
         ],
       ),
     );

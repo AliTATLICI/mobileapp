@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
 
 import '../../models/haber_duyuru.dart';
 import '../../widgets/haberler_duyurular/haber_fab.dart';
@@ -52,7 +54,7 @@ class HaberDuyuruSayfasi extends StatelessWidget {
     List haber_icerikleri = haber.icerik;
     String ilkresim = haber.icerik.firstWhere(
         (o) => o.startsWith('/SDU_Files/'),
-        orElse: () => '/assets/images/isubu-logo@2x.png');
+        orElse: () => '/assets/isubu_logo_opacity2.png');
     return WillPopScope(
       onWillPop: () {
         print("< Geri Butonuna Basıldı");
@@ -79,7 +81,7 @@ class HaberDuyuruSayfasi extends StatelessWidget {
                 background: Hero(
                   tag: haber.id,
                   child: FadeInImage(
-                    image: NetworkImage("http://isparta.edu.tr/" + ilkresim),
+                    image: NetworkImage("https://isparta.edu.tr/" + ilkresim),
                     height: 200.0,
                     fit: BoxFit.cover,
                     placeholder: AssetImage('assets/isubu_logo_opacity2.png'),
@@ -102,7 +104,18 @@ class HaberDuyuruSayfasi extends StatelessWidget {
                           fit: BoxFit.cover,
                           placeholder: AssetImage('assets/isubu_logo_opacity2.png'),
                         )
-                      : Text(haber.icerik[index-1]),
+                      : Html(data: haber.icerik[index-1]+"-",padding: EdgeInsets.all(8.0),
+            onLinkTap: (url) {
+              print("Opening $url...");
+            },
+            customRender: (node, children) {
+              if (node is dom.Element) {
+                switch (node.localName) {
+                  case "custom_tag":
+                    return Column(children: children);
+                }
+              }
+            },)
                 ) : Container();
               }, childCount: haber.icerik.length+1),
             )

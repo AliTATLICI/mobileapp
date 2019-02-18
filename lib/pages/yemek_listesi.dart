@@ -100,7 +100,7 @@ class _YemekListesiSayfasiState extends State<YemekListesiSayfasi> {
     return Scaffold(
       drawer: DrawerCustom(widget.model),
       appBar: AppBar(
-        title: Text("Haftalık Yemek Listesi"),
+        title: Text("Yemek Listesi"),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: _select,

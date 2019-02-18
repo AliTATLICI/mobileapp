@@ -14,6 +14,7 @@ class CikisYapListTile extends StatelessWidget {
           title: Text('Çıkış'),
           onTap: () {
             model.cikisYap();
+            Navigator.pushReplacementNamed(context, '/');
           },
         );
       },

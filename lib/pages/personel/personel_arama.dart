@@ -471,12 +471,13 @@ class DataSearch extends SearchDelegate<MainModel> {
   @override
   Widget buildResults(BuildContext context) {
     // shom some result based on the selection
+    
     return Center(
       child: Container(
         height: 100.0,
         width: 100.0,
         child: Card(
-          color: Colors.red,
+          color: Colors.blue,
           child: Center(
             child: Text(query),
           ),
@@ -563,7 +564,7 @@ class DataSearch extends SearchDelegate<MainModel> {
 
   _buildDuzenleButonu(BuildContext context, int index, suggestionList) {
     return IconButton(
-      icon: Icon(Icons.edit),
+      icon: Icon(Icons.perm_contact_calendar),
       onPressed: () => Navigator.pushNamed<bool>(
           context, '/personel/' + suggestionList[index].id),
     );

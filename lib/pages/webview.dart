@@ -39,7 +39,7 @@ class _WebViewExampleState extends State<WebViewPage> {
           style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Enter Url Here",
+            hintText: "Adresi Girebilirsiniz",
             hintStyle: TextStyle(color: Colors.white),
           ),
         ),

@@ -15,7 +15,19 @@ class KadroBasvuruCard extends StatelessWidget {
 
   KadroBasvuruCard(this.kadro, this.kadroIndex);
 
-  
+  Widget getJuriWidgets(kadro, juri)
+  {
+    List<Widget> list = new List<Widget>();
+    for(var i = 0; i < kadro; i++){
+        list.add(new CircleAvatar(
+          radius: 10.0,
+          backgroundColor: juri[i]["gelen_evrak"]!=""? Colors.green:Colors.red,
+          child: Text("${i+1}"),
+        ),);
+        list.add(SizedBox(width: 5,));
+    }
+    return new Row(children: list);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +44,7 @@ class KadroBasvuruCard extends StatelessWidget {
           maxRadius: 35.0,
           backgroundImage: NetworkImage("https://isparta.edu.tr/resim.aspx?sicil_no=${kadro.sicilNo}"),
         ),
-        title: Text(kadro.basvuran + " / " + kadro.basvuruSayisi, style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text("Doç.Dr. "+kadro.basvuran + " / " + kadro.basvuruSayisi, style: TextStyle(fontWeight: FontWeight.bold),),
         subtitle: Text(kadro.birim + "\n" + kadro.bolum + "\n" + kadro.abdProgram),
 
       ),
@@ -44,25 +56,11 @@ class KadroBasvuruCard extends StatelessWidget {
               child: Row(children: <Widget>[
                 Icon(Icons.assignment_ind),
                 Padding(padding: EdgeInsets.all(2.0),),
-                Text(kadro.kadroTuru == "P" ? "Profesörlük Jürileri" : "Doçentlik Jürileri"),
-                SizedBox(width: 20.0,),
-                CircleAvatar(
-          radius: 10.0,
-          backgroundColor: Colors.green,
-          child: Text("1"),
-        ),
-        SizedBox(width: 10.0,),
-        CircleAvatar(
-          radius: 10.0,
-          backgroundColor: Colors.green,
-          child: Text("2"),
-        ),
-        SizedBox(width: 10.0,),
-        CircleAvatar(
-          radius: 10.0,
-          backgroundColor: Colors.red,
-          child: Text("3"),
-        )
+                Text(kadro.kadroTuru == "P" ? "Prof. Jürileri" : "Doçentlik Jürileri"),
+                SizedBox(width: 5,),
+                getJuriWidgets(kadro.kadroTuru == "P" ? 5 : 3 , kadro.juriler),
+                //SizedBox(width: 15.0,)       
+        
               ],),
               onPressed: () {
                 showDialog(
@@ -70,16 +68,19 @@ class KadroBasvuruCard extends StatelessWidget {
             builder: (BuildContext context) {
               return new SimpleDialog(
                 children: <Widget>[
+                  Text("Doç. Dr. "+kadro.basvuran + "  Jürileri", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
+                  SizedBox(height: 10.0,),
                   new Container(
-                    height: 60.0 * 3,
-                    width: 150.0,
+                    height: 60.0 * 5,
+                    width: MediaQuery.of(context).size.width,
                     child: ListView.builder(
-                      itemCount: 2,
+                      itemCount: kadro.juriler.length,
                       itemBuilder: (context, index) {
                         return ListTile(
                           leading: Text((index+1).toString()),
-                          title: Text(kadro.juriler[index]["adi"]),
-                          subtitle: Text(kadro.juriler[index]["giden"]),
+                          title: Text("Prof. Dr. " + kadro.juriler[index]["adi"]),
+                          subtitle: Text(kadro.juriler[index]["giden_tarih"] + " / " +kadro.juriler[index]["giden_evrak"] + "\n" +
+                                        kadro.juriler[index]["gelen_tarih"] + " / " +kadro.juriler[index]["gelen_evrak"]),
                           onTap: () {
                             
                             //Navigator.pop(context, true);
@@ -97,7 +98,49 @@ class KadroBasvuruCard extends StatelessWidget {
           );
               }
               
+            ),
+            FlatButton(
+              child: Row(children: <Widget>[
+                kadro.sonDurum == false ? Icon(Icons.indeterminate_check_box, color: Colors.redAccent,) : Icon(Icons.check_box, color: Colors.greenAccent,),   
+                Text("Detay")
+              ],),
+              onPressed: () {
+                showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return new SimpleDialog(
+                children: <Widget>[
+                  Text("Doç. Dr. "+kadro.basvuran + "\n  Atama Bilgileri", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
+                  SizedBox(height: 10.0,),
+                  new Container(
+                    height: 60.0 * 5,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(
+                      children: <Widget>[
+                           ListTile(
+                          title: Text(kadro.aciklama),
+                          onTap: () {
+                            
+                            //Navigator.pop(context, true);
+
+                            //kayitGoster();
+                            Navigator.pushNamed(context, "/");
+                          },
+                        )
+                      
+                      ],
+                       
+                     
+                    ),
+                  )
+                ],
+              );
+            },
+          );
+              }
+              
             )
+            //kadro.sonDurum == false ? Icon(Icons.indeterminate_check_box, color: Colors.redAccent,) : Icon(Icons.check_box, color: Colors.greenAccent,)
           ],
         ),
       ),

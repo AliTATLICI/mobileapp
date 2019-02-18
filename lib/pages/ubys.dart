@@ -138,139 +138,141 @@ class _UBYSSayfaState extends State<UBYSSayfa> {
           )),
       onTap: () {
         if (kisayol.page == 'obs') {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Öğrenci Bilgi Sistemi Giriş"),
-                content: SingleChildScrollView(
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              // validator: (val) {
-                              //   if (val.length != 10) {
-                              //     return "Lütfen 10 haneli öğrenci numranızı giriniz";
-                              //   }
-                              // },
-                              keyboardType: TextInputType.number,
-                              controller: ogrNoCtrl,
-                              decoration: InputDecoration(
-                                  hintText: "Öğrenci Numaranızı Giriniz"),
-                              onSaved: (String value) {
-                                _formData['username'] = value;
-                              },
-                            ),
-                            TextFormField(
-                              // validator: (val) {
-                              //   if (val.isEmpty) {
-                              //     return "Şifrenizi boş geçmeyiniz!";
-                              //   }
-                              // },
-                              obscureText: true,
-                              controller: sifreCtrl,
-                              decoration: InputDecoration(
-                                  hintText: "Şifrenizi Giriniz"),
-                              onSaved: (String value) {
-                                _formData['password'] = value;
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  ScopedModelDescendant(
-                    builder:
-                        (BuildContext context, Widget child, MainModel model) {
-                      return model.isYukleme
-                          ? CircularProgressIndicator()
-                          : RaisedButton(
-                              textColor: Colors.white,
-                              child: Text('GİRİŞ'),
-                              onPressed: () =>
-                                  _gonderForm(model.obsdogrulamaDjango),
-                            );
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          Navigator.pushNamed(context, "/anasayfa");
+          // showDialog(
+          //   context: context,
+          //   barrierDismissible: false,
+          //   builder: (BuildContext context) {
+          //     return AlertDialog(
+          //       title: Text("Öğrenci Bilgi Sistemi Giriş"),
+          //       content: SingleChildScrollView(
+          //         child: Column(
+          //           //crossAxisAlignment: CrossAxisAlignment.center,
+          //           children: <Widget>[
+          //             Form(
+          //               key: _formKey,
+          //               child: Column(
+          //                 children: <Widget>[
+          //                   TextFormField(
+          //                     // validator: (val) {
+          //                     //   if (val.length != 10) {
+          //                     //     return "Lütfen 10 haneli öğrenci numranızı giriniz";
+          //                     //   }
+          //                     // },
+          //                     keyboardType: TextInputType.number,
+          //                     controller: ogrNoCtrl,
+          //                     decoration: InputDecoration(
+          //                         hintText: "Öğrenci Numaranızı Giriniz"),
+          //                     onSaved: (String value) {
+          //                       _formData['username'] = value;
+          //                     },
+          //                   ),
+          //                   TextFormField(
+          //                     // validator: (val) {
+          //                     //   if (val.isEmpty) {
+          //                     //     return "Şifrenizi boş geçmeyiniz!";
+          //                     //   }
+          //                     // },
+          //                     obscureText: true,
+          //                     controller: sifreCtrl,
+          //                     decoration: InputDecoration(
+          //                         hintText: "Şifrenizi Giriniz"),
+          //                     onSaved: (String value) {
+          //                       _formData['password'] = value;
+          //                     },
+          //                   ),
+          //                 ],
+          //               ),
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //       actions: <Widget>[
+          //         ScopedModelDescendant(
+          //           builder:
+          //               (BuildContext context, Widget child, MainModel model) {
+          //             return model.isYukleme
+          //                 ? CircularProgressIndicator()
+          //                 : RaisedButton(
+          //                     textColor: Colors.white,
+          //                     child: Text('GİRİŞ'),
+          //                     onPressed: () =>
+          //                         _gonderForm(model.obsdogrulamaDjango),
+          //                   );
+          //           },
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
         } else if (kisayol.page == 'pbs') {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Ders Ekleme"),
-                content: SingleChildScrollView(
-                  child: Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Form(
-                        key: formKontrolcu,
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              validator: (val) {
-                                if (val.isEmpty) {
-                                  return "Lütfen ders kodu giriniz";
-                                }
-                              },
-                              controller: dersKoduCtrl,
-                              decoration: InputDecoration(
-                                  hintText: "Ders Kodu Giriniz"),
-                            ),
-                            TextFormField(
-                              validator: (val) {
-                                if (val.isEmpty) {
-                                  return "Ders adını boş geçmeyiniz!";
-                                }
-                              },
-                              controller: dersAdiCtrl,
-                              decoration:
-                                  InputDecoration(hintText: "Ders Adı Giriniz"),
-                            ),
-                            TextFormField(
-                              validator: (val) {
-                                if (val.isEmpty) {
-                                  return "Ders yılını boş geçmeyiniz!";
-                                }
-                              },
-                              keyboardType: TextInputType.number,
-                              controller: dersYiliCtrl,
-                              decoration: InputDecoration(
-                                  hintText: "Ders Yılı Giriniz"),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    color: Colors.green,
-                    child: Text("Kaydet"),
-                    onPressed: _dersEkle,
-                  ),
-                  FlatButton(
-                    color: Colors.red,
-                    child: Text("İptal"),
-                    onPressed: () {},
-                  )
-                ],
-              );
-            },
-          );
+          Navigator.pushNamed(context, "/anasayfa");
+          // showDialog(
+          //   context: context,
+          //   barrierDismissible: false,
+          //   builder: (BuildContext context) {
+          //     return AlertDialog(
+          //       title: Text("Ders Ekleme"),
+          //       content: SingleChildScrollView(
+          //         child: Column(
+          //           //crossAxisAlignment: CrossAxisAlignment.center,
+          //           children: <Widget>[
+          //             Form(
+          //               key: formKontrolcu,
+          //               child: Column(
+          //                 children: <Widget>[
+          //                   TextFormField(
+          //                     validator: (val) {
+          //                       if (val.isEmpty) {
+          //                         return "Lütfen ders kodu giriniz";
+          //                       }
+          //                     },
+          //                     controller: dersKoduCtrl,
+          //                     decoration: InputDecoration(
+          //                         hintText: "Ders Kodu Giriniz"),
+          //                   ),
+          //                   TextFormField(
+          //                     validator: (val) {
+          //                       if (val.isEmpty) {
+          //                         return "Ders adını boş geçmeyiniz!";
+          //                       }
+          //                     },
+          //                     controller: dersAdiCtrl,
+          //                     decoration:
+          //                         InputDecoration(hintText: "Ders Adı Giriniz"),
+          //                   ),
+          //                   TextFormField(
+          //                     validator: (val) {
+          //                       if (val.isEmpty) {
+          //                         return "Ders yılını boş geçmeyiniz!";
+          //                       }
+          //                     },
+          //                     keyboardType: TextInputType.number,
+          //                     controller: dersYiliCtrl,
+          //                     decoration: InputDecoration(
+          //                         hintText: "Ders Yılı Giriniz"),
+          //                   )
+          //                 ],
+          //               ),
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //       actions: <Widget>[
+          //         FlatButton(
+          //           color: Colors.green,
+          //           child: Text("Kaydet"),
+          //           onPressed: _dersEkle,
+          //         ),
+          //         FlatButton(
+          //           color: Colors.red,
+          //           child: Text("İptal"),
+          //           onPressed: () {},
+          //         )
+          //       ],
+          //     );
+          //   },
+          // );
         } else {
           Navigator.pushNamed(context, "/${kisayol.page}");
         }

@@ -17,7 +17,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
-    'acceptTerms': false
+    'acceptTerms': true //şart kabul ettirilecekse false olacak
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordTextController = TextEditingController();
@@ -49,7 +49,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
   Widget _buildEpostaTextField() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'E-mail', filled: true, fillColor: Colors.white),
+          labelText: 'Sicil Numarası', filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.number,
       validator: (String value) {
         if (value.isEmpty || value.length < 5) {
@@ -123,7 +123,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
     successInformation = await authenticate(
         _formData['email'], _formData['password'], _authMode);
     if (successInformation['success']) {
-      Navigator.pushReplacementNamed(context, '/personeller');
+      Navigator.pushReplacementNamed(context, '/anasayfa');
     } else {
       showDialog(
         context: context,
@@ -178,27 +178,27 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                         height: 10.0,
                       ),
                       _buildPasswordConfirmTextField(),
-                      _buildAcceptSwitch(),
+                      //_buildAcceptSwitch(),
                       SizedBox(
                         height: 10.0,
                       ),
-                      FlatButton(
-                        child: Text(
-                            'Switch to ${_authMode == AuthMode.Login ? 'Signup' : 'Login'}'),
-                        onPressed: () {
-                          if (_authMode == AuthMode.Login) {
-                            setState(() {
-                              _authMode == AuthMode.Signup;
-                            });
-                            _controller.forward();
-                          } else {
-                            setState(() {
-                              _authMode == AuthMode.Login;
-                            });
-                            _controller.reverse();
-                          }
-                        },
-                      ),
+                      // FlatButton(
+                      //   child: Text(
+                      //       'Switch to ${_authMode == AuthMode.Login ? 'Signup' : 'Login'}'),
+                      //   onPressed: () {
+                      //     if (_authMode == AuthMode.Login) {
+                      //       setState(() {
+                      //         _authMode == AuthMode.Signup;
+                      //       });
+                      //       _controller.forward();
+                      //     } else {
+                      //       setState(() {
+                      //         _authMode == AuthMode.Login;
+                      //       });
+                      //       _controller.reverse();
+                      //     }
+                      //   },
+                      // ),
                       SizedBox(
                         height: 10.0,
                       ),

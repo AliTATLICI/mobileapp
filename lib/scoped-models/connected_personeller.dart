@@ -861,12 +861,14 @@ class PersonellerModel extends ConnectedPersonellerModel {
     });
   }
 
-    Future<Null> fetchKadroBasvurulari({onlyForUser = false}) {
+  Future<Null> fetchKadroBasvurulari({onlyForUser = false}) {
     _isYukleme = true;
     notifyListeners();
+    //_authenticatedKullanici.token;
     return http
         .get(
       apiWebIp + '/haber/kadrobasvurulari/',
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'token ${_authenticatedKullanici.token}'}
     )
         .then<Null>((http.Response response) {
       print(json.decode(response.body));
@@ -1116,7 +1118,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
       _kullaniciSubject.add(true);
       final DateTime now = DateTime.now();
       final DateTime expiryTime =
-          now.add(Duration(seconds: int.parse(responseData['expireIn'])));
+          now.add(Duration(hours: int.parse(responseData['expireIn'])));
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('token', responseData['token']);
       prefs.setString('userEmail', responseData['email'].toString());
@@ -1313,7 +1315,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
       final String username = prefs.getString('username');
       final String firstname = prefs.getString('firstname');
       final String lastname = prefs.getString('lastname');
-      final int tokenLifespan = parsedExpiryTime.difference(now).inSeconds;
+      final int tokenLifespan = parsedExpiryTime.difference(now).inHours;
       _authenticatedKullanici = Kullanici(
           id: userId,
           email: userEmail,
@@ -1342,7 +1344,7 @@ class KullaniciModel extends ConnectedPersonellerModel {
   }
 
   void ayarlaAuthTimeout(int time) {
-    _authTimer = Timer(Duration(seconds: time), cikisYap);
+    _authTimer = Timer(Duration(hours: time), cikisYap); // 3600 saniyeyi (second) saate (hours) çevirdim. Kullanıcı girişini sık sık istemesin diye :)
   }
 }
 

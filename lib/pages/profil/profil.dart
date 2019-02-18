@@ -16,7 +16,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(title: Text("Profil"),),
-      drawer: DrawerCustom(widget.model),
+      //drawer: DrawerCustom(widget.model),
         body: new Stack(
       children: <Widget>[
         ClipPath(
@@ -35,7 +35,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                         color: Colors.red,
                         image: DecorationImage(
                             image: NetworkImage(
-                                'http://isparta.edu.tr/resim.aspx?sicil_no=01582'),
+                                'http://isparta.edu.tr/resim.aspx?sicil_no='+widget.model.kullanici.username),
                             fit: BoxFit.cover),
                         borderRadius: BorderRadius.all(Radius.circular(75.0)),
                         boxShadow: [
@@ -43,7 +43,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                         ])),
                 SizedBox(height: 90.0),
                 Text(
-                  'Ali TATLICI',
+                  widget.model.kullanici.firstName + " " + widget.model.kullanici.lastName,
                   style: TextStyle(
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                         onTap: () {},
                         child: Center(
                           child: Text(
-                            'Edit Name',
+                            'Düzenle',
                             style: TextStyle(color: Colors.white, fontFamily: 'Montserrat'),
                           ),
                         ),
@@ -90,7 +90,7 @@ class _ProfilSayfasiState extends State<ProfilSayfasi> {
                         onTap: () {},
                         child: Center(
                           child: Text(
-                            'Log out',
+                            'Çıkış',
                             style: TextStyle(color: Colors.white, fontFamily: 'Montserrat'),
                           ),
                         ),

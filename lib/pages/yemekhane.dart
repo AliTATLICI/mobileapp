@@ -163,8 +163,8 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                                       gunun_sayi_degeri--;
                                       _menuIndex--;
                                       widget._seciliGun =
-                                          (gunun_sayi_degeri).toString() +
-                                              '.10.2018';
+                                          (gunun_sayi_degeri).toString()+"." + ayin_sayi_degeri.toString() +
+                                              '.2018';
                                     });
                                   },
                                   child: Icon(Icons.arrow_back_ios)),
@@ -183,7 +183,7 @@ class _YemekhaneSayfasiState extends State<YemekhaneSayfasi> {
                                       gunun_sayi_degeri++;
                                       _menuIndex++;
                                       widget._seciliGun =
-                                          (gunun_sayi_degeri).toString() + ayin_sayi_degeri.toString() +
+                                          (gunun_sayi_degeri).toString()+"." + ayin_sayi_degeri.toString() +
                                               '.2018';
                                     });
                                   },

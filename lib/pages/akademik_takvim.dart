@@ -57,7 +57,7 @@ List<Map<String, dynamic>> takvimBahar = [
     'detay':
         'Ders Kaydı ve İnternet Üzerinden Kayıt Yenileme\n(BİRİNCİ SINIF ÖĞRENCİLERİ DAHİL) '
   },
-  {'tarih': '11 Şubat - 21 Mayıs 2019', 'detay': 'BAHAR YARIYILI DERS DÖNEMİ'},
+  {'tarih': '11 Şubat - 31 Mayıs 2019', 'detay': 'BAHAR YARIYILI DERS DÖNEMİ'},
   {
     'tarih': '11-13 Şubat 2019',
     'detay':
@@ -65,15 +65,15 @@ List<Map<String, dynamic>> takvimBahar = [
   },
   {'tarih': '15-20 Şubat 2019', 'detay': 'Ders Ekleme-Bırakma '},
   {
-    'tarih': '30 Mart - 07 Nisan Kasım 2019',
+    'tarih': '23 - 29 Mart 2019',
     'detay': 'Bahar Yarıyılı Arasınavları '
   },
   {
-    'tarih': '22 Mayıs - 16 Haziran 2019',
+    'tarih': '10 - 23 Haziran 2019',
     'detay':
-        'Bahar Yarıyıl Sonu Sınavları (1-9 Haziran tarihleri arasında sınav yapılmayacaktır.) '
+        'Bahar Yarıyılı Sonu Sınavları'
   },
-  {'tarih': '26-30 Haziran 2019', 'detay': 'Bahar Yarıyılı Bütünleme Sınavları'}
+  {'tarih': '03 - 07 Temmuz 2019', 'detay': 'Bahar Yarıyılı Bütünleme Sınavları'}
 ];
 
 class AkademikTakvimSayfasiState extends State<AkademikTakvimSayfasi>
