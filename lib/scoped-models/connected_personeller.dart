@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_course/models/kadro_basvurulari.dart';
@@ -37,6 +36,8 @@ class ConnectedPersonellerModel extends Model {
   List<HaberDuyuru> _duyurular = [];
   List<Eczane> _eczaneler = [];
   List<KadroBasvuru> _kadroBasvurulari = [];
+  List<KadroBasvuru> _kadroBasvurulari2 = [];
+  List<KadroBasvuru> _kadroBasvurulari3 = [];
   List<KadroBasvuru> _kadroAramalari = [];
   List<Yemek> _yemekler = [];
   List<KisaYol> _kisayollar = <KisaYol>[
@@ -95,7 +96,9 @@ class ConnectedPersonellerModel extends Model {
 
   _RadioGroup _itemType = _RadioGroup.foo1;
   int _selectedRadio = 0;
+  int _selectedRadioKadroBasvuru = 0;
 
+  int _kadroBasvurulariAktifOge = 0;
 }
 
 class PersonellerModel extends ConnectedPersonellerModel {
@@ -107,16 +110,50 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   onSearchTextChanged(String text) async {
     _kadroAramalari.clear();
+
     if (text.isEmpty) {
       notifyListeners();
       return;
     }
-
-    _kadroBasvurulari.forEach((kadroDetay) {
-      if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) || kadroDetay.birim.contains(text))
+    if (_kadroBasvurulariAktifOge == 0) {
+      _kadroBasvurulari.forEach((kadroDetay) {
+        if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) ||
+            kadroDetay.birim.contains(text)) _kadroAramalari.add(kadroDetay);
+      });
+    } else if (_kadroBasvurulariAktifOge == 1) {
+      _kadroBasvurulari2.forEach((kadroDetay) {
+        if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) ||
+            kadroDetay.birim.contains(text)) _kadroAramalari.add(kadroDetay);
+      });
+    } else {
+      if (getSecilenRadioKadroBasvuru == 0) {
+        _kadroBasvurulari3.forEach((kadroDetay) {
+          if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()))
+            _kadroAramalari.add(kadroDetay);
+        });
+      }
+      else if (getSecilenRadioKadroBasvuru == 1) {
+        _kadroBasvurulari3.forEach((kadroDetay) {
+          if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) && kadroDetay.kadroTuru == 'G')
+            _kadroAramalari.add(kadroDetay);
+        });
+      } else {
+        _kadroBasvurulari3.forEach((kadroDetay) {
+      if (kadroDetay.basvuran.toLowerCase().contains(text.toLowerCase()) && kadroDetay.kadroTuru == 'U')
         _kadroAramalari.add(kadroDetay);
     });
+      }
+    }
 
+    notifyListeners();
+  }
+
+  int get getKadroBasvurulariAftifOge {
+    return _kadroBasvurulariAktifOge;
+  }
+
+  void setKadroBasvurulariAktifOge(gelen_sayi) {
+    _kadroBasvurulariAktifOge = gelen_sayi;
     notifyListeners();
   }
 
@@ -134,6 +171,14 @@ class PersonellerModel extends ConnectedPersonellerModel {
 
   void setSecilenRadioGotur(gelenRadio) {
     _selectedRadio = gelenRadio;
+  }
+
+  int get getSecilenRadioKadroBasvuru {
+    return _selectedRadioKadroBasvuru;
+  }
+
+  void setSecilenRadioKadroBasvuru(gelenRadio) {
+    _selectedRadioKadroBasvuru = gelenRadio;
   }
 
   _RadioGroup get getRadioGetir {
@@ -441,7 +486,29 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return List.from(_kadroBasvurulari);
   }
 
-   List<KadroBasvuru> get displayedKadroAramalari {
+  List<KadroBasvuru> get displayedKadroBasvurulari2 {
+    return List.from(_kadroBasvurulari2);
+  }
+
+  List<KadroBasvuru> get displayedKadroBasvurulari3 {
+    if (getSecilenRadioKadroBasvuru == 1) {
+      notifyListeners();
+      return _kadroBasvurulari3
+          .where((KadroBasvuru basvuru) => basvuru.kadroTuru == "G")
+          .toList();
+    }
+    else if (getSecilenRadioKadroBasvuru == 2) {
+      notifyListeners();
+      return _kadroBasvurulari3
+          .where((KadroBasvuru basvuru) => basvuru.kadroTuru == "U")
+          .toList();
+    }
+    notifyListeners();
+    return List.from(_kadroBasvurulari3);
+    
+  }
+
+  List<KadroBasvuru> get displayedKadroAramalari {
     return List.from(_kadroAramalari);
   }
 
@@ -472,7 +539,7 @@ class PersonellerModel extends ConnectedPersonellerModel {
     return _gosterAkademikIdari;
   }
 
-  bool get displayedGosterArama{
+  bool get displayedGosterArama {
     return _gosterArama;
   }
 
@@ -865,12 +932,10 @@ class PersonellerModel extends ConnectedPersonellerModel {
     _isYukleme = true;
     notifyListeners();
     //_authenticatedKullanici.token;
-    return http
-        .get(
-      apiWebIp + '/haber/kadrobasvurulari/',
-      headers: {'Content-Type': 'application/json', 'Authorization' : 'token ${_authenticatedKullanici.token}'}
-    )
-        .then<Null>((http.Response response) {
+    return http.get(apiWebIp + '/haber/kadrobasvurulari/', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'token ${_authenticatedKullanici.token}'
+    }).then<Null>((http.Response response) {
       print(json.decode(response.body));
       final List<KadroBasvuru> fetchedKadroList = [];
       final Map<String, dynamic> kadroListData =
@@ -885,21 +950,111 @@ class PersonellerModel extends ConnectedPersonellerModel {
         //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
         final KadroBasvuru kadro = KadroBasvuru(
             id: kadroData['id'].toString(),
-    kadroTuru: kadroData['kadro_turu'],
-    basvuran: kadroData['basvuran'],
-    sicilNo: kadroData['sicil_no'],
-    birim: kadroData['birim'],
-    bolum: kadroData['bolum'],
-    abdProgram: kadroData['abd_program'],
-    basvuruTarihi: kadroData['basvuru_tarihi'],
-    basvuruSayisi: kadroData['basvuru_sayisi'],
-    juriler: kadroData['juriler'],
-    aciklama: kadroData['aciklama'],
-    sonDurum: kadroData['son_durum']);
+            kadroTuru: kadroData['kadro_turu'],
+            basvuran: kadroData['basvuran'],
+            sicilNo: kadroData['sicil_no'],
+            birim: kadroData['birim'],
+            bolum: kadroData['bolum'],
+            abdProgram: kadroData['abd_program'],
+            basvuruTarihi: kadroData['basvuru_tarihi'],
+            basvuruSayisi: kadroData['basvuru_sayisi'],
+            juriler: kadroData['juriler'],
+            aciklama: kadroData['aciklama'],
+            sonDurum: kadroData['son_durum']);
         //print("haberTOSTRING-" + haber.toString());
         fetchedKadroList.add(kadro);
       });
       _kadroBasvurulari = fetchedKadroList;
+      _isYukleme = false;
+      notifyListeners();
+      //_selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  Future<Null> fetchKadroBasvurulari2({onlyForUser = false}) {
+    _isYukleme = true;
+    notifyListeners();
+    //_authenticatedKullanici.token;
+    return http.get(apiWebIp + '/haber/kadrobasvurulari2/', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'token ${_authenticatedKullanici.token}'
+    }).then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<KadroBasvuru> fetchedKadroList = [];
+      final Map<String, dynamic> kadroListData =
+          json.decode(utf8.decode(response.bodyBytes));
+      if (kadroListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      print("KADROLISTDATA:" + kadroListData["results"].toString());
+      kadroListData["results"].forEach((dynamic kadroData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final KadroBasvuru kadro = KadroBasvuru(
+            id: kadroData['id'].toString(),
+            basvuran: kadroData['basvuran'],
+            sicilNo: kadroData['sicil_no'],
+            birim: kadroData['birim'],
+            bolum: kadroData['bolum'],
+            abdProgram: kadroData['abd_program'],
+            kadroTuru: kadroData['atama_turu'],
+            juriler: kadroData['json_veri'],
+            aciklama: kadroData['aciklama'],
+            sonDurum: kadroData['son_durum']);
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedKadroList.add(kadro);
+      });
+      _kadroBasvurulari2 = fetchedKadroList;
+      _isYukleme = false;
+      notifyListeners();
+      //_selHaberId = null;
+    }).catchError((error) {
+      _isYukleme = false;
+      notifyListeners();
+      return;
+    });
+  }
+
+  Future<Null> fetchKadroBasvurulari3({onlyForUser = false}) {
+    _isYukleme = true;
+    notifyListeners();
+    //_authenticatedKullanici.token;
+    return http.get(apiWebIp + '/haber/kadrobasvurulari3/', headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'token ${_authenticatedKullanici.token}'
+    }).then<Null>((http.Response response) {
+      print(json.decode(response.body));
+      final List<KadroBasvuru> fetchedKadroList = [];
+      final Map<String, dynamic> kadroListData =
+          json.decode(utf8.decode(response.bodyBytes));
+      if (kadroListData == null) {
+        _isYukleme = false;
+        notifyListeners();
+        return;
+      }
+      print("KADROLISTDATA:" + kadroListData["results"].toString());
+      kadroListData["results"].forEach((dynamic kadroData) {
+        //print("HABERDATA-FOREACH-----------------------" + haberData['id']);
+        final KadroBasvuru kadro = KadroBasvuru(
+            id: kadroData['id'].toString(),
+            basvuran: kadroData['basvuran'],
+            sicilNo: kadroData['sicil_no'],
+            birim: kadroData['calistigi_birim'],
+            bolum: kadroData['unvan'],
+            abdProgram: kadroData['basvurdugu_kadro'],
+            kadroTuru: kadroData['sınav_turu'],
+            juriler: kadroData['json_verileri'],
+            aciklama: kadroData['aciklama'],
+            sonDurum: kadroData['son_durum']);
+        //print("haberTOSTRING-" + haber.toString());
+        fetchedKadroList.add(kadro);
+      });
+      _kadroBasvurulari3 = fetchedKadroList;
       _isYukleme = false;
       notifyListeners();
       //_selHaberId = null;
@@ -1154,13 +1309,13 @@ class KullaniciModel extends ConnectedPersonellerModel {
     String uri = "https://obs.sdu.edu.tr";
     String url = 'https://obs.sdu.edu.tr/index.aspx';
 
-
     //UserAgentClient client;
     var client = new http.Client();
-  
+
     //var client = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", altclient);
     //var altclient = new UserAgentClient("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0", client);
-    var response = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"));
+    var response =
+        await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"));
     // var document = parse(response.body);
     //       var priceElement = document.getElementsByTagName("input");
     //       for (var i = 0; i < 8; i++) {
@@ -1170,15 +1325,12 @@ class KullaniciModel extends ConnectedPersonellerModel {
     //         bodyData[priceElement[i].attributes["name"]] =
     //             priceElement[i].attributes["value"];
     //       }
-          //debugPrint(priceElement[0].attributes["name"]);
+    //debugPrint(priceElement[0].attributes["name"]);
 
-          debugPrint(
-              "OBS GET-1 SONRASI GELEN RESPONSE ********************************************************************************");
-          debugPrint(response.statusCode.toString());
-      
+    debugPrint(
+        "OBS GET-1 SONRASI GELEN RESPONSE ********************************************************************************");
+    debugPrint(response.statusCode.toString());
 
-  
-    
     debugPrint(response.isRedirect.toString());
 
     // http.Request request;
@@ -1187,35 +1339,37 @@ class KullaniciModel extends ConnectedPersonellerModel {
 
     // http.Request request = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
     //           'User-Agent':
-    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
+    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0',
     //         })..isRedirect=true;
-    
 
-    var response2 = await client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
-              'User-Agent':
-                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
-            });
-      debugPrint(
-              "OBS POST SONRASI GELEN RESPONSE ********************************************************************************");
-          debugPrint(response2.statusCode.toString());
-          debugPrint(response2.isRedirect.toString());
-          //debugPrint(response2.body.toString());
-      
+    var response2 = await client.post(
+        Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"),
+        body: bodyData,
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0',
+        });
+    debugPrint(
+        "OBS POST SONRASI GELEN RESPONSE ********************************************************************************");
+    debugPrint(response2.statusCode.toString());
+    debugPrint(response2.isRedirect.toString());
+    //debugPrint(response2.body.toString());
+
     if (response2.statusCode == 302) {
-    url = response2.headers["location"];
-    debugPrint("LOCATION *-*****-*-*-*****************: $url");
-    var cevap = await client.get(Uri.parse("https://obs.sdu.edu.tr/Birimler/Ogrenci/Bilgilerim.aspx"));
-    debugPrint(cevap.body);
-  }
-   else {
-     url = response2.headers['location'];
-    debugPrint("LOCATION *-*****-*-*-*****************: $url");
-    var cevap = await client.get(Uri.encodeFull("https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"));
-    debugPrint(cevap.body);
-   }
-  //print(response2.body);
-    
-  
+      url = response2.headers["location"];
+      debugPrint("LOCATION *-*****-*-*-*****************: $url");
+      var cevap = await client.get(
+          Uri.parse("https://obs.sdu.edu.tr/Birimler/Ogrenci/Bilgilerim.aspx"));
+      debugPrint(cevap.body);
+    } else {
+      url = response2.headers['location'];
+      debugPrint("LOCATION *-*****-*-*-*****************: $url");
+      var cevap = await client.get(Uri.encodeFull(
+          "https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"));
+      debugPrint(cevap.body);
+    }
+    //print(response2.body);
+
     // client
     //     .get(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"))
     //     .then((response) {
@@ -1238,20 +1392,17 @@ class KullaniciModel extends ConnectedPersonellerModel {
     //     .then((response) =>
     //         client.post(Uri.encodeFull("https://obs.sdu.edu.tr/index.aspx"), body: bodyData, headers: {
     //           'User-Agent':
-    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0', 
+    //               'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0',
     //         })).then((response) {
     //           debugPrint(response.body);
-    //         })        
+    //         })
     //     .whenComplete(client.close);
 
-    
-
-      // client.get(Uri.encodeFull("https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"))
-      //   .then((cevap) {
-      //     debugPrint(cevap.statusCode.toString());
-      //     debugPrint(cevap.body.toString());
-      //   })
-
+    // client.get(Uri.encodeFull("https://obs.sdu.edu.tr/Birimler/Ogrenci/DonemDersleri.aspx"))
+    //   .then((cevap) {
+    //     debugPrint(cevap.statusCode.toString());
+    //     debugPrint(cevap.body.toString());
+    //   })
 
     // final Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
     bool hasError = true;
@@ -1344,7 +1495,8 @@ class KullaniciModel extends ConnectedPersonellerModel {
   }
 
   void ayarlaAuthTimeout(int time) {
-    _authTimer = Timer(Duration(hours: time), cikisYap); // 3600 saniyeyi (second) saate (hours) çevirdim. Kullanıcı girişini sık sık istemesin diye :)
+    _authTimer = Timer(Duration(hours: time),
+        cikisYap); // 3600 saniyeyi (second) saate (hours) çevirdim. Kullanıcı girişini sık sık istemesin diye :)
   }
 }
 
@@ -1354,14 +1506,13 @@ class UserAgentClient extends http.BaseClient {
 
   UserAgentClient(this.userAgent, this._inner);
 
-
   Future<StreamedResponse> send(BaseRequest request) {
-    request.headers['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0';
+    request.headers['user-agent'] =
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0';
     request.followRedirects = true;
     return _inner.send(request);
   }
 }
-
 
 class YardimciModel extends ConnectedPersonellerModel {
   bool get isYukleme {

@@ -9,11 +9,11 @@ import '../ui_elements/haber_basligi.dart';
 import '../../models/kadro_basvurulari.dart';
 import '../../scoped-models/main.dart';
 
-class KadroBasvuruCard extends StatelessWidget {
+class KadroBasvuruCard2 extends StatelessWidget {
   final KadroBasvuru kadro;
   final int kadroIndex;
 
-  KadroBasvuruCard(this.kadro, this.kadroIndex);
+  KadroBasvuruCard2(this.kadro, this.kadroIndex);
 
   Widget getJuriWidgets(kadro, juri)
   {
@@ -21,10 +21,10 @@ class KadroBasvuruCard extends StatelessWidget {
     for(var i = 0; i < kadro; i++){
         list.add(new CircleAvatar(
           radius: 10.0,
-          backgroundColor: juri[i]["gelen_evrak"]!=""? Colors.green:Colors.red,
+          backgroundColor: juri[i]["durum"]==true? Colors.green:Colors.red,
           child: Text("${i+1}"),
         ),);
-        list.add(SizedBox(width: 5,));
+        list.add(SizedBox(width: 8,));
     }
     return new Row(children: list);
   }
@@ -42,9 +42,9 @@ class KadroBasvuruCard extends StatelessWidget {
                 ListTile(
         leading: CircleAvatar(
           maxRadius: 35.0,
-          backgroundImage: NetworkImage("https://isparta.edu.tr/resim.aspx?sicil_no=${kadro.sicilNo}"),
+          backgroundImage: kadro.sicilNo == "00000" ? NetworkImage("https://pbs.isparta.edu.tr/api/api/Personel/ResimGetir?id=${kadro.aciklama}"): NetworkImage("https://isparta.edu.tr/resim.aspx?sicil_no=${kadro.sicilNo}"),
         ),
-        title: Text("Doç.Dr. "+kadro.basvuran, style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text(kadro.basvuran, style: TextStyle(fontWeight: FontWeight.bold),),
         subtitle: Text(kadro.birim + "\n" + kadro.bolum + "\n" + kadro.abdProgram),
 
       ),
@@ -54,12 +54,12 @@ class KadroBasvuruCard extends StatelessWidget {
           children: <Widget>[
             FlatButton(
               child: Row(children: <Widget>[
-                Icon(Icons.assignment_ind),
+                Icon(kadro.kadroTuru == "M" ? Icons.swap_vert : Icons.fingerprint),
                 Padding(padding: EdgeInsets.all(2.0),),
-                Text(kadro.kadroTuru == "P" ? "Prof. Jürileri" : "Doçentlik Jürileri"),
-                SizedBox(width: 5,),
-                getJuriWidgets(kadro.kadroTuru == "P" ? 5 : 3 , kadro.juriler),
-                //SizedBox(width: 15.0,)       
+                Text(kadro.kadroTuru == "M" ? "Muvafakat " : "Güv. Soruş."),
+                SizedBox(width: 8,),
+                getJuriWidgets(kadro.kadroTuru == "M" ? 4 : 4 , kadro.juriler),
+                SizedBox(width: 13.0,)       
         
               ],),
               onPressed: () {
@@ -68,7 +68,7 @@ class KadroBasvuruCard extends StatelessWidget {
             builder: (BuildContext context) {
               return new SimpleDialog(
                 children: <Widget>[
-                  Text("Doç. Dr. "+kadro.basvuran + "  Jürileri", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(kadro.basvuran + "  Yazışmaları", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10.0,),
                   new Container(
                     height: 60.0 * 5,
@@ -78,9 +78,8 @@ class KadroBasvuruCard extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return ListTile(
                           leading: Text((index+1).toString()),
-                          title: Text("Prof. Dr. " + kadro.juriler[index]["adi"]),
-                          subtitle: Text(kadro.juriler[index]["giden_tarih"] + " / " +kadro.juriler[index]["giden_evrak"] + "\n" +
-                                        kadro.juriler[index]["gelen_tarih"] + " / " +kadro.juriler[index]["gelen_evrak"]),
+                          title: Text(kadro.juriler[index]["adi"]),
+                          subtitle: Text(kadro.juriler[index]["tarih"] + " / " +kadro.juriler[index]["evrak"]),
                           onTap: () {
                             
                             //Navigator.pop(context, true);
@@ -110,7 +109,7 @@ class KadroBasvuruCard extends StatelessWidget {
             builder: (BuildContext context) {
               return new SimpleDialog(
                 children: <Widget>[
-                  Text("Doç. Dr. "+kadro.basvuran + "\n  Atama Bilgileri", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(kadro.basvuran + "\n  Atama Bilgileri", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10.0,),
                   new Container(
                     height: 60.0 * 5,

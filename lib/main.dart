@@ -3,6 +3,8 @@ import 'dart:async';
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_course/pages/clean_designs/car_servise.dart';
+import 'package:flutter_course/pages/clean_designs/rental_service.dart';
 import 'package:flutter_course/pages/norm_kadro.dart';
 import 'package:flutter_course/pages/personel/kadro_basvurulari.dart';
 import 'package:flutter_course/pages/ubys/obs.dart';
@@ -116,7 +118,7 @@ class _MyAppState extends State<MyApp> {
         theme: getAdaptiveThemeData(context),
         //home: PersonellerSayfa(),
         routes: {
-          '/': (BuildContext context) => AnaSayfa(_model),//GirisSayfasi(),
+          '/': (BuildContext context) => AnaSayfa(_model), //GirisSayfasi(),
           '/anasayfa': (BuildContext context) => AnaSayfa(_model),
           '/login': (BuildContext context) => AuthPage(),
           '/ubys': (BuildContext context) => UBYSSayfa(_model),
